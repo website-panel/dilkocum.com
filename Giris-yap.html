@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dil Koçum - Öğrenci Paneli</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1F5AA8;
+            --primary-dark: #154a87;
+            --accent: #F4B400;
+            --accent-dark: #d39e00;
+            --bg: linear-gradient(to bottom right, #eef2f7, #ffffff);
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            /* Varsayılan metin rengi: Koyu (açık arka planlar için) */
+            --text-light: #f5f5f5;
+            /* Genellikle açık arka planlar için kullanılır */
+            --muted: #7f8c8d;
+            --radius: 12px;
+            --radius-lg: 16px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #1F5AA8 0%, #3d8bd1 100%);
+            --transition: all 0.3s ease;
+            --success: #4CAF50;
+            --danger: #F44336;
+            --warning: #FF9800;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        html,
+        body {
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            /* Tüm sayfa metinleri bu değişkene bağlıdır */
+            line-height: 1.6;
+        }
+
+        #auth-section {
+            background: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: var(--card-bg);
+            /* Auth container arka planı temaya göre ayarla */
+            width: 100%;
+            max-width: 400px;
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            color: var(--text);
+            /* Auth container metin rengini de temaya göre ayarla */
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        /* Yeni eklenen input ikonları için stil */
+        .auth-container .relative {
+            position: relative;
+        }
+
+        .auth-container .relative .fas {
+            position: absolute;
+            left: 12px;
+            /* input padding'ine göre ayarlandı */
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--muted);
+            /* Orta gri */
+            font-size: 18px;
+        }
+
+        .auth-container input[type="text"],
+        .auth-container input[type="tel"],
+        .auth-container input[type="email"],
+        .auth-container input[type="password"] {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            /* İkon için sol padding artırıldı */
+            margin-bottom: 16px;
+            border: 1px solid var(--muted);
+            /* input border rengini temaya göre ayarla */
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            /* input arka planını temaya göre ayarla */
+            color: var(--text);
+            /* input metin rengini temaya göre ayarla */
+        }
+
+        .auth-container input:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(31, 90, 168, 0.2);
+        }
+
+        .auth-container button {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-container button:hover {
+            background: var(--primary-dark);
+        }
+
+        .toggle {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text);
+            /* Toggle metin rengini de temaya göre ayarla */
+        }
+
+        .toggle a {
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .toggle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Toggle switch için özel stil (kayıt formu için) */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db;
+            /* Gri */
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked+.toggle-slider {
+            background-color: var(--primary);
+            /* Ana renk */
+        }
+
+        .toggle-switch input:checked+.toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Parola kriterleri için dinamik renk (kayıt formu için) */
+        .password-criteria {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 8px;
+            font-size: 0.875rem;
+            /* text-sm */
+            color: var(--muted);
+        }
+
+        .password-criteria li {
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-criteria li i {
+            margin-right: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .password-criteria li.valid {
+            color: var(--success);
+            /* Yeşil */
+        }
+
+        .password-criteria li.invalid {
+            color: var(--danger);
+            /* Kırmızı */
+        }
+
+        #dashboard {
+            display: none;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            background: var(--gradient);
+            color: white;
+            /* Sidebar metinlerinin rengi beyaz kalır */
+            width: 260px;
+            padding: 30px 20px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            /* Logoyla menü arasına boşluğu azaltır */
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 8px;
+            /* Logo ile yazı arasındaki boşluk azaltıldı */
+            color: white;
+            /* "Dil Koçum" yazısının rengi beyaz kalır */
+            border: none;
+            background: transparent;
+            padding: 0;
+        }
+
+        .sidebar h2 .logo-icon img {
+            width: 100%;
+            height: auto;
+            vertical-align: middle;
+            filter: none;
+            /* Hiçbir renk filtresi uygulanmaz */
+            box-shadow: none;
+            /* Hiçbir kutu gölgesi uygulanmaz */
+            transition: none;
+            /* Hiçbir geçiş efekti uygulanmaz */
+            cursor: default;
+            /* İmleç varsayılan kalır */
+        }
+
+
+        /* Sidebar'daki SVG ikonu için (artık kullanılmasa da eski koddan kalma) */
+        .sidebar h2 .logo-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+            display: none;
+            /* SVG ikonunu gizledik, çünkü PNG logo kullanıyoruz */
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-top: 10px;
+            /* Menü öğeleri ile logo/başlık arasına boşluk azaltıldı */
+        }
+
+        .sidebar li {
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .sidebar li:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar li.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar .material-icons {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .main {
+            flex: 1;
+            padding: 30px;
+            background: var(--bg);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+            margin-right: 15px;
+            color: white;
+        }
+
+        .user-text h1 {
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .user-text p {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            transition: var(--transition);
+            position: relative;
+            color: var(--text);
+            /* Kart içi metin rengi temaya göre ayarlanır */
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card h3 {
+            margin-bottom: 20px;
+            color: var(--primary);
+            /* Başlık rengi birincil renk kalır */
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 .material-icons {
+            margin-right: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text);
+            /* Label metin rengini temaya göre ayarla */
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--muted);
+            /* Form kontrol border rengini temaya göre ayarla */
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: var(--card-bg);
+            /* Form kontrol arka planını temaya göre ayarla */
+            color: var(--text);
+            /* Form kontrol metin rengini temaya göre ayarla */
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(31, 90, 168, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 15px;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #3d8b40;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #d32f2f;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e68a00;
+        }
+
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 14px;
+        }
+
+        .btn .material-icons {
+            font-size: 18px;
+        }
+
+        #notes-list,
+        #homework-list,
+        #schedule-list,
+        #files-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        #notes-list li,
+        #homework-list li,
+        #schedule-list li,
+        #files-list li {
+            background: var(--card-bg);
+            /* Liste öğelerinin arka planını temaya göre ayarla */
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            border-left: 4px solid var(--primary);
+            color: var(--text);
+            /* Liste öğeleri metin rengini temaya göre ayarla */
+        }
+
+        #notes-list li:hover,
+        #homework-list li:hover,
+        #schedule-list li:hover,
+        #files-list li:hover {
+            background: var(--card-bg);
+            /* Hover durumunda da arka planı temaya göre ayarla */
+            opacity: 0.9;
+            /* Hafif transparanlık verilebilir */
+            transform: translateX(5px);
+        }
+
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .item-title {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--primary);
+            /* Başlık rengi birincil renk kalır */
+        }
+
+        .item-date {
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .item-content {
+            margin-bottom: 15px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: var(--text);
+            /* İçerik metin rengini temaya göre değişsin */
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--muted);
+        }
+
+        .empty-state .material-icons {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: var(--muted);
+            /* İkon rengini de temaya göre ayarla */
+        }
+
+        .empty-state p {
+            margin-top: 10px;
+        }
+
+        #sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-lg);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        #sidebar-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast .material-icons {
+            margin-right: 10px;
+        }
+
+        .toast-success {
+            background: var(--success);
+        }
+
+        .toast-error {
+            background: var(--danger);
+        }
+
+        .toast-warning {
+            background: var(--warning);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                width: 280px;
+                height: 100vh;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 90;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            #sidebar-toggle {
+                display: flex;
+            }
+
+            .main {
+                padding: 20px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tema Stilleri */
+        .dark-theme {
+            --bg: #121212;
+            --card-bg: #1e1e1e;
+            --text: #ffffff;
+            /* Koyu tema için metin beyaz */
+            --muted: #b0b0b0;
+            --primary: #3d8bd1;
+            --primary-dark: #2a72d4;
+            --gradient: linear-gradient(135deg, #3d8bd1 0%, #1F5AA8 100%);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .blue-theme {
+            --bg: linear-gradient(135deg, #4A90E2, #6CB3FF);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #2A72D4;
+            --primary-dark: #1a5ab7;
+            --gradient: linear-gradient(135deg, #4A90E2, #6CB3FF);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .green-theme {
+            --bg: linear-gradient(135deg, #4CAF50, #66BB6A);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #388E3C;
+            --primary-dark: #2E7D32;
+            --gradient: linear-gradient(135deg, #4CAF50, #66BB6A);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .red-theme {
+            --bg: linear-gradient(135deg, #FF5F50, #D32F2F);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #C62828;
+            --primary-dark: #B71C1C;
+            --gradient: linear-gradient(135deg, #FF5F50, #D32F2F);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .yellow-theme {
+            --bg: linear-gradient(135deg, #FBC02D, #F9A825);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #F9A825;
+            --primary-dark: #F57F17;
+            --gradient: linear-gradient(135deg, #FBC02D, #F9A825);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .nebula-theme {
+            --bg: linear-gradient(135deg, #2E1A47, #4A148C);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            /* Kart arka planını biraz daha opak yaptık */
+            --text: #2c3e50;
+            /* Koyu arka planlı bir temada kartın opaklığı artınca metin koyu olmalı */
+            --primary: #9C27B0;
+            --primary-dark: #7B1FA2;
+            --gradient: linear-gradient(135deg, #2E1A47, #4A148C);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .gold-light-theme {
+            --bg: linear-gradient(135deg, #F57C00, #FFD54F);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #FF9800;
+            --primary-dark: #F57C00;
+            --gradient: linear-gradient(135deg, #F57C00, #FFD54F);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .rainbow-theme {
+            --bg: linear-gradient(135deg, #FF1744, #FFEA00, #00E5FF, #00C853, #D500F9);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #FF4081;
+            --primary-dark: #F50057;
+            --gradient: linear-gradient(135deg, #FF1744, #FFEA00, #00E5FF, #00C853, #D500F9);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .cosmic-theme {
+            --bg: linear-gradient(135deg, #1A1A1D, #6B0F49);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            /* Kart arka planını biraz daha opak yaptık */
+            --text: #2c3e50;
+            /* Metin rengi koyu */
+            --primary: #9B4D96;
+            --primary-dark: #7B1FA2;
+            --gradient: linear-gradient(135deg, #1A1A1D, #6B0F49);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .starry-theme {
+            --bg: linear-gradient(135deg, #212121, #757575);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            /* Kart arka planını biraz daha opak yaptık */
+            --text: #2c3e50;
+            /* Metin rengi koyu */
+            --primary: #FF4081;
+            --primary-dark: #F50057;
+            --gradient: linear-gradient(135deg, #212121, #757575);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .silver-light-theme {
+            --bg: linear-gradient(135deg, #B0BEC5, #90A4AE);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text: #2c3e50;
+            /* Açık tema için metin koyu */
+            --primary: #78909C;
+            --primary-dark: #607D8B;
+            --gradient: linear-gradient(135deg, #B0BEC5, #90A4AE);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .aurora-theme {
+            --bg: linear-gradient(135deg, #141E30, #243B55);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            /* Kart arka planını opaktan opak hale getirdik */
+            --text: #2c3e50;
+            /* Metin rengi koyu, kartın arka planı opaklaştığı için okunur */
+            --muted: #7f8c8d;
+            /* Muted metinler için de uygun renk */
+            --primary: #00bcd4;
+            --primary-dark: #0097a7;
+            --gradient: linear-gradient(135deg, #00bcd4, #243B55);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .note-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+            padding: 10px;
+            background: var(--card-bg);
+            /* Not içeriğinin arka planı da kart arka planına göre değişsin */
+            border-radius: 6px;
+            margin: 10px 0;
+            max-width: 100%;
+            overflow-wrap: break-word;
+            overflow: hidden;
+            color: var(--text);
+            /* Not içeriği metin rengi temaya göre değişsin */
+        }
+
+        #motivasyon-sozu {
+            text-align: center;
+            font-style: italic;
+            color: var(--muted);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar-toggle">
+        <span class="material-icons">menu</span>
+    </div>
+
+    <div id="auth-section">
+        <div class="auth-container" id="login-box">
+            <h2>Giriş Yap</h2>
+            <div class="relative">
+                <input type="email" id="login-email" placeholder="E-posta">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="relative">
+                <input type="password" id="login-password" placeholder="Şifre">
+                <i class="fas fa-lock"></i>
+            </div>
+            <button id="login-button">Giriş Yap</button>
+            <div class="toggle">Hesabınız yok mu?
+                <a id="show-register">Kayıt Ol</a>
+            </div>
+        </div>
+
+        <div class="auth-container" id="register-box" style="display:none;">
+            <h2>Kayıt Ol</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: var(--muted);">
+                Yeni bir hesap oluşturmak için lütfen aşağıdaki butona tıklayınız.
+            </p>
+            <button id="go-to-signup-page" class="auth-container button">
+                Üyelik Formuna Git
+            </button>
+            <div class="toggle">Zaten hesabınız var mı?
+                <a id="show-login">Giriş Yap</a>
+            </div>
+        </div>
+        </div>
+
+    <div id="dashboard">
+        <div class="layout">
+            <nav class="sidebar">
+                <h2>
+                    <span class="logo-icon">
+                        <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu" />
+                    </span>
+                </h2>
+                <ul>
+                    <li onclick="notlariGoster()" class="active">
+                        <span class="material-icons">note</span> Notlar
+                    </li>
+                    <li onclick="odevleriGoster()">
+                        <span class="material-icons">assignment</span> Ödevler
+                    </li>
+                    <li onclick="programiGoster()">
+                        <span class="material-icons">schedule</span> Program
+                    </li>
+                    <li onclick="dosyalariGoster()">
+                        <span class="material-icons">folder</span> Dosyalar
+                    </li>
+                    <li onclick="ayarlarGoster()">
+                        <span class="material-icons">settings</span> Ayarlar
+                    </li>
+                    <li id="logout-btn">
+                        <span class="material-icons">logout</span> Çıkış Yap
+                    </li>
+                </ul>
+            </nav>
+
+            <main class="main">
+                <header>
+                    <div class="user-info">
+                        <div class="avatar" id="avatar">A</div>
+                        <div class="user-text">
+                            <h1>Hoşgeldiniz, <span id="student-name">İsim</span></h1>
+                            <p id="email-display"></p>
+                        </div>
+                    </div>
+                </header>
+
+                <div id="motivasyon-sozu"></div>
+                <section class="cards">
+                    <div class="card" id="notesCard">
+                        <h3><span class="material-icons">note</span> Notlarım</h3>
+                        <div id="notes-container">
+                            <ul id="notes-list"></ul>
+                            <div id="empty-notes" class="empty-state" style="display: none;">
+                                <span class="material-icons">note_add</span>
+                                <h4>Henüz not eklemediniz</h4>
+                                <p>Yeni not eklemek için sağdaki formu kullanabilirsiniz</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" id="noteAddCard">
+                        <h3><span class="material-icons">add</span> Yeni Not Ekle</h3>
+                        <div class="form-group">
+                            <label for="note-title">Not Başlığı</label>
+                            <input type="text" id="note-title" class="form-control" placeholder="Not başlığını girin">
+                        </div>
+                        <div class="form-group">
+                            <label for="note-content">Not İçeriği</label>
+                            <textarea id="note-content" class="form-control" placeholder="Not içeriğini girin"></textarea>
+                        </div>
+                        <button id="note-add-btn" class="btn btn-primary">
+                            <span class="material-icons">save</span> Notu Kaydet
+                        </button>
+                    </div>
+
+                    <div id="homeworkCard" class="card" style="display: none;">
+                        <h3><span class="material-icons">assignment</span> Ödevlerim</h3>
+                        <div id="homework-container">
+                            <ul id="homework-list"></ul>
+                            <div id="empty-homework" class="empty-state">
+                                <span class="material-icons">assignment_turned_in</span>
+                                <h4>Henüz ödev eklemediniz</h4>
+                                <p>Yeni ödev eklemek için aşağıdaki butonu kullanabilirsiniz</p>
+                            </div>
+                            <button id="add-homework-btn" class="btn btn-primary" style="margin-top: 20px;">
+                                <span class="material-icons">add</span> Yeni Ödev Ekle
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="scheduleCard" class="card" style="display: none;">
+                        <h3><span class="material-icons">schedule</span> Çalışma Programım</h3>
+                        <div id="schedule-container">
+                            <ul id="schedule-list"></ul>
+                            <div id="empty-schedule" class="empty-state">
+                                <span class="material-icons">event_available</span>
+                                <h4>Henüz program oluşturmadınız</h4>
+                                <p>Yeni program eklemek için aşağıdaki butonu kullanabilirsiniz</p>
+                            </div>
+                            <button id="add-schedule-btn" class="btn btn-primary" style="margin-top: 20px;">
+                                <span class="material-icons">add</span> Yeni Program Ekle
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="filesCard" class="card" style="display: none;">
+                        <h3><span class="material-icons">folder</span> Dosyalarım</h3>
+                        <div id="files-container">
+                            <ul id="files-list"></ul>
+                            <div id="empty-files" class="empty-state">
+                                <span class="material-icons">folder_open</span>
+                                <h4>Henüz dosya eklemediniz</h4>
+                                <p>Yeni dosya eklemek için aşağıdaki butonu kullanabilirsiniz</p>
+                            </div>
+                            <button id="add-file-btn" class="btn btn-primary" style="margin-top: 20px;">
+                                <span class="material-icons">add</span> Yeni Dosya Ekle
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="settingsCard" class="card" style="display: none;">
+                        <h3><span class="material-icons">settings</span> Ayarlar</h3>
+                        <div class="form-group">
+                            <label for="theme-select">Tema Seçin</label>
+                            <select id="theme-select" class="form-control">
+                                <option value="default">Varsayılan Tema</option>
+                                <option value="dark">Koyu Tema</option>
+                                <option value="blue">Mavi Tema</option>
+                                <option value="green">Yeşil Tema</option>
+                                <option value="red">Kırmızı Tema</option>
+                                <option value="yellow">Sarı Tema</option>
+                                <option value="nebula">Nebula</option>
+                                <option value="gold-light">Altın Işık</option>
+                                <option value="rainbow">Gökkuşağı</option>
+                                <option value="cosmic">Kozmik</option>
+                                <option value="starry">Yıldızlar</option>
+                                <option value="silver-light">Gümüş Işık</option>
+                                <option value="aurora">Aurora</option>
+                            </select>
+                        </div>
+                        <button onclick="temaDegistir()" class="btn btn-primary">
+                            <span class="material-icons">palette</span> Temayı Uygula
+                        </button>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">
+        <span class="material-icons" id="toast-icon">check</span>
+        <span id="toast-message">İşlem başarılı</span>
+    </div>
+
+    <script type="module">
+        import {
+            initializeApp
+        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
+        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+        import {
+            getFirestore,
+            doc,
+            setDoc,
+            getDoc,
+            collection,
+            getDocs,
+            deleteDoc,
+            updateDoc,
+            addDoc,
+            serverTimestamp,
+            orderBy
+        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoFKoItrd3B9e3n_gycx3YsILeguNCUlY",
+            authDomain: "dilkocum-6a4e0.firebaseapp.com",
+            projectId: "dilkocum-6a4e0",
+            storageBucket: "dilkocum-6a4e0.appspot.com",
+            messagingSenderId: "329707977894",
+            appId: "1:329707977894:web:40226f42583dc70b08c867",
+            measurementId: "G-Z68EB8TBCS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Uygulama durumu
+        let currentUser = null;
+
+        // Veri Türü Sabitleri (Önemli: Her iki panelde de aynı olmalı)
+        const VERI_TURU = {
+            NOT: 'notlar',
+            ODEV: 'odevler',
+            PROGRAM: 'program',
+            DOSYA: 'dosyalar'
+        };
+
+        // Ortak Kullanılan Fonksiyonlar
+        function formatDate(date) {
+            if (!date) return "Bilinmiyor";
+            try {
+                const d = date.toDate();
+                return d.toLocaleDateString('tr-TR', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                return "Tarih bilinmiyor";
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Toast mesajı göster
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastMessage = document.getElementById('toast-message');
+
+            // Toast stilini sıfırla
+            toast.className = 'toast';
+
+            // Yeni stil ekle
+            if (type === 'success') {
+                toast.classList.add('toast-success');
+                toastIcon.textContent = 'check';
+            } else if (type === 'error') {
+                toast.classList.add('toast-error');
+                toastIcon.textContent = 'error';
+            } else {
+                toast.classList.add('toast-warning');
+                toastIcon.textContent = 'warning';
+            }
+
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+
+            // 3 saniye sonra toast'ı gizle
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Tema Değiştirme Fonksiyonu
+        window.temaDegistir = function() {
+            const tema = document.getElementById('theme-select').value;
+            document.body.className = '';
+
+            if (tema !== 'default') {
+                document.body.classList.add(tema + '-theme');
+            }
+
+            localStorage.setItem('selectedTheme', tema);
+            showToast('Tema başarıyla değiştirildi');
+        };
+
+        // Notları Yükle (Düzenlendi)
+        async function loadNotes(uid) {
+            try {
+                const notesRef = collection(db, "users", uid, VERI_TURU.NOT); // VERI_TURU sabitini kullan
+                const snapshot = await getDocs(notesRef);
+                const notesList = document.getElementById("notes-list");
+                const emptyNotes = document.getElementById("empty-notes");
+                notesList.innerHTML = "";
+
+                if (snapshot.empty) {
+                    emptyNotes.style.display = 'block';
+                    return;
+                }
+
+                emptyNotes.style.display = 'none';
+
+                const sortedNotes = snapshot.docs.sort((a, b) => {
+                    return (b.data().createdAt?.seconds || 0) - (a.data().createdAt?.seconds || 0);
+                });
+
+                sortedNotes.forEach(docSnap => {
+                    const note = docSnap.data();
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <div class="item-header">
+                            <div class="item-title">${escapeHtml(note.title || 'Başlıksız Not')}</div>
+                            <div class="item-date">${formatDate(note.createdAt)}</div>
+                        </div>
+                        <div class="item-content">${escapeHtml(note.content)}</div>
+                        <div class="item-actions">
+                            <button class="btn btn-warning btn-sm" onclick="editItem('${docSnap.id}', '${escapeHtml(note.title)}', '${escapeHtml(note.content)}', '${VERI_TURU.NOT}')">
+                                <span class="material-icons">edit</span> Düzenle
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem('${docSnap.id}', '${VERI_TURU.NOT}')">
+                                <span class="material-icons">delete</span> Sil
+                            </button>
+                        </div>
+                    `;
+                    notesList.appendChild(li);
+                });
+            } catch (error) {
+                showToast('Notlar yüklenirken hata oluştu: ' + error.message, 'error');
+            }
+        }
+
+        // Veri Ekle (Düzenlendi - Genel Fonksiyon)
+        async function addItem(type, title, content) {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            if (!title || !content) {
+                showToast("Lütfen başlık ve içerik giriniz", 'warning');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "users", currentUser.uid, type), {
+                    title,
+                    content,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById('note-title').value = '';
+                document.getElementById('note-content').value = '';
+                await loadItems(currentUser.uid, type); // Eklenen türe göre listeyi güncelle
+                showToast('Başarıyla eklendi');
+            } catch (error) {
+                showToast("Ekleme hatası: " + error.message, 'error');
+            }
+        }
+
+        // Veri Düzenle (Düzenlendi - Genel Fonksiyon)
+        window.editItem = async function(id, currentTitle, currentContent, type) {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            const newTitle = prompt("Yeni başlık:", currentTitle || '');
+            if (newTitle === null) return;
+            const newContent = prompt("Yeni içerik:", currentContent || '');
+            if (newContent === null) return;
+            try {
+                await updateDoc(doc(db, "users", currentUser.uid, type, id), {
+                    title: newTitle,
+                    content: newContent
+                });
+                await loadItems(currentUser.uid, type); // Güncellenen türe göre listeyi güncelle
+                showToast('Başarıyla güncellendi');
+            } catch (error) {
+                showToast('Güncelleme hatası: ' + error.message, 'error');
+            }
+        };
+
+        // Veri Sil (Düzenlendi - Genel Fonksiyon)
+        window.deleteItem = async function(id, type) {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            if (!confirm("Bu öğeyi silmek istediğinize emin misiniz?")) return;
+            try {
+                await deleteDoc(doc(db, "users", currentUser.uid, type, id));
+                await loadItems(currentUser.uid, type); // Silinen türe göre listeyi güncelle
+                showToast('Başarıyla silindi');
+            } catch (error) {
+                showToast('Silme hatası: ' + error.message, 'error');
+            }
+        };
+
+        // Giriş Yap
+        document.getElementById('login-button').addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showToast('Lütfen tüm alanları doldurun', 'warning');
+                return;
+            }
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showToast('Başarıyla giriş yapıldı');
+
+            } catch (error) {
+                let errorMessage = "Giriş hatası oluştu";
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = "Geçersiz e-posta formatı";
+                        break;
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        errorMessage = "E-posta veya şifre hatalı";
+                        break;
+                    case 'auth/too-many-requests':
+                        errorMessage = "Çok fazla deneme yaptınız. Lütfen daha sonra tekrar deneyin";
+                        break;
+                }
+                showToast(errorMessage, 'error');
+            }
+        });
+
+        // KAYIT OL KISMI - YÖNLENDİRME LOGİĞİ
+        document.getElementById('show-register').addEventListener('click', () => {
+            window.location.href = 'üyelik formu.html'; // Doğrudan üyelik formuna yönlendir
+        });
+
+        document.getElementById('go-to-signup-page').addEventListener('click', () => {
+            window.location.href = 'üyelik formu.html'; // Doğrudan üyelik formuna yönlendir
+        });
+
+        document.getElementById('show-login').addEventListener('click', () => {
+            document.getElementById('register-box').style.display = 'none';
+            document.getElementById('login-box').style.display = 'block';
+        });
+
+
+        // Çıkış Yap
+        document.getElementById("logout-btn").addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showToast('Başarıyla çıkış yapıldı');
+            } catch (error) {
+                showToast("Çıkış hatası: " + error.message, 'error');
+            }
+        });
+
+        // Panel Geçiş Fonksiyonları (Düzenlendi)
+        window.notlariGoster = async function() {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            document.querySelectorAll('.sidebar li')[0].classList.add('active');
+
+            await loadItems(currentUser.uid, VERI_TURU.NOT, 'notes-list', 'empty-notes');
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById('notesCard').style.display = 'block';
+            document.getElementById('noteAddCard').style.display = 'block';
+        };
+
+        window.odevleriGoster = async function() {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            document.querySelectorAll('.sidebar li')[1].classList.add('active');
+
+            await loadItems(currentUser.uid, VERI_TURU.ODEV, 'homework-list', 'empty-homework');
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById('homeworkCard').style.display = 'block';
+        };
+
+        window.programiGoster = async function() {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            document.querySelectorAll('.sidebar li')[2].classList.add('active');
+
+            await loadItems(currentUser.uid, VERI_TURU.PROGRAM, 'schedule-list', 'empty-schedule');
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById('scheduleCard').style.display = 'block';
+        };
+
+        window.dosyalariGoster = async function() {
+            if (!currentUser) {
+                showToast("Lütfen giriş yapınız", 'error');
+                return;
+            }
+
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            document.querySelectorAll('.sidebar li')[3].classList.add('active');
+
+            await loadItems(currentUser.uid, VERI_TURU.DOSYA, 'files-list', 'empty-files');
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById('filesCard').style.display = 'block';
+        };
+
+        window.ayarlarGoster = function() {
+            document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
+            document.querySelectorAll('.sidebar li')[4].classList.add('active');
+
+            document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+            document.getElementById('settingsCard').style.display = 'block';
+        };
+
+        // Genel Veri Yükleme Fonksiyonu (Ödevler, Program, Dosyalar için)
+        async function loadItems(uid, type, listId, emptyId) {
+            try {
+                const listElement = document.getElementById(listId);
+                const emptyElement = document.getElementById(emptyId);
+                listElement.innerHTML = "";
+                emptyElement.style.display = 'none';
+
+                const itemsRef = collection(db, "users", uid, type);
+                const snapshot = await getDocs(itemsRef);
+
+                if (snapshot.empty) {
+                    emptyElement.style.display = 'block';
+                    return;
+                }
+
+                snapshot.forEach(docSnap => {
+                    const item = docSnap.data();
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <div class="item-header">
+                            <div class="item-title">${escapeHtml(item.title || 'Başlıksız')}</div>
+                            <div class="item-date">${formatDate(item.createdAt)}</div>
+                        </div>
+                        <div class="item-content">${escapeHtml(item.content)}</div>
+                        <div class="item-actions">
+                            <button class="btn btn-warning btn-sm" onclick="editItem('${docSnap.id}', '${escapeHtml(item.title)}', '${escapeHtml(item.content)}', '${type}')">
+                                <span class="material-icons">edit</span> Düzenle
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteItem('${docSnap.id}', '${type}')">
+                                <span class="material-icons">delete</span> Sil
+                            </button>
+                        </div>
+                    `;
+                    listElement.appendChild(li);
+                });
+            } catch (error) {
+                showToast(`Öğeler yüklenirken hata oluştu: ${error.message}`, 'error');
+            }
+        }
+
+        // Rastgele Söz Seçme Fonksiyonu
+        function rastgeleSozGetir() {
+            const motivasyonSozleri = [
+                "Başarıya giden yol, denemekten asla vazgeçmemektir.",
+                "Hayallerine inan ve onları gerçekleştirmek için çalış.",
+                "Her gün yeni bir başlangıçtır.",
+                "Zorluklar, başarıya ulaşmanın basamaklarıdır.",
+                "Kendine güven, başarabilirsin!",
+                "İmkansız diye bir şey yoktur, sadece zaman alır.",
+                "Geleceğini değiştiremezsin ama alışkanlıklarını değiştirebilirsin. Alışkanlıkların da geleceğini değiştirir.",
+                "En büyük zafer, hiçbir zaman düşmemekte değil, her düştüğünde ayağa kalkmaktır.",
+                "Hayat, bisiklet sürmek gibidir. Dengenizi korumak için hareket etmeye devam etmelisiniz.",
+                "Başlamak için mükemmel olmak zorunda değilsin, fakat mükemmel olmak için başlamak zorundasın.",
+                "Yarın, dün yaptığımız şeydir.",
+                "Gözlerindeki ışık hiç sönmesin.",
+                "Kendin ol, dünya seni taklit etsin."
+            ];
+            const rastgeleIndex = Math.floor(Math.random() * motivasyonSozleri.length);
+            return motivasyonSozleri[rastgeleIndex];
+        }
+
+        // Sözü HTML'e Ekleme
+        function sozuGoster() {
+            const soz = rastgeleSozGetir();
+            const motivasyonDiv = document.getElementById('motivasyon-sozu'); // HTML'de bir div oluşturun
+            if (motivasyonDiv) {
+                motivasyonDiv.textContent = soz;
+            }
+        }
+
+        // Sayfa Yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar toggle
+            document.getElementById('sidebar-toggle').addEventListener('click', function() {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+
+            // Kayıtlı temayı yükle
+            const savedTheme = localStorage.getItem('selectedTheme');
+            if (savedTheme) {
+                document.getElementById('theme-select').value = savedTheme;
+                temaDegistir();
+            }
+
+            // Kullanıcı oturum durumunu izle
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    currentUser = user;
+                    try {
+                        const userDoc = await getDoc(doc(db, 'users', user.uid));
+                        if (userDoc.exists()) {
+                            document.getElementById('student-name').textContent = userDoc.data().name;
+                            document.getElementById('avatar').textContent = userDoc.data().name.charAt(0).toUpperCase();
+                            document.getElementById('email-display').textContent = user.email;
+
+                            document.getElementById('auth-section').style.display = "none";
+                            document.getElementById("dashboard").style.display = "block";
+
+                            await notlariGoster(); // Varsayılan olarak notları göster
+                        }
+                    } catch (error) {
+                        showToast('Kullanıcı bilgileri yüklenirken hata oluştu', 'error');
+                    }
+                } else {
+                    currentUser = null;
+                    document.getElementById('auth-section').style.display = "flex";
+                    document.getElementById("dashboard").style.display = "none";
+                }
+            });
+
+            sozuGoster(); // Sayfa yüklendiğinde sözü göster
+        });
+    </script>
+</body>
+
+</html>

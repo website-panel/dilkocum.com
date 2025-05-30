@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YDS Paragraf Stratejileri - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65; /* Derin, Zengin Mavi - Ana Koyu Renk (Güven ve Sakinlik) */
+            --accent-blue: #3498DB; /* Canlı Mavi - Vurgu 1 (Dinamizm) */
+            --accent-gold: #FFD700; /* Parlak Altın Sarısı - Vurgu 2 (Profesyonellik ve Güven) */
+            --accent-orange: #E67E22; /* Enerjik Turuncu - Vurgu 3 (Aksiyon Butonları için) */
+            --light-bg: #ECF0F1; /* Daha Açık Nötr Gri Arka Plan */
+            --dark-text: #1F3A65; /* Koyu Metin (Primary Dark Blue ile aynı) */
+            --light-text: #fefefe; /* Açık Metin */
+            --card-shadow: rgba(0, 0, 0, 0.18); /* Gölge biraz daha belirgin */
+            --button-hover-orange: #D35400; /* Turuncu Buton Hover */
+            --button-hover-blue: #2980B9; /* Mavi Buton Hover (Eğer kullanılacaksa) */
+
+            /* Navbar Gradient */
+            --navbar-bg-start: #1F3A65; /* Derin Mavi */
+            --navbar-bg-end: #294A7D; /* Biraz daha açık derin mavi */
+
+            /* Hero Section Gradient */
+            --hero-gradient-start: rgba(31, 58, 101, 0.9); /* Derin Mavi'nin şeffaf hali */
+            --hero-gradient-end: rgba(31, 58, 101, 0.8);
+            /* Footer için özel renkler (görselden) */
+            --footer-bg: #222a3a; /* Görseldeki koyu lacivert tonu */
+            --footer-link-color: #f1c40f; /* Görseldeki sarı tonu */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif; /* Montserrat da eklendi */
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            display: flex; /* Footer'ı aşağı itmek için */
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        }
+
+        /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 3rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px; /* sabit yükseklik */
+            overflow: hidden;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease; /* Backdrop-filter geçişi eklendi */
+        }
+
+        /* Navbar kaydırıldığında şeffaflık/saydamlık */
+        header.scrolled {
+            background-color: rgba(31, 58, 101, 0.6); /* Daha şeffaf mavi (0.6 olarak ayarlandı) */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Gölgeyi biraz yumuşattım */
+            backdrop-filter: blur(8px); /* Hafif bulanıklık efekti */
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        header .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        /* Logo metin stili */
+        header .logo-container .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem; /* Büyük ve dikkat çekici */
+            font-weight: 800; /* Extra bold */
+            letter-spacing: -1px; /* Harfler arası boşluğu azaltma */
+            color: var(--light-text);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3); /* Hafif gölge */
+            padding: 5px 0; /* İç boşluk */
+            line-height: 1; /* Tek satırda kalması için */
+        }
+
+        header .logo-container .logo-text span:first-child {
+            color: var(--accent-gold); /* 'DİL' kısmı altın rengi */
+        }
+
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.8rem;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%) scaleX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+            transform: translateY(-2px);
+        }
+
+        /* Hamburger Menü İkonu */
+        .menu-toggle {
+            display: none;
+            font-size: 2.2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Mobil Navigasyon Açık Durumda */
+        nav.active {
+            max-height: 300px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        nav.active ul {
+            flex-direction: column; /* Mobil menüde dikey hizala */
+            width: 100%;
+            gap: 0;
+            align-items: flex-start;
+            padding: 1rem 0;
+            background-color: var(--navbar-bg-start);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        nav.active ul li {
+            width: 100%;
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav.active ul li:last-child {
+            border-bottom: none;
+        }
+
+        nav.active ul li a::after {
+            left: 1rem;
+            transform: translateX(0);
+            width: 0%;
+        }
+
+        nav.active ul li a:hover::after {
+            width: 30%;
+        }
+
+        /* Hero Bölümü */
+        .hero {
+            background: linear-gradient(to bottom right, var(--hero-gradient-start), var(--hero-gradient-end)), url('https://source.unsplash.com/1600x500/?study,language,education') no-repeat center center/cover;
+            height: 350px; /* Yükseklik ayarlandı */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before { /* Gradient overlay */
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent; /* Zaten gradient var, bu şeffaf olmalı */
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            color: var(--light-text); /* Başlık rengi */
+        }
+
+        /* Ana İçerik Bölümü (Beyaz Kart) */
+        .section {
+            max-width: 960px;
+            margin: -120px auto 60px; /* Hero'dan yukarı kaydırma */
+            padding: 60px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 30px var(--card-shadow); /* Yeni gölge */
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 0.8s ease-out; /* Animasyon korunuyor */
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h1 { /* Ana içerik kartının ana başlığı */
+            font-family: 'Montserrat', sans-serif; /* Font eklendi */
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: var(--primary-dark-blue); /* Yeni ana renk */
+            border-bottom: 4px solid var(--accent-blue); /* Canlı mavi çizgi */
+            padding-bottom: 15px;
+            text-align: left; /* Başlık hizalaması */
+        }
+
+        .section h2 { /* Strateji başlıkları */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: var(--primary-dark-blue);
+            border-bottom: 2px solid var(--accent-gold); /* Altın çizgi */
+            padding-bottom: 10px;
+            display: flex; /* İkonu hizalamak için */
+            align-items: center; /* İkonu dikeyde ortalamak için */
+        }
+
+        .section h2 i { /* Başlık ikonları */
+            color: var(--accent-blue); /* Mavi ikon rengi */
+            margin-right: 15px; /* İkon ile metin arası boşluk */
+            font-size: 1.8rem; /* İkon boyutu */
+        }
+        .section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.6rem;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: var(--primary-dark-blue);
+            border-bottom: 1px solid var(--accent-blue);
+            padding-bottom: 8px;
+        }
+
+        .section p,
+        .section li {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.9;
+            color: var(--dark-text); /* Koyu metin */
+        }
+
+        .section strong {
+            font-weight: 700;
+            color: var(--primary-dark-blue); /* Yeni ana renk */
+        }
+
+        /* List item (ul li) ve içindeki ikonların düzenlenmesi */
+        .section ul {
+            padding-left: 0; /* Varsayılan padding'i kaldır */
+            margin-top: 15px;
+            list-style-type: none; /* Varsayılan madde işaretini kaldır */
+        }
+
+        .section ul li {
+            position: relative; /* İçindeki absolute konumlandırma için bağlam */
+            padding-left: 60px; /* Madde işareti (20px) ve ikon (20px) için yeterli boşluk + 20px metin başlangıcı */
+            margin-bottom: 10px;
+            line-height: 1.7;
+            /* display: flex; align-items: flex-start; */ /* Bu kısım kaldırıldı, absolute positioning ile daha iyi kontrol sağlanıyor */
+        }
+
+        .section ul li::before { /* Özel madde işareti */
+            content: '\2022'; /* Unicode bullet character */
+            position: absolute;
+            left: 0; /* li'nin en soluna konumlandır */
+            top: 0.2em; /* Metinle dikey hizalama */
+            color: var(--accent-blue); /* Mavi madde işareti */
+            font-weight: bold;
+            font-size: 1.2rem;
+            line-height: 1.7; /* Metinle aynı satır yüksekliği */
+            width: 20px; /* Madde işaretine sabit genişlik ver */
+            text-align: right; /* Kendi kutusunda sağa hizala */
+        }
+
+        .section ul li i { /* Liste öğesi ikonları */
+            position: absolute; /* li içinde absolute konumlandır */
+            left: 25px; /* Madde işaretinin genişliği (20px) + küçük boşluk (5px) */
+            top: 0.15em; /* Metinle dikey hizalama */
+            color: var(--accent-blue); /* Mavi ikon rengi */
+            font-size: 1.1rem; /* İkon boyutu */
+            line-height: 1.7; /* Metinle aynı satır yüksekliği */
+        }
+
+        /* İpucu Kutusu Stili */
+        .tip-box {
+            background-color: #f0f8ff; /* Çok açık mavi */
+            border-left: 5px solid var(--accent-blue); /* Mavi sol kenarlık */
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start; /* İçeriği üstten hizala (çok satırlı metinler için) */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            color: var(--dark-text); /* Metin rengi */
+        }
+        
+        .tip-box p { /* İpucu kutusu içindeki paragraflar */
+            margin-bottom: 0; /* Varsayılan alt boşluğu kaldır */
+        }
+
+        .tip-box i {
+            color: var(--accent-gold); /* İpucu ikonu için altın rengi */
+            font-size: 1.5rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+            line-height: 1.5; /* İkonun metinle hizalanması için */
+        }
+
+        .tip-box strong {
+            color: var(--primary-dark-blue); /* Kalın metin rengi */
+        }
+
+        .tip-box ul { /* İpucu kutusu içindeki listeler */
+            padding-left: 0; /* Varsayılan padding'i kaldır */
+            margin-top: 10px; /* Üst boşluk ekle */
+        }
+
+        .tip-box ul li { /* İpucu kutusu içindeki liste öğeleri */
+            position: relative;
+            padding-left: 50px; /* Madde işareti (15px) ve ikon (15px) için yeterli boşluk + 20px metin başlangıcı */
+            margin-bottom: 5px; /* Daha az alt boşluk */
+            line-height: 1.5; /* Line height specific to tip box lists */
+        }
+
+        .tip-box ul li::before {
+            content: '\2022';
+            position: absolute;
+            left: 0;
+            top: 0.2em;
+            width: 15px; /* Daha küçük genişlik */
+            color: var(--accent-blue);
+            font-size: 1rem;
+            font-weight: bold;
+            line-height: 1.5;
+            text-align: right;
+        }
+
+        .tip-box ul li i {
+            position: absolute;
+            left: 20px; /* Madde işaretinin genişliği (15px) + küçük boşluk (5px) */
+            top: 0.15em;
+            color: var(--accent-blue);
+            font-size: 1em;
+            line-height: 1.5;
+        }
+
+
+        /* Ana Sayfaya Dön Butonu */
+        .back-button {
+            background-color: var(--accent-orange); /* Turuncu buton */
+            color: var(--light-text);
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-30deg);
+            transition: all 0.7s ease;
+        }
+
+        .back-button:hover::before {
+            left: 100%;
+        }
+
+        .back-button:hover {
+            background-color: var(--button-hover-orange); /* Turuncu hover */
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            animation: none;
+        }
+
+        .back-button:active {
+            transform: translateY(-2px) scale(0.96);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .back-button-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Altbilgi */
+        footer {
+            background-color: var(--footer-bg); /* Görseldeki koyu lacivert */
+            color: var(--light-text);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.95rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            display: flex; /* İçeriği merkezlemek için */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Öğeler arası boşluk */
+        }
+
+        footer .footer-top-row {
+            display: flex;
+            flex-direction: column; /* Mobil için dikey, masaüstü için yan yana */
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px; /* Genişliği sınırlayabiliriz */
+        }
+
+        footer .footer-legal-links {
+            white-space: nowrap; /* Linklerin yan yana kalmasını sağlar */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+        }
+
+        footer .footer-legal-links a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px; /* Linkler arası boşluk */
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-legal-links a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        footer .footer-legal-links span { /* Boru işareti için */
+            color: var(--light-text); /* Boru işareti rengi */
+            font-weight: normal;
+        }
+
+        footer .social-icons {
+            display: flex;
+            gap: 15px; /* İkonlar arası boşluk */
+            margin-top: 5px; /* Linklerle ikonlar arasına boşluk */
+        }
+
+        footer .social-icons a {
+            color: var(--light-text); /* İkon rengi */
+            font-size: 1.4rem; /* İkon boyutu */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .social-icons a:hover {
+            color: var(--accent-gold); /* İkon hover rengi */
+            transform: scale(1.1);
+        }
+
+        footer .footer-links-bottom {
+            list-style: none; /* Madde işaretlerini kaldır */
+            padding: 0;
+            margin: 10px 0; /* Üst ve alt boşluk */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+            display: flex;
+            flex-direction: column; /* Dikey sıralama */
+            align-items: center;
+            gap: 8px; /* Liste öğeleri arası boşluk */
+        }
+
+        footer .footer-links-bottom a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-links-bottom a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        .copyright-text {
+            color: var(--light-text);
+            font-size: 0.85rem; /* Telif hakkı yazısını küçültme */
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            header .logo-container .logo-text {
+                font-size: 2rem; /* Tablette logo metin boyutu */
+            }
+
+            nav ul {
+                gap: 1.8rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section {
+                padding: 40px;
+                margin: -100px auto 40px;
+            }
+
+            .section h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            header .logo-container {
+                margin-bottom: 0;
+            }
+
+            header .logo-container .logo-text {
+                font-size: 1.8rem; /* Mobil cihazlarda logo metin boyutu */
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                width: 100%;
+                order: 2;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-out;
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+                align-items: flex-start;
+                padding: 1rem 0;
+                background-color: var(--primary-dark-blue);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: left;
+                padding: 0.8rem 1rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav ul li a::after {
+                left: 1rem;
+                transform: translateX(0);
+                width: 0%;
+            }
+
+            nav ul li a:hover::after {
+                width: 30%;
+            }
+
+            .hero {
+                height: 250px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 30px;
+                margin: -60px auto 30px; /* Hero'dan yukarı kaydırma */
+                border-radius: 8px;
+            }
+
+            .section h1 {
+                font-size: 2.2rem;
+            }
+
+            .section h2 {
+                font-size: 1.6rem;
+            }
+
+            .section p,
+            .section li {
+                font-size: 1rem;
+            }
+
+            .back-button {
+                font-size: 1rem;
+                padding: 12px 25px;
+            }
+
+            footer .footer-top-row {
+                flex-direction: column;
+            }
+            footer .footer-legal-links {
+                white-space: normal; /* Mobil görünümde linklerin alt alta geçmesine izin ver */
+                text-align: center;
+            }
+            footer .footer-legal-links a {
+                display: block; /* Linkleri blok yaparak alt alta sırala */
+                margin: 5px 0;
+            }
+            footer .footer-legal-links span {
+                display: none; /* Boru işaretini mobil görünümde gizle */
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logo-container .logo-text {
+                font-size: 1.5rem; /* Küçük mobil cihazlarda logo metin boyutu */
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section h1 {
+                font-size: 1.8rem;
+            }
+            .section h2 {
+                font-size: 1.4rem;
+            }
+        }
+        /* Hero içindeki img etiketi artık arka plan olarak konumlandırılıyor */
+        .hero > img { /* Doğrudan .hero'nun altındaki img'yi hedefle */
+            position: absolute; /* Arka plan olarak konumlandır */
+            top: 0; /* Üstten başla */
+            left: 0; /* Soldan başla */
+            width: 100%; /* Genişliği kapsayıcıya sığdır */
+            height: 100%; /* Yüksekliği kapsayıcıya sığdır */
+            object-fit: cover; /* Resmi orantısını bozmadan kapsayıcıyı kapla */
+            z-index: 1; /* İçeriğin arkasında kalmasını sağla */
+            filter: brightness(0.8); /* Resmi daha da karartarak metin okunurluğunu artır */
+            transform: none; /* Önceki transform kaldırıldı */
+        }
+
+        .hero-content {
+            max-width: 850px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 1.2s ease-out;
+            padding: 3rem 5rem; /* Yatay padding artırıldı */
+            background-color: rgba(0, 0, 0, 0.4); /* Şeffaf arka plan */
+            border-radius: 10px;
+            backdrop-filter: blur(4px); /* Bulanıklık artırıldı */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4); /* Gölge artırıldı */
+            color: var(--light-text); /* Metin rengini beyaz yap */
+        }
+        /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px;
+            overflow: hidden; /* Global overflow hidden */
+            transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Navbar kaydırıldığında şeffaflık */
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.6); /* Şeffaflığı test etmek için 0.9 yaptım, isterseniz 1.0 bırakabilirsiniz */
+            box-shadow: 0 4px 15px rgba(0,0,0,1);
+            backdrop-filter: blur(3px);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtmek için */
+        }
+
+        header .logo-container:hover {
+            transform: scale(1.10); /* Hover'da hafif büyüme */
+        }
+
+        header .logo-container img {
+            height: 150px;
+            object-fit: contain;
+            margin-top: -15px;
+            filter: brightness(0) invert(1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container" onclick="window.location.href='index.html#hero'">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html#hero">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="üyelik formu.html">Kayıt Ol</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="hero">
+        <h1>Detaylı Performans Analizi</h1>
+    </div>
+
+    <main>
+        <section class="section">
+            <h1><i class="fas fa-chart-bar"></i> Detaylı Performans Analizi ile Başarıya Giden Yol</h1>
+            <p>Sınav başarısının sırrı, sadece çok çalışmak değil, doğru ve verimli çalışmaktır. Dil Koçum olarak, bu gerçeğin farkındayız ve sizi hedeflerinize ulaştırmak için kapsamlı ve detaylı performans analizleri sunuyoruz.</p>
+
+            <h2><i class="fas fa-poll"></i> Deneme Sınavı Sonuçlarının Derinlemesine Analizi</h2>
+            <p>Dil Koçum’da yaptığınız her deneme sınavı, yalnızca toplam puan ya da doğru-yanlış sayısından ibaret değildir. Sınav sonuçlarınız, her bir soru tipi ve konu bazında detaylı olarak incelenir. Bu analiz, hangi konularda güçlü olduğunuzu, hangi alanlarda eksikleriniz bulunduğunu net bir şekilde ortaya koyar. Böylece, sınavdaki performansınızı sadece yüzeysel olarak değil, derinlemesine anlamış olursunuz.</p>
+
+            <h2><i class="fas fa-exclamation-triangle"></i> Eksik ve Zayıf Konuların Kesin Tespiti</h2>
+            <p>Performans analizimiz sayesinde, özellikle üzerinde durmanız gereken eksik ve zayıf konular kolayca belirlenir. Bu, sınav hazırlığınızda nerelere odaklanmanız gerektiğini bilmeniz açısından kritik bir adımdır. Zamandan ve enerjiden tasarruf ederek, etkili ve hedefe yönelik bir çalışma stratejisi geliştirmenizi sağlar.</p>
+
+            <h2><i class="fas fa-calendar-check"></i> Kişiye Özel, Hedefe Yönelik Çalışma Programları</h2>
+            <p>Dil Koçum, standart ve genel programların ötesinde, sizin analiz sonuçlarınıza dayalı olarak hazırlanan kişiye özel çalışma planları sunar. Bu programlar, eksiklerinizi gidermek ve güçlü yönlerinizi pekiştirmek üzere tasarlanmıştır. Böylece çalışma süreciniz her daim planlı, organize ve verimli olur.</p>
+
+            <h2><i class="fas fa-chart-line"></i> Sürekli Takip ve Gelişim Raporları</h2>
+            <p>Sadece bir defaya mahsus değil, düzenli aralıklarla yapılan denemeler ve performans analizleri ile gelişiminiz takip edilir. Bu sayede, hangi alanlarda ilerleme kaydettiğiniz, hangi konularda hâlâ destek gerektiği sürekli olarak gözlemlenir. Size özel raporlar, motivasyonunuzu yüksek tutmanıza ve çalışma düzeninizi gerektiğinde revize etmenize olanak sağlar.</p>
+
+            <h2><i class="fas fa-star-half-alt"></i> Dil Koçum Ayrıcalığı ile Başarıya Daha Hızlı Ulaşın</h2>
+            <p>Unutmayın, başarı tesadüf değildir. Bilinçli analizler, doğru hedefler ve etkili çalışma planları ile ulaşılır. Dil Koçum’un uzman ekibi ve gelişmiş performans takibi sistemleri, sınava hazırlık sürecinizde size yol gösterir, rehberlik eder ve destek olur.</p>
+
+            <h2><i class="fas fa-fist-raised"></i> Şimdi Harekete Geçin, Zirveye Yürüyün!</h2>
+            <p>Başarıya giden yolda atacağınız her akıllı adım sizi hedeflerinize daha da yaklaştırır. Dil Koçum’un detaylı performans analizleri ile eksiklerinizi tespit edin, çalışma planınızı güçlendirin ve sınavda fark yaratacak bilgi ve beceriyle donanın. Unutmayın, hayal ettiğiniz başarıya ulaşmak için en doğru zaman şimdi!</p>
+
+            <div class="back-button-container">
+                <a class="back-button" href="index.html">Ana Sayfaya Dön</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-top-row">
+            <div class="footer-legal-links">
+                <a href="gizlilik-politikası.html">Gizlilik Politikası</a> <span>|</span> <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/dilkocumm/?igsh=MTA2NDk2cXljNGRtbw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=05075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <ul class="footer-links-bottom">
+            <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+            <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+            <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+        </ul>
+        <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        // Sayfa yüklendiğinde logo animasyonu başlat
+        window.onload = function() {
+            document.querySelector('header .logo-container').style.animationDelay = '0.2s';
+        };
+
+        // Hamburger menü toggle fonksiyonu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+
+        // Navbar kaydırıldığında şeffaflık efekti
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) { /* 50px aşağı kaydırıldığında */
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Dahili linkler için yumuşak kaydırma
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            // Eğer link dış bir HTML dosyasına veya ana sayfadaki bir bölüme işaret ediyorsa
+            if (anchor.getAttribute('href').includes('.html') || anchor.getAttribute('href').startsWith('#')) {
+                anchor.addEventListener('click', function (e) {
+                    const href = this.getAttribute('href');
+                    const currentPath = window.location.pathname.split('/').pop();
+
+                    // Eğer link bu sayfadaki bir bölüme ise (örneğin #kelime)
+                    if (href.startsWith('#') && currentPath === 'yds-paragraf-stratejileri.html') {
+                        e.preventDefault();
+                        if (mainNav.classList.contains('active')) {
+                            mainNav.classList.remove('active');
+                        }
+                        document.querySelector(href).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                    // Eğer link ana sayfadaki bir bölüme işaret ediyorsa (örn: index.html#hizmetler)
+                    else if (href.includes('index.html#')) {
+                        e.preventDefault();
+                        const targetId = href.split('#')[1];
+                        // Ana sayfaya git ve sonra ilgili bölüme kaydır
+                        window.location.href = `index.html#${targetId}`;
+                    }
+                    // Diğer tüm HTML linkleri (örn: hakkimizda.html, iletisim.html)
+                    else {
+                        // Mobil menü açıksa kapat
+                        if (mainNav.classList.contains('active')) {
+                            mainNav.classList.remove('active');
+                        }
+                        // Varsayılan link davranışını koru
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

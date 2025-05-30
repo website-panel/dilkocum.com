@@ -1,0 +1,2026 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dil Koçum - YDS, YÖKDİL, YDT Özel Koçluk</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65; /* Derin, Zengin Mavi - Ana Koyu Renk (Güven ve Sakinlik) */
+            --accent-blue: #3498DB; /* Canlı Mavi - Vurgu 1 (Dinamizm) */
+            --accent-gold: #FFD700; /* Parlak Altın Sarısı - Vurgu 2 (Profesyonellik ve Güven) */
+            --accent-orange: #E67E22; /* Enerjik Turuncu - Vurgu 3 (Aksiyon Butonları için) */
+            --light-bg: #ECF0F1; /* Daha Açık Nötr Gri Arka Plan */
+            --dark-text: #1F3A65; /* Koyu Metin (Primary Dark Blue ile aynı) */
+            --light-text: #fefefe; /* Açık Metin */
+            --card-shadow: rgba(0, 0, 0, 0.18); /* Gölge biraz daha belirgin */
+            --button-hover-orange: #D35400; /* Turuncu Buton Hover */
+            --button-hover-blue: #2980B9; /* Mavi Buton Hover (Eğer kullanılacaksa) */
+
+            /* Navbar Gradient */
+            --navbar-bg-start: #1F3A65; /* Derin Mavi */
+            --navbar-bg-end: #294A7D; /* Biraz daha açık derin mavi */
+
+            /* Footer için özel renkler (görselden) */
+            --footer-bg: #222a3a; /* Görseldeki koyu lacivert tonu */
+            --footer-link-color: #f1c40f; /* Görseldeki sarı tonu */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
+            display: flex; /* Footer'ı sayfanın en altına itmek için */
+            flex-direction: column; /* Dikey düzen */
+            min-height: 100vh; /* Minimum tam ekran yüksekliği */
+            -webkit-text-size-adjust: 100%; /* Metin boyutunun mobil cihazlarda otomatik ayarlanmasını engeller */
+            text-size-adjust: 100%;
+        }
+
+        /* Tüm görsellerin responsive olmasını sağlar */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block; /* Resimlerin altında boşluk bırakmasını engeller */
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark-blue); /* Yeni ana renk */
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue); /* Yeni vurgu renk */
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        }
+
+        /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px;
+            overflow: hidden; /* Global overflow hidden */
+            transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Navbar kaydırıldığında şeffaflık */
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.6); /* Şeffaflığı test etmek için 0.9 yaptım, isterseniz 1.0 bırakabilirsiniz */
+            box-shadow: 0 4px 15px rgba(0,0,0,1);
+            backdrop-filter: blur(3px);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtmek için */
+        }
+
+        header .logo-container:hover {
+            transform: scale(1.10); /* Hover'da hafif büyüme */
+        }
+
+        header .logo-container img {
+            height: 150px;
+            object-fit: contain;
+            margin-top: -15px;
+            filter: brightness(0) invert(1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.8rem;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            background-color: var(--accent-blue); /* Canlı mavi alt çizgi */
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%) scaleX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-blue); /* Canlı mavi metin */
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7); /* Mavi parlama */
+            transform: translateY(-2px);
+        }
+
+        /* Aktif Navigasyon Link Stili */
+        nav ul li a.active {
+            color: var(--accent-blue); /* Aktif link rengi mavi */
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.8); /* Mavi parlama */
+            transform: translateY(-2px);
+            font-weight: 700; /* Daha kalın font */
+        }
+
+        nav ul li a.active::after {
+            width: 100%; /* Aktif linkte alt çizgi her zaman tam olsun */
+            transform: translateX(-50%) scaleX(1);
+            background-color: var(--accent-blue); /* Alt çizgi rengi mavi */
+        }
+
+
+        /* Hamburger Menü İkonu */
+        .menu-toggle {
+            display: none;
+            font-size: 2.2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: var(--accent-blue); /* Canlı mavi */
+            transform: scale(1.1);
+        }
+
+        /* Mobil Navigasyon Açık Durumda (eski kurallar, responsive'de güncellenecek) */
+        nav.active {
+            max-height: 300px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        nav.active ul {
+            flex-direction: column; /* Mobil menüde dikey hizala */
+            width: 100%;
+            gap: 0;
+            align-items: flex-start;
+            padding: 1rem 0;
+            background-color: var(--navbar-bg-start); /* Yeni ana renk */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        nav.active ul li {
+            width: 100%;
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav.active ul li:last-child {
+            border-bottom: none;
+        }
+
+        nav.active ul li a::after {
+            left: 1rem;
+            transform: translateX(0);
+            width: 0%;
+        }
+
+        nav.active ul li a:hover::after {
+            width: 30%; /* Mobil menüde hover efekti */
+        }
+
+        /* Hero Section - Güncellenen Stiller */
+        .hero {
+            background-size: cover;
+            background-position: center;
+            height: 600px; /* DEĞİŞTİRİLDİ: Masaüstü için yükseklik azaltıldı */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--light-text);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Hero içindeki img etiketi artık arka plan olarak konumlandırılıyor */
+        .hero > img { /* Doğrudan .hero'nun altındaki img'yi hedefle */
+            position: absolute; /* Arka plan olarak konumlandır */
+            top: 0; /* Üstten başla */
+            left: 0; /* Soldan başla */
+            width: 100%; /* Genişliği kapsayıcıya sığdır */
+            height: 100%; /* Yüksekliği kapsayıcıya sığdır */
+            object-fit: cover; /* Resmi orantısını bozmadan kapsayıcıyı kapla */
+            z-index: 1; /* İçeriğin arkasında kalmasını sağla */
+            filter: brightness(1); /* Resmi daha da karartarak metin okunurluğunu artır */
+            transform: none; /* Önceki transform kaldırıldı */
+        }
+
+        .hero-content {
+            max-width: 800px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 1.2s ease-out;
+            padding: 2.5rem 4rem; /* DEĞİŞTİRİLDİ: Yatay padding azaltıldı */
+            background-color: rgba(0, 0, 0, 0.5); /* Şeffaf arka plan */
+            border-radius: 10px;
+            backdrop-filter: blur(8px); /* Bulanıklık artırıldı */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); /* Gölge artırıldı */
+            color: var(--light-text); /* Metin rengini beyaz yap */
+        }
+
+        .hero-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2.5rem, 4.5vw, 4rem); /* DEĞİŞTİRİLDİ: Duyarlı font boyutu, maksimum değerler biraz azaltıldı */
+            margin-bottom: 1.2rem; /* Başlık ve paragraf arası boşluk azaltıldı */
+            font-weight: 650;
+            line-height: 1.1;
+            text-shadow: 0px 10px 30px rgba(0,0,0,0.8); /* Metin gölgesi artırıldı */
+            color: var(--light-text);
+        }
+
+        .hero-content p {
+            font-size: clamp(0.95rem, 1.6vw, 1.2rem); /* DEĞİŞTİRİLDİ: Duyarlı font boyutu ve maksimum değeri azaltıldı */
+            margin-bottom: 2rem; /* Paragraf ve buton arası boşluk azaltıldı */
+            opacity: 0.99;
+            max-width: 600px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0px 10px 30px rgba(0,0,0,0.8); /* Metin gölgesi artırıldı */
+        }
+
+        .btn {
+            background-color: var(--accent-orange); /* Turuncu buton */
+            color: var(--light-text);
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-30deg);
+            transition: all 0.7s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover-orange); /* Turuncu hover */
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            animation: none;
+        }
+
+        .btn:active {
+            transform: translateY(-2px) scale(0.96);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .btn-s {
+            background-color: var(--accent-blue);
+            color: var(--light-text);
+            padding: 0.6rem 1.2rem; /* Daha küçük padding */
+            border: none;
+            border-radius: 30px; /* Daha az oval */
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem; /* Yazı boyutu küçüldü */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Daha hafif gölge */
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .btn-s::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-30deg);
+            transition: all 0.7s ease;
+        }
+
+        .btn-s:hover::before {
+            left: 100%;
+        }
+
+        .btn-s:hover {
+            background-color: var(--button-hover-blue); /* Turuncu hover */
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            animation: none;
+        }
+
+        .btn-s:active {
+            transform: translateY(-2px) scale(0.96);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        /* Sections Genel Stil */
+        .section {
+            padding: 70px 20px; /* DEĞİŞTİRİLDİ: Padding biraz azaltıldı */
+            max-width: 1000px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: auto;
+            opacity: 0; /* Başlangıçta gizli */
+            transform: translateY(50px); /* Başlangıçta biraz aşağıda */
+            transition: all 0.8s ease-out;
+        }
+
+        .section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section h3 {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            color: var(--primary-dark-blue); /* Ana koyu renk */
+            position: relative;
+        }
+
+        .section h3::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            background-color: var(--accent-blue); /* Canlı mavi çizgi */
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        /* Hizmetler Bölümü */
+        #hizmetler .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            justify-content: center; /* Kartları ortala */
+            gap: 2.5rem;
+        }
+
+        #hizmetler .card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--card-shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        #hizmetler .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        #hizmetler .card i {
+            font-size: 3.5rem;
+            color: var(--accent-blue); /* Canlı mavi ikonlar */
+            margin-bottom: 1.5rem;
+        }
+
+        #hizmetler .card h4 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            color: var(--primary-dark-blue); /* Ana koyu renk */
+        }
+
+        #hizmetler .card p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Blog Bölümü */
+        #blog .blog-posts {
+            display: grid;
+            grid-template-columns: 1fr; /* Blog kartlarını alt alta sırala */
+            justify-content: center; /* Kartları yatayda ortala */
+            gap: 2.5rem; /* Kartlar arasındaki dikey boşluk */
+            max-width: 800px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: 0 auto; /* Opsiyonel: Tüm blog bölümünü sayfada ortala */
+        }
+
+        #blog .post {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* İçeriği sola hizala */
+            text-align: left; /* Metni sola hizala */
+            max-width: 600px; /* DEĞİŞTİRİLDİ: Her bir kartın maksimum genişliğini belirle */
+            margin: 0 auto; /* Her bir kartı kendi içinde ortala */
+        }
+
+        #blog .post:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        #blog .post img {
+            width: 150%;
+            height: 400px; /* Yüksekliği sabit tutarak tutarlılık sağlar */
+            object-fit: cover; /* Resmi keserek alana sığdırır, orantısını korur */
+            border-radius: 10px;
+            margin-bottom: 1.5rem; /* Resim ile yazı arasında daha fazla boşluk */
+            display: block; /* Resmi tam ortalamak için */
+            margin-left: auto; /* Resmi tam ortalamak için */
+            margin-right: auto; /* Resmi tam ortalamak için */
+        }
+
+        #blog .post-content {
+            padding: 0;
+            flex-grow: 1; /* İçeriğin kalan alanı doldurmasını sağlar */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* İçeriği yukarıdan başlat */
+            align-items: flex-start; /* İç öğeleri sola hizala */
+            width: 100%; /* İçerik konteynerinin kartın tamamını kaplamasını sağla */
+            min-height: 120px; /* İçerik için minimum yükseklik */
+        }
+
+        #blog .post-content h4 {
+            font-family: 'Montserrat', sans-serif;
+            margin-bottom: 1rem; /* Başlık altındaki boşluğu artır */
+            font-size: 1.5rem; /* Başlık boyutunu biraz büyüt */
+            color: var(--primary-dark-blue); /* Ana koyu renk */
+            line-height: 1.4; /* Satır aralığını artır, okunabilirliği artırır */
+            text-align: left; /* Başlığı sola hizala */
+        }
+
+        #blog .post-content p {
+            font-size: 1rem; /* Paragraf boyutunu biraz büyüt */
+            color: #444; /* Metin rengini biraz koyulaştır */
+            line-height: 1.6; /* Paragraf satır aralığını artır, okunabilirliği çok artırır */
+            margin-bottom: 1rem; /* Paragraflar arasına boşluk ekle */
+            text-align: left; /* Paragrafı sola hizala */
+        }
+
+        /* Madde işaretli listeler için (örneğin <ul> ve <li>) */
+        #blog .post-content ul {
+            list-style-type: none; /* Varsayılan madde işaretlerini kaldır */
+            padding-left: 0; /* Sol boşluğu kaldır */
+            margin-bottom: 1rem;
+            text-align: left; /* Listeyi sola hizala */
+            width: 100%; /* Genişliğini ayarla */
+        }
+
+        #blog .post-content ul li {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem; /* Madde işareti için boşluk */
+        }
+
+        /* Özel madde işaretleri için (örneğin elmas ikonu gibi) */
+        #blog .post-content ul li::before {
+            content: "◆"; /* Elmas karakteri */
+            color: var(--primary-dark-blue); /* Madde işareti rengi */
+            font-size: 0.8rem;
+            position: absolute;
+            left: 0;
+            top: 0.3rem; /* Dikey hizalama */
+        }
+
+        /* İpucu kısmı için özel stil */
+        #blog .post-content .tip {
+            font-style: italic;
+            font-size: 0.95rem; /* Biraz daha büyüt */
+            color: #777;
+            margin-top: 1.5rem;
+            padding: 0.8rem 1rem;
+            background-color: #f9f9f9;
+            border-left: 4px solid var(--accent-blue); /* Ana renkle uyumlu mavi */
+            border-radius: 5px;
+            text-align: left;
+        }
+
+
+        /* Yeni Bize Ulaşın Bölümü */
+        #bize-ulasin {
+            background-color: var(--primary-dark-blue); /* Ana koyu renk */
+            color: var(--light-text);
+            text-align: center;
+            padding: 80px 20px;
+            margin-top: 6rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #bize-ulasin::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background: radial-gradient(circle at top left, rgba(255, 215, 0, 0.1), transparent 70%), /* Altın vurgu */
+                                 radial-gradient(circle at bottom right, rgba(255, 215, 0, 0.1), transparent 70%); /* Altın vurgu */
+            z-index: 0;
+            opacity: 0.5;
+        }
+
+        #bize-ulasin .content-wrapper {
+            position: relative;
+            z-index: 1;
+            max-width: 750px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: auto;
+        }
+
+        #bize-ulasin h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold); /* Altın başlık */
+            position: relative;
+            display: inline-block;
+        }
+
+        #bize-ulasin h3::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: var(--light-text);
+            left: 0;
+            bottom: -10px;
+            transform: scaleX(0);
+            transform-origin: center;
+            transition: transform 0.5s ease;
+        }
+
+        #bize-ulasin.is-visible h3::after {
+            transform: scaleX(1);
+        }
+
+        #bize-ulasin p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--light-text);
+            opacity: 0.9;
+        }
+
+        /* Altbilgi */
+        footer {
+            background-color: var(--footer-bg); /* Görseldeki koyu lacivert */
+            color: var(--light-text);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.95rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            display: flex; /* İçeriği merkezlemek için */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Öğeler arası boşluk */
+        }
+
+        footer .footer-top-row {
+            display: flex;
+            flex-direction: column; /* Mobil için dikey, masaüstü için yan yana */
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px; /* Genişliği sınırlayabiliriz */
+        }
+
+        footer .footer-legal-links {
+            white-space: nowrap; /* Linklerin yan yana kalmasını sağlar */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+        }
+
+        footer .footer-legal-links a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px; /* Linkler arası boşluk */
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-legal-links a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        footer .footer-legal-links span { /* Boru işareti için */
+            color: var(--light-text); /* Boru işareti rengi */
+            font-weight: normal;
+        }
+
+        footer .social-icons {
+            display: flex;
+            gap: 15px; /* İkonlar arası boşluk */
+            margin-top: 5px; /* Linklerle ikonlar arasına boşluk */
+        }
+
+        footer .social-icons a {
+            color: var(--light-text); /* İkon rengi */
+            font-size: 1.4rem; /* İkon boyutu */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .social-icons a:hover {
+            color: var(--accent-gold); /* İkon hover rengi */
+            transform: scale(1.1);
+        }
+
+        footer .footer-links-bottom {
+            list-style: none; /* Madde işaretlerini kaldır */
+            padding: 0;
+            margin: 10px 0; /* Üst ve alt boşluk */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+            display: flex;
+            flex-direction: column; /* Dikey sıralama */
+            align-items: center;
+            gap: 8px; /* Liste öğeleri arası boşluk */
+        }
+
+        footer .footer-links-bottom a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-links-bottom a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        .copyright-text {
+            color: var(--light-text);
+            font-size: 0.85rem; /* Telif hakkı yazısını küçültme */
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        .quote {
+            background: linear-gradient(135deg, #e0ecff, #c3d8f2);
+            color: #1e2a38;
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-top: 60px; /* Diğer bölümlerle tutarlılık için eklendi */
+        }
+
+        .quote h3 {
+            font-size: 1.8rem;
+            max-width: 800px;
+            margin: auto;
+            color: var(--primary-dark-blue); /* Quote başlık rengi */
+        }
+
+        .quote p {
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            color: #333; /* Quote yazar rengi */
+        }
+
+        /* Koçluk Detayları Bölümü - Yeni Tasarım */
+        .kocluk-ozel {
+            background-color: var(--light-bg); /* Daha açık bir arka plan */
+            padding: 80px 20px;
+            margin-top: 60px; /* Üstteki bölümle boşluk */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Hafif gölge */
+            text-align: center; /* İçeriği ortala */
+        }
+
+        .kocluk-ozel h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            color: var(--primary-dark-blue);
+            margin-bottom: 3.5rem;
+            position: relative;
+        }
+
+        .kocluk-ozel h3::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        .kocluk-icerik {
+            display: flex;
+            flex-wrap: wrap; /* Mobil uyumluluk için */
+            gap: 40px; /* Metin ve görsel arası boşluk */
+            align-items: center; /* Dikeyde ortala */
+            max-width: 900px; /* DEĞİŞTİRİLDİ: İçerik genişliği azaltıldı */
+            margin: 40px auto; /* Ortala ve boşluk bırak */
+            text-align: left; /* İç metni sola hizala */
+        }
+
+        .kocluk-yazi {
+            flex: 2; /* Yazının daha geniş yer kaplamasını sağlar */
+            min-width: 300px; /* Minimum genişlik */
+            font-size: 1.15rem;
+            line-height: 1.9;
+            color: var(--dark-text);
+        }
+
+        .kocluk-yazi p {
+            margin-bottom: 1.5rem; /* Paragraflar arası boşluk */
+        }
+
+        .kocluk-gorsel {
+            flex: 1; /* Görselin orantılı yer kaplamasını sağlar */
+            min-width: 250px; /* Minimum genişlik */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .kocluk-gorsel img {
+            max-width: 120%;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .kocluk-gorsel img:hover {
+            transform: scale(1.05); /* Hafif büyüme efekti */
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
+        }
+
+        .kocluk-cta {
+            margin-top: 40px; /* Buton için üst boşluk */
+            display: inline-block;
+        }
+
+        /* YENİ EKLENEN CSS STILLERİ */
+
+        /* About Summary Section */
+        .about-summary {
+            background-color: white;
+            padding: 70px 20px; /* DEĞİŞTİRİLDİ: Padding biraz azaltıldı */
+            text-align: center;
+        }
+
+        .about-summary .content-wrapper {
+            max-width: 800px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: auto;
+        }
+
+        .about-summary p {
+            font-size: 1.1rem;
+            color: #444;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .about-summary .btn.about-btn {
+            background-color: var(--accent-blue); /* Mavi buton */
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .about-summary .btn.about-btn:hover {
+            background-color: var(--button-hover-blue);
+            box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4);
+        }
+
+        /* Testimonials Section */
+        .testimonials {
+            background-color: var(--light-bg);
+            padding: 70px 20px; /* DEĞİŞTİRİLDİ: Padding biraz azaltıldı */
+        }
+
+        .testimonials .testimonials-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1000px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: auto;
+        }
+
+        .testimonials .testimonial-card {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--card-shadow);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .testimonials .testimonial-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .testimonials .testimonial-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid var(--accent-gold); /* Vurgulu kenarlık */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonials .testimonial-card h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            color: var(--primary-dark-blue);
+            margin-bottom: 10px;
+        }
+
+        .testimonials .testimonial-card .stars {
+            color: var(--accent-gold); /* Altın yıldızlar */
+            margin-bottom: 10px;
+        }
+
+        .testimonials .testimonial-card p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 15px;
+            flex-grow: 1; /* İçeriğin dikeyde eşit dağılmasını sağlar */
+        }
+
+        .testimonials .testimonial-card span {
+            font-weight: 600;
+            color: var(--accent-blue);
+            font-size: 0.9rem;
+        }
+
+        /* FAQ Section */
+        .faq {
+            background-color: var(--light-bg);
+        }
+
+        .faq .faq-container {
+            max-width: 800px; /* DEĞİŞTİRİLDİ: Maksimum genişlik azaltıldı */
+            margin: auto;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .faq .faq-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .faq .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            cursor: pointer;
+            background-color: var(--primary-dark-blue); /* Koyu mavi başlık */
+            color: var(--light-text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq .faq-question:hover {
+            background-color: var(--accent-blue); /* Hover'da canlı mavi */
+        }
+
+        .faq .faq-question h4 {
+            margin: 0;
+            flex-grow: 1;
+            font-size: 1.2rem; /* Daha okunaklı olması için boyut */
+        }
+
+        .faq .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq .faq-answer {
+            padding: 0 30px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            background-color: #f8f8f8; /* Açılır içeriğin arka planı */
+        }
+
+        .faq .faq-item.active .faq-answer {
+            max-height: 500px; /* Cevap içeriğine göre ayarlanmalı. Daha uzun içerikler için artırıldı */
+            padding: 20px 30px;
+        }
+
+        .faq .faq-answer p {
+            font-size: 1rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            header .logo-container img {
+                height: 70px; /* Tablette logo yüksekliği */
+                margin-top: 0; /* Negatif margin kaldırıldı */
+            }
+
+            nav ul {
+                gap: 1.8rem;
+            }
+
+            .hero {
+                height: 500px; /* DEĞİŞTİRİLDİ: Tablet için uygun yükseklik azaltıldı */
+            }
+
+            .hero-content {
+                padding: 2.5rem 3.5rem;
+            }
+
+            .hero-content h2 {
+                font-size: clamp(2.5rem, 4.5vw, 4rem); /* Daha duyarlı boyut */
+            }
+
+            .hero-content p {
+                font-size: clamp(0.95rem, 1.6vw, 1.2rem);
+            }
+
+            .section {
+                padding: 60px 20px; /* DEĞİŞTİRİLDİ: Tablet için padding azaltıldı */
+            }
+            .section h3 {
+                font-size: 2.6rem;
+                margin-bottom: 3rem;
+            }
+
+            #bize-ulasin {
+                padding: 60px 15px;
+            }
+
+            #bize-ulasin h3 {
+                font-size: 2.5rem;
+            }
+
+            #bize-ulasin p {
+                font-size: 1.1rem;
+            }
+
+            #blog .post img {
+                height: 300px; /* Tablette resim yüksekliği */
+            }
+
+            .kocluk-icerik {
+                flex-direction: column; /* Tablette dikey sıralama */
+                gap: 30px;
+                text-align: center;
+            }
+            .kocluk-yazi {
+                order: 2; /* Metin altta */
+                font-size: 1.05rem;
+                margin-bottom: 0; /* Artık alt boşluk kocluk-icerik'teki gap ile yönetiliyor */
+            }
+            .kocluk-yazi p {
+                margin-bottom: 1rem;
+            }
+            .kocluk-gorsel {
+                order: 1; /* Görsel üstte */
+                margin-bottom: 0; /* Artık alt boşluk kocluk-icerik'teki gap ile yönetiliyor */
+            }
+            .kocluk-gorsel img {
+                max-width: 90%; /* Tablette resim boyutunu ayarla */
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: row; /* Mobil menüde logo ve hamburger yanyana */
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.8rem 1rem;
+                height: auto;
+                overflow: visible; /* Menü açıldığında içeriğin kırpılmasını engelle */
+            }
+
+            header .logo-container {
+                order: 2; /* Logo sağda */
+                margin-left: auto; /* Logoyu sağa it */
+            }
+
+            header .logo-container img {
+                height: 80px; /* Mobil cihazlarda logo yüksekliği ayarlandı */
+                margin-top: 0; /* Negatif margin kaldırıldı */
+            }
+
+            .menu-toggle {
+                display: block;
+                order: 1; /* Hamburger solda */
+            }
+            
+            nav {
+                flex-basis: 100%; /* Navigasyon tamamen alt satıra geçsin */
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-out, background-color 0.3s ease-out;
+                position: absolute; /* Navbar'ın altına açılması için */
+                top: 100%; /* Header'ın hemen altında başla */
+                left: 0;
+                right: 0;
+                width: 100%;
+                background-color: var(--navbar-bg-start); /* Mobil menü arka planı */
+                box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+                z-index: 999; /* Header'dan biraz düşük z-index */
+            }
+
+            nav.active {
+                max-height: 500px; /* Menü açıldığında max-height artırıldı */
+                padding-bottom: 1rem; /* Alttan boşluk */
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                padding: 0; /* Kaldırılan padding */
+                gap: 0;
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: left;
+                padding: 0.7rem 1.5rem; /* Yanlardan boşluk */
+                border-bottom: 1px solid rgba(255,255,255,0.08); /* Daha ince sınır */
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav ul li a {
+                font-size: 1.1rem; /* Mobil menü link boyutu */
+                padding: 0; /* İç padding kaldırıldı */
+                display: block; /* Tam tıklanabilir alan için */
+            }
+            
+            nav ul li a::after {
+                left: 0;
+                transform: none; /* Transform kaldırıldı */
+                bottom: 0; /* Alta yapıştır */
+                height: 2px; /* Daha ince alt çizgi */
+                background-color: var(--accent-blue);
+            }
+
+            nav ul li a:hover::after {
+                width: 25%; /* Mobil menüde hover efekti */
+            }
+
+            .hero {
+                height: 450px; /* Mobil için uygun yükseklik */
+                padding: 1rem;
+            }
+
+            .hero-content {
+                padding: 2rem 1.5rem; /* Daha az padding */
+                border-radius: 8px;
+                backdrop-filter: blur(3px); /* Daha az bulanıklık */
+                box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            }
+
+            .hero-content h2 {
+                font-size: clamp(2rem, 8vw, 3rem); /* Telefonlar için daha küçük */
+                margin-bottom: 1rem;
+            }
+
+            .hero-content p {
+                font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+                margin-bottom: 1.5rem;
+            }
+
+            .btn {
+                padding: 0.9rem 2.2rem;
+                font-size: 1.05rem;
+            }
+
+            .section {
+                padding: 50px 15px;
+            }
+            .section h3 {
+                font-size: 2.2rem;
+                margin-bottom: 2.8rem;
+            }
+            .section h3::after {
+                width: 60px;
+                height: 4px;
+                bottom: -10px;
+            }
+
+            #hizmetler .cards {
+                grid-template-columns: 1fr; /* Tek sütunlu düzen */
+                gap: 2rem;
+            }
+            #hizmetler .card {
+                padding: 2rem 1.5rem;
+            }
+            #hizmetler .card i {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+            }
+            #hizmetler .card h4 {
+                font-size: 1.5rem;
+            }
+            #hizmetler .card p {
+                font-size: 0.95rem;
+            }
+
+            #blog .blog-posts {
+                gap: 2rem;
+            }
+            #blog .post {
+                padding: 1.2rem;
+                max-width: 500px; /* Mobil görünümde biraz daha daralt */
+            }
+            #blog .post img {
+                width: 100%; /* Resim kartın genişliğine sığsın */
+                height: 250px; /* Mobil için daha küçük resim yüksekliği */
+                margin-bottom: 1rem;
+            }
+            #blog .post-content h4 {
+                font-size: 1.3rem;
+                margin-bottom: 0.8rem;
+            }
+            #blog .post-content p,
+            #blog .post-content ul li {
+                font-size: 0.9rem;
+                line-height: 1.5;
+            }
+            #blog .post-content .tip {
+                font-size: 0.85rem;
+                padding: 0.7rem 0.8rem;
+            }
+
+            #bize-ulasin {
+                padding: 50px 15px;
+                margin-top: 5rem;
+            }
+            #bize-ulasin h3 {
+                font-size: 2.2rem;
+                margin-bottom: 1rem;
+            }
+            #bize-ulasin p {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .kocluk-ozel {
+                padding: 50px 15px;
+            }
+            .kocluk-ozel h3 {
+                font-size: 1.8rem;
+            }
+            .kocluk-yazi {
+                font-size: 0.95rem;
+            }
+            .kocluk-yazi p {
+                margin-bottom: 0.8rem;
+            }
+            .kocluk-gorsel img {
+                max-width: 100%; /* Mobil cihazda tam genişlik */
+            }
+
+            .testimonials .testimonials-container {
+                /* Testimonials bölümü için Flexbox'a geçiş */
+                display: flex;
+                flex-direction: column; /* Öğeleri dikey olarak sırala */
+                gap: 25px; /* Öğeler arası boşluk */
+            }
+            .testimonials .testimonial-card {
+                padding: 25px;
+            }
+            .testimonials .testimonial-card img {
+                width: 80px;
+                height: 80px;
+                margin-bottom: 10px;
+            }
+            .testimonials .testimonial-card h4 {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+            .testimonials .testimonial-card p {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+            .testimonials .testimonial-card span {
+                font-size: 0.8rem;
+            }
+
+            .faq .faq-container {
+                border-radius: 10px;
+            }
+            .faq .faq-item {
+                margin-bottom: 10px;
+                border-radius: 8px;
+            }
+            .faq .faq-question {
+                padding: 15px 20px;
+                font-size: 1.1rem;
+            }
+            .faq .faq-question h4 {
+                font-size: 1.05rem;
+            }
+            .faq .faq-answer {
+                padding: 0 20px;
+            }
+            .faq .faq-item.active .faq-answer {
+                padding: 15px 20px;
+            }
+            .faq .faq-answer p {
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 25px 15px;
+                gap: 10px;
+            }
+            footer .footer-top-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+            footer .footer-legal-links {
+                font-size: 0.85rem;
+                margin-bottom: 5px;
+            }
+            footer .footer-legal-links a {
+                margin: 0 6px;
+            }
+            footer .social-icons {
+                gap: 12px;
+                margin-top: 3px;
+                margin-bottom: 8px;
+            }
+            footer .social-icons a {
+                font-size: 1.3rem;
+            }
+            footer .footer-links-bottom {
+                font-size: 0.85rem;
+                margin: 8px 0;
+                gap: 6px;
+            }
+            .copyright-text {
+                font-size: 0.8rem;
+                margin-top: 8px;
+            }
+
+            .quote {
+                padding: 3rem 1.5rem;
+                margin-top: 40px;
+            }
+            .quote h3 {
+                font-size: 1.6rem;
+            }
+            .quote p {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                height: 400px;
+            }
+            .hero-content {
+                padding: 1.5rem 1rem;
+            }
+            .hero-content h2 {
+                font-size: clamp(1.8rem, 8vw, 2.5rem);
+            }
+            .hero-content p {
+                font-size: clamp(0.85rem, 3.5vw, 1rem);
+            }
+            .btn {
+                padding: 0.8rem 1.8rem;
+                font-size: 0.95rem;
+            }
+
+            .section {
+                padding: 40px 10px;
+            }
+            .section h3 {
+                font-size: 1.9rem;
+                margin-bottom: 2.5rem;
+            }
+            .section h3::after {
+                width: 50px;
+                height: 3px;
+                bottom: -8px;
+            }
+
+            #blog .post {
+                padding: 1rem;
+            }
+            #blog .post img {
+                height: 200px; /* Telefonlar için daha da küçük resim yüksekliği */
+            }
+            #blog .post-content h4 {
+                font-size: 1.15rem;
+            }
+            #blog .post-content p,
+            #blog .post-content ul li {
+                font-size: 0.85rem;
+            }
+
+            #bize-ulasin h3 {
+                font-size: 1.9rem;
+            }
+            #bize-ulasin p {
+                font-size: 0.95rem;
+            }
+
+            .kocluk-ozel h3 {
+                font-size: 1.8rem;
+            }
+            .kocluk-yazi {
+                font-size: 0.9rem;
+            }
+            .kocluk-yazi p {
+                margin-bottom: 0.8rem;
+            }
+
+            .testimonials .testimonial-card {
+                padding: 20px;
+            }
+            .testimonials .testimonial-card h4 {
+                font-size: 1.2rem;
+            }
+            .testimonials .testimonial-card p {
+                font-size: 0.85rem;
+            }
+
+            .faq .faq-question {
+                padding: 12px 15px;
+            }
+            .faq .faq-question h4 {
+                font-size: 0.95rem;
+            }
+            .faq .faq-answer {
+                padding: 0 15px;
+            }
+            .faq .faq-item.active .faq-answer {
+                padding: 12px 15px;
+            }
+            .faq .faq-answer p {
+                font-size: 0.85rem;
+            }
+
+            footer {
+                padding: 20px 10px;
+            }
+            footer .footer-legal-links {
+                font-size: 0.8rem;
+            }
+            footer .social-icons a {
+                font-size: 1.2rem;
+            }
+            footer .footer-links-bottom {
+                font-size: 0.8rem;
+            }
+            .copyright-text {
+                font-size: 0.75rem;
+            }
+
+            .quote {
+                padding: 2.5rem 1rem;
+                margin-top: 30px;
+            }
+            .quote h3 {
+                font-size: 1.4rem;
+            }
+            .quote p {
+                font-size: 1rem;
+            }
+        }
+        /* WhatsApp Chat Bubble Styles */
+        .whatsapp-chat-bubble {
+            position: fixed;
+            bottom: 25px; /* Ayarlayabilirsiniz */
+            right: 25px; /* Ayarlayabilirsiniz */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .whatsapp-button {
+            background-color: #25D366; /* WhatsApp yeşili */
+            color: var(--light-text);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            animation: pulse 2s infinite ease-in-out; /* Hero butondaki gibi animasyon */
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1DA851; /* Daha koyu yeşil */
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            animation: none; /* Hover'da animasyonu durdur */
+        }
+
+        .whatsapp-chat-bubble .chat-header {
+            background-color: var(--primary-dark-blue); /* Sitenizin ana koyu rengi */
+            color: var(--light-text);
+            padding: 12px 18px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 0.95rem;
+            font-weight: 600;
+            white-space: nowrap; /* Metnin tek satırda kalmasını sağlar */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(20px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out, visibility 0.4s ease-out;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtir */
+            user-select: none; /* Metnin seçilmesini engeller */
+        }
+
+        /* Baloncuğu görünür yapma */
+        .whatsapp-chat-bubble.show-header .chat-header {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        /* Responsive Düzenlemeler */
+        @media (max-width: 768px) {
+            .whatsapp-chat-bubble {
+                bottom: 20px;
+                right: 20px;
+            }
+            .whatsapp-button {
+                width: 55px;
+                height: 55px;
+                font-size: 2rem;
+            }
+            .whatsapp-chat-bubble .chat-header {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .whatsapp-chat-bubble {
+                bottom: 15px;
+                right: 15px;
+            }
+            .whatsapp-button {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+            .whatsapp-chat-bubble .chat-header {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container" onclick="window.location.href='index.html#hero'">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html" class="nav-link">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html" class="nav-link">Hakkımızda</a></li>
+                <li><a href="#hizmetler" class="nav-link">Hizmetler</a></li>
+                <li><a href="#blog" class="nav-link">Blog</a></li>
+                <li><a href="#faq" class="nav-link">SSS</a></li>
+                <li><a href="iletisim-no.html" class="nav-link">İletişim</a></li>
+                <li><a href="üyelik formu.html" class="nav-link" target="_blank">Kayıt Ol</a></li>
+                <li><a href="Giris-yap.html" class="nav-link" target="_blank">Giriş Yap</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero" id="hero">
+        <img src="ChatGPT Image 27 May 2025 19_04_22.png" alt="YDS, YÖKDİL, YDT Sınavlarına Hazırlık">
+        <div class="hero-content">
+            <h2>YDS, YÖKDİL, YDT İçin Kişisel Koçluk</h2>
+            <p>Akademik ve profesyonel hayatta önemli bir yere sahip olan YDS, YÖKDİL ve YDT sınavları, yalnızca bilgi birikimi değil, aynı zamanda doğru stratejiler ve disiplinli bir hazırlık süreci gerektirir. YDS/YÖKDİL/YDT koçluğu, bu sınavlara yönelik özel olarak tasarlanmış bir dil koçluğu hizmetidir.</p>
+            <a href="iletisim-no.html" class="btn">Hemen Başla</a>
+        </div>
+    </section>
+
+    <section class="section about-summary" id="about-summary">
+        <div class="content-wrapper">
+            <h3>Neden Dil Koçum?</h3>
+            <p>Çünkü biz sadece ders anlatmıyoruz — başarıyı planlıyor, yol arkadaşlığı yapıyoruz.
+            Dil Koçum, YDS, YÖKDİL ve YDT sınavlarına hazırlık sürecini sıradanlıktan çıkararak, her öğrencinin bireysel öğrenme tarzına özel koçluk çözümleri sunar. Hedeflerinizi, alışkanlıklarınızı ve güçlü yönlerinizi detaylı şekilde analiz eder; size özel, stratejik bir çalışma planı oluştururuz.
+            Bireyselleştirilmiş yönlendirme, özgün ve güncel içerikler, alanında uzman koçlar ile sınav yolculuğunuzda yalnız değilsiniz.
+            Motivasyonunuzu canlı tutan, sizi daima ileri taşıyan bir sistemle, başarıyı sadece mümkün değil, kaçınılmaz hale getiriyoruz.
+            Dil Koçum ile öğrenmek sadece bir görev değil, bir tutkudur.</p>
+            <a href="hakkimizda.html" class="btn about-btn">Hakkımızda Daha Fazla Bilgi</a>
+        </div>
+    </section>
+
+    <section class="section" id="hizmetler">
+        <h3>Hizmetlerimiz</h3>
+        <div class="cards">
+            <div class="card">
+                <i class="fas fa-user-graduate"></i>
+                <h4>Birebir Koçluk & Mentörlük</h4>
+                <p>Size özel oluşturulmuş haftalık çalışma planları, düzenli ilerleme takibi ve kişisel motivasyon desteği.</p><a href="mentorluk.html" class="btn-s">Daha Fazla Bilgi</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-book-open"></i>
+                <h4>Özgün ve Güncel Kaynaklar</h4>
+                <p>YDS, YÖKDİL, YDT formatına uygun, güncel kelime setleri, okuma metinleri, deneme sınavları ve soru bankaları.</p><a href="hizmetlerimiz-2.html" class="btn-s">Daha Fazla Bilgi</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-video"></i>
+                <h4>Canlı Ders ve Soru Çözümleri</h4>
+                <p>Uzman eğitmenlerle interaktif canlı dersler, anlamadığınız sorular için anında sesli/yazılı destek.</p><a href="canlı_egitim.html" class="btn-s">Daha Fazla Bilgi</a>
+            </div>
+            <div class="card">
+                <i class="fas fa-chart-line"></i>
+                <h4>Detaylı Performans Analizi</h4>
+                <p>Deneme sınavı analizleri, eksik konuların belirlenmesi ve hedefe yönelik özel çalışma programları.</p><a href="analiz.html" class="btn-s">Daha Fazla Bilgi</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section kocluk-ozel" id="kocluk-detaylari">
+        <div class="content-wrapper"> 
+            <h3>Sizin Kazanmanız İçin Koçluk Hizmetini Kişiye Özel Hale Getiriyoruz</h3>
+            <div class="kocluk-icerik">
+                <div class="kocluk-yazi">
+                    <p>Koçluk hizmetinin amacı; öğrenciyi hedefleri doğrultusunda yönlendirmek, motive etmek ve bu süreç içerisinde yaşadığı zorluklar ile baş etmesini sağlamaktır. Yani koçunuz sizin hedefinize ulaşmanız için sizi destekler, motivasyonunuzu arttırır ve hedefinize ulaşma yolunda doğru çalışma stratejilerini size gösterir.</p>
+                    <p>Sunduğumuz koçluk hizmeti; bireyselleştirilmiş hedef belirleme, etkili çalışma planları, düzenli geri bildirimler ve kapsamlı deneme analizleri gibi birçok unsuru içermektedir. Öğrencilerimize sadece teknik bilgiler sunmakla kalmıyor, aynı zamanda motivasyon, zaman yönetimi ve özgüven desteği ile başarılarını maksimum seviyeye çıkarıyoruz.</p>
+                </div>
+                <div class="kocluk-gorsel">
+                    <img src="ChatGPT Image 26 May 2025 20_06_21.png" alt="Kişiye özel koçluk"> 
+                </div>
+            </div>
+            <a href="iletisim-no.html" class="btn kocluk-cta">Hemen Detaylı Bilgi Alın</a>
+        </div>
+    </section>       
+
+    <section class="section testimonials" id="testimonials">
+        <h3>Öğrencilerimizden Gelenler</h3>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=Öğrenci+1" alt="Öğrenci Profili">
+                <h4></h4>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p>"Dil Koçum sayesinde YDS'den hedeflediğim puanı fazlasıyla geçtim! Kişiye özel planları ve motivasyon desteği inanılmazdı."</p>
+                <span>YDS Puanı: 85</span>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=Öğrenci+2" alt="Öğrenci Profili">
+                <h4></h4>
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i>
+                </div>
+                <p>"YÖKDİL için doğru kaynakları bulmakta zorlanıyordum. Dil Koçum'un özgün kaynakları ve soru çözümleri sayesinde çok ilerledim."</p>
+                <span>YÖKDİL Puanı: 78</span>
+            </div>
+            <div class="testimonial-card">
+                <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=Öğrenci+3" alt="Öğrenci Profili">
+                <div class="stars">
+                    <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                </div>
+                <p>"YDT'ye hazırlanırken sınav stresiyle başa çıkmakta zorlanıyordum. Koçumun verdiği destekle hem netimi yükselttim hem de daha rahat bir sınav geçirdim."</p>
+                <span>YDT Net: 77,50</span>
+            </div>
+        </div>
+    </section>
+    <section class="section" id="blog">
+        <h3>Blog</h3>
+        <div class="blog-posts">
+            <div class="post">
+                <img src="Gemini_Generated_Image_oznzmfoznzmfoznz.png" alt="Açık bir kitap ve kütüphane ortamı gösteren görsel." onerror="this.onerror=null;this.src='https://placehold.co/250x250/E0E0E0/333333?text=Resim+Yok';">
+                <div class="post-content">
+                    <h4>YDS'de Okuma Becerilerini Geliştirmenin Sırları</h4>
+                    <p>📚 YDS, Türkiye’de lisansüstü eğitim ve akademik kariyer hedefleyen adaylar için oldukça kritik bir sınav. Bu sınavda %70’e yakın kısım okuduğunu anlamaya dayanır. Peki, bu beceriyi nasıl geliştirirsiniz? İşte bu blogda YDS’de okuma becerilerinizi geliştirecek 7 altın stratejiyi birlikte öğrenelim.</p>
+                     <a href="blogger.html" class="btn-s">Daha Fazla Bilgi</a>
+                </div>
+            </div>
+        </div>    
+    </section>
+
+    <section class="quote">
+        <h3>“Most of the important things in the world have been accomplished by people who have kept on trying when there seemed to be no hope at all.”</h3>
+        <p>- Dale Carnegie</p>
+    </section>
+
+    <section class="section faq" id="faq">
+        <h3>Sıkça Sorulan Sorular</h3>
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>1. Koçluk programları ne kadar sürer? <i class="fas fa-chevron-down"></i></h4>
+                </div>
+                <div class="faq-answer">
+                    <p>Koçluk programlarımız genellikle öğrencinin mevcut seviyesi ve hedef puanına göre 2 ila 6 ay arasında değişmektedir. Detaylı bilgi için ücretsiz ön görüşme talep edebilirsiniz.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>2. Dersler online mı yüz yüze mi yapılıyor? <i class="fas fa-chevron-down"></i></h4>
+                </div>
+                <div class="faq-answer">
+                    <p>Tüm derslerimiz ve koçluk seanslarımız tamamen online platformlar üzerinden gerçekleştirilmektedir. Bu sayede Türkiye'nin her yerinden ulaşım kolaylığı sağlıyoruz.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>3. Kaynaklar ve materyaller nasıl sağlanıyor? <i class="fas fa-chevron-down"></i></h4>
+                </div>
+                <div class="faq-answer">
+                    <p>Size özel hazırlanan özgün PDF materyaller, deneme sınavları ve soru bankaları dijital ortamda sizinle paylaşılmaktadır. Ek olarak, önerilen ek kaynaklar hakkında da bilgi veriyoruz.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>4. Koçluk hizmeti hangi sınavları kapsıyor? <i class="fas fa-chevron-down"></i></h4>
+                </div>
+                <div class="faq-answer">
+                    <p>Hizmetimiz YDS, YÖKDİL ve YDT sınavlarına yönelik birebir koçluk ve mentörlük desteği sağlamaktadır.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question">
+                    <h4>5. Ödeme seçenekleri nelerdir? <i class="fas fa-chevron-down"></i></h4>
+                </div>
+                <div class="faq-answer">
+                    <p>Ödeme seçeneklerimiz hakkında detaylı bilgiyi iletişim sayfamızdan veya ücretsiz ön görüşme sırasında alabilirsiniz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="bize-ulasin">
+        <div class="content-wrapper">
+            <h3>Bizimle İletişime Geçin</h3>
+            <p>Sınavlara hazırlık sürecinizde size nasıl destek olabileceğimizi merak mı ediyorsunuz? Eğitim programlarımız, koçluk süreçlerimiz veya aklınızdaki diğer sorular için bize ulaşmaktan çekinmeyin!</p>
+            <a href="iletisim-no.html" class="btn">Hemen İletişime Geç</a>
+        </div>
+    </section>
+    
+    <div class="whatsapp-chat-bubble">
+        <div class="chat-header" id="chatHeader">
+            Nasıl Yardımcı Olabiliriz?
+        </div>
+        <a href="https://api.whatsapp.com/send?phone=905075186699&text=Merhaba,%20web%20sitenizden%20geliyorum%20ve%20yardıma%20ihtiyacım%20var." target="_blank" class="whatsapp-button">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-top-row">
+            <div class="footer-legal-links">
+                <a href="gizlilik-politikası.html">Gizlilik Politikası</a> <span>|</span> <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/dilkocumm/?igsh=MTA2NDk2cXljNGRtbw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=05075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <ul class="footer-links-bottom">
+            <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+            <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+            <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+        </ul>
+        <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            if (header) { // header elementi bulunduğundan emin olun
+                window.addEventListener('scroll', function() {
+                    if (window.scrollY > 50) {
+                        header.classList.add('scrolled');
+                    } else {
+                        header.classList.remove('scrolled');
+                    }
+                });
+            } else {
+                console.warn("Header elementi bulunamadı!"); // Konsola uyarı gönderin
+            }
+        });
+
+        // Sayfa yüklendiğinde logo ve hero içeriği için animasyonları başlat
+        window.onload = function() {
+            document.querySelector('header .logo-container').style.animationDelay = '0.2s';
+            
+        };
+
+        // 🍔 Hamburger menü toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                mainNav.classList.toggle('active');
+            });
+        }
+
+        // Function to update active class on nav links
+        function updateNavLinkActiveState(identifier) {
+            document.querySelectorAll(".nav-link").forEach(link => {
+                link.classList.remove("active");
+            });
+
+            // Find the link that matches the identifier
+            let targetLink = null;
+            if (identifier === 'index.html' || identifier === 'hero' || identifier === '') {
+                targetLink = document.querySelector('nav ul li a[href="index.html"]');
+            } else if (identifier === 'about-summary') { // Special case for 'Hakkımızda' section
+                targetLink = document.querySelector('nav ul li a[href="hakkimizda.html"]');
+            } else if (identifier === 'hizmetler') {
+                targetLink = document.querySelector('nav ul li a[href="#hizmetler"]');
+            } else if (identifier === 'blog') {
+                targetLink = document.querySelector('nav ul li a[href="#blog"]');
+            } else if (identifier === 'faq') {
+                targetLink = document.querySelector('nav ul li a[href="#faq"]');
+            } else if (identifier === 'bize-ulasin') { // 'İletişim' linki için
+                targetLink = document.querySelector('nav ul li a[href="iletisim-no.html"]');
+            }
+            else { // For other direct HTML file names
+                targetLink = document.querySelector(`nav ul li a[href="${identifier}"]`);
+            }
+            
+            if (targetLink) {
+                targetLink.classList.add("active");
+            }
+        }
+
+        // 🔗 Tüm navigasyon linkleri için click event listener
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Menü açıksa kapat (mobil görünüm için)
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                }
+
+                const href = this.getAttribute('href');
+                let identifierToActivate = '';
+
+                if (href.startsWith('#')) {
+                    identifierToActivate = href.substring(1);
+                    e.preventDefault(); // Varsayılan kaydırma davranışını engelle
+                    const targetElement = document.getElementById(identifierToActivate);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    identifierToActivate = href.split('/').pop();
+                }
+                
+                // Tıklamada hemen bu linki aktif yap
+                updateNavLinkActiveState(identifierToActivate);
+            });
+        });
+
+
+        // Intersection Observer for scroll-based active link updates
+        // Sadece navbar'da karşılığı olan bölümleri gözlemleyeceğiz
+        const sectionsForNavbarActive = document.querySelectorAll('#hero, #about-summary, #hizmetler, #blog, #faq, #bize-ulasin'); 
+
+        const navbarObserverOptions = {
+            root: null, // Viewport'u kök olarak kullan
+            rootMargin: '0px',
+            threshold: 0.5 // Elementin %50'si görünür olduğunda tetiklenir
+        };
+
+        const navbarSectionObserver = new IntersectionObserver((entries) => {
+            let currentActiveSectionId = null;
+            let maxIntersectionRatio = 0;
+
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.intersectionRatio > maxIntersectionRatio) {
+                        maxIntersectionRatio = entry.intersectionRatio;
+                        currentActiveSectionId = entry.target.id;
+                    }
+                }
+            });
+
+            if (currentActiveSectionId) {
+                updateNavLinkActiveState(currentActiveSectionId);
+            } else {
+                // Eğer hiçbir navbar bölümü belirgin şekilde görünmüyorsa (örn. navbar'da olmayan bir bölümdeyse)
+                // ve sayfa en üstte değilse, hiçbir link aktif olmasın.
+                // Ancak sayfa en üstteyse (hero section'a yakınsa), "Ana Sayfa" aktif olsun.
+                if (window.scrollY < document.getElementById('hero').offsetHeight / 2) { // Hero'nun yarısından az kaydırıldıysa
+                    updateNavLinkActiveState('index.html'); 
+                } else {
+                    // Eğer navbar'da olmayan bir bölümdeyse veya hiçbir linkli bölüm belirgin değilse
+                    // ve sayfa en üstte değilse, tüm aktif sınıfları kaldır.
+                    document.querySelectorAll(".nav-link").forEach(link => link.classList.remove("active"));
+                }
+            }
+        }, navbarObserverOptions);
+
+        // Her bir ilgili bölümü gözlemlemeye başla
+        sectionsForNavbarActive.forEach(section => {
+            navbarSectionObserver.observe(section);
+        });
+
+
+        // Bölümlerin görünür olduğunda animasyonunu tetiklemek için ayrı Intersection Observer API
+        // Bu observer sadece animasyonları tetikler, aktif navigasyon linkini değiştirmez.
+        const sectionsForAnimation = document.querySelectorAll('.section, .quote, #bize-ulasin, #kocluk-detaylari'); 
+
+        const animationObserverOptions = {
+            root: null, // Viewport'u kök olarak kullan
+            rootMargin: '0px',
+            threshold: 0.1 // Elementin %10'u görünür olduğunda tetiklenir
+        };
+
+        const sectionAnimationObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible'); 
+                } else {
+                    // İsteğe bağlı: Eğer element görünürlükten çıkınca animasyonu sıfırlamak isterseniz
+                    // entry.target.classList.remove('is-visible');
+                }
+            });
+        }, animationObserverOptions);
+
+        // Her bir ilgili bölümü gözlemlemeye başla
+        sectionsForAnimation.forEach(section => {
+            sectionAnimationObserver.observe(section);
+        });
+
+        // Sayfa yüklendiğinde veya hash değiştiğinde aktif linki belirle
+        // Bu kısım, sayfa ilk yüklendiğinde veya kullanıcı bir HTML sayfasına yönlendirildiğinde çalışır.
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPath = window.location.pathname.split("/").pop(); // index.html, hakkimizda.html, etc.
+            const currentHash = window.location.hash.substring(1); // hizmetler, blog, etc.
+
+            if (currentHash) {
+                updateNavLinkActiveState(currentHash);
+            } else if (currentPath) {
+                updateNavLinkActiveState(currentPath);
+            } else {
+                // Eğer ne hash ne de dosya adı varsa (örn: domain.com/), varsayılan olarak Ana Sayfa aktif olsun
+                updateNavLinkActiveState('index.html');
+            }
+        });
+
+        // SSS (Sıkça Sorulan Sorular) etkileşimli alanı
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', event => {
+                const parent = item.closest('.faq-item');
+                parent.classList.toggle('active');
+
+                // Diğer açık olanları kapat (isteğe bağlı, tek seferde sadece birini açık tutmak için)
+                document.querySelectorAll('.faq-item.active').forEach(openItem => {
+                    if (openItem !== parent) {
+                        openItem.classList.remove('active');
+                    }
+                });
+            });
+        });
+        
+        // WhatsApp Sohbet Balonu İşlevselliği
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatBubble = document.querySelector('.whatsapp-chat-bubble');
+            const chatHeader = document.getElementById('chatHeader');
+            let hoverTimeout;
+
+            // Mouse butona geldiğinde başlığı göster
+            if (chatBubble && chatHeader) {
+                chatBubble.addEventListener('mouseenter', () => {
+                    clearTimeout(hoverTimeout); // Önceki timeout'u temizle
+                    chatBubble.classList.add('show-header');
+                });
+
+                // Mouse butondan ayrıldığında başlığı gizle (kısa bir gecikmeyle)
+                chatBubble.addEventListener('mouseleave', () => {
+                    hoverTimeout = setTimeout(() => {
+                        chatBubble.classList.remove('show-header');
+                    }, 800); // 0.8 saniye sonra gizle
+                });
+
+                // Başlığa tıklayınca da gizle (eğer zaten açıksa)
+                chatHeader.addEventListener('click', () => {
+                    chatBubble.classList.remove('show-header');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

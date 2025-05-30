@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dilkoçum.com - Üyelik Formu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Ana gövde stilleri */
+        body {
+            background: linear-gradient(to right, #e0f2ff, #f8f9ff); /* Açık mavi-beyaz degrade arka plan */
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column; /* Mobil için dikey hizalama */
+            justify-content: flex-start; /* İçeriği yukarıdan başlat */
+            align-items: center; /* Yatayda ortala */
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333; /* Genel metin rengi */
+        }
+
+        /* Orta ve büyük ekranlar için ana düzenin responsive davranışları */
+        @media (min-width: 768px) {
+            body {
+                justify-content: center; /* Desktop'ta dikey ortala */
+            }
+        }
+
+        /* Özel mesaj kutusu stilleri */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #fef3c7; /* Sarımsı arka plan */
+            color: #92400e; /* Koyu turuncu metin */
+            border: 1px solid #fcd34d; /* Turuncu kenarlık */
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            opacity: 0;
+            transform: translateY(-30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            min-width: 280px;
+            text-align: center;
+            font-weight: 500;
+        }
+        .message-box.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .message-box.error {
+            background-color: #dc3545; /* Hata mesajı için canlı kırmızı */
+            color: white;
+            border-color: #dc3545;
+        }
+
+        /* Başlık (h2) rengi */
+        h2 {
+            color: #1e293b; /* Koyu gri/mavi */
+        }
+
+        /* Özel metin rengi için sınıf */
+        .text-sky-1000 {
+            color: #1e40af; /* Koyu mavi */
+        }
+
+        /* Form konteynerinin arka planı */
+        .form-section-gradient {
+            background: linear-gradient(to top right, #f0f9ff, #e0e7ff); /* Açık mavi degrade */
+        }
+
+        /* Input odak animasyonu */
+        input:focus {
+            outline: none;
+            border-color: #6366f1 !important; /* Morumsu mavi odak rengi */
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+
+        /* Input arka plan rengi */
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="password"] {
+            background-color: #f9fafb; /* Çok açık gri */
+        }
+
+        /* Toggle switch stilleri */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #d1d5db; /* Gri */
+            transition: 0.4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .toggle-slider {
+            background-color: #6366f1; /* Morumsu mavi */
+        }
+
+        .toggle-switch input:checked + .toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        /* Gönder butonu stilleri */
+        button#submitButton {
+            background: linear-gradient(to right, #4f46e5, #6366f1); /* Mavi-mor degrade */
+        }
+
+        button#submitButton:hover {
+            background: linear-gradient(to right, #4338ca, #4f46e5); /* Koyu mavi-mor degrade */
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Parola kriterleri ikon renkleri */
+        .password-criteria li i {
+            transition: color 0.3s ease;
+        }
+
+        .password-criteria li.valid i {
+            color: #16a34a; /* Yeşil */
+        }
+
+        .password-criteria li.invalid i {
+            color: #dc2626; /* Kırmızı */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 font-sans leading-relaxed antialiased">
+    <div id="messageBox" class="message-box" role="alert" aria-live="polite"></div>
+
+    <main class="flex flex-col md:flex-row items-stretch justify-center w-full max-w-6xl md:max-w-7xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-white" role="main">
+        <div class="w-full md:w-1/2 bg-gradient-to-br from-slate-50 via-indigo-100 to-white py-10 px-4 md:px-8 flex flex-col items-center justify-start text-center relative overflow-hidden">
+
+            <img src="Dil Koçum logo.png"
+                 onerror="this.onerror=null;this.src='https://placehold.co/600x400/E0F2F7/2C3E50?text=Dil+Koçum+Logo';"
+                 alt="Arka Plan Logo"
+                 class="absolute left-1/2 top-2/4 -translate-x-1/2 -translate-y-1/3 w-full max-w-xl opacity-25 brightness-95 z-0 object-contain pointer-events-none select-none" />
+            
+            <div class="relative z-10">
+                <div class="flex items-center justify-center gap-4 mb-6">
+                    <img src="https://placehold.co/60x60/3B82F6/FFFFFF?text=D"
+                         alt="Dilkoçum.com Logosu"
+                         class="h-12 w-12 rounded-full shadow-md object-contain" />
+
+                    <a href="index.html#hero"
+                       class="bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-full shadow hover:bg-blue-700 transition">
+                        dilkocum.com
+                    </a>
+                </div>
+
+                <h1 class="text-3xl md:text-4xl font-extrabold text-slate-800 leading-tight">
+                    YDS, YÖKDİL, YDT yolculuğunuzda <span class="text-indigo-600">rehberiniz biziz!</span>
+                </h1>
+
+                <p class="mt-6 text-lg md:text-xl text-slate-600 max-w-xl mx-auto">
+                    Sınav sürecinizde yanınızda olan bir ekip, güçlü bir kaynak ve uzman rehberlikle tanışın.
+                </p>
+            </div>
+        </div>
+
+        <div class="form-section-gradient p-8 sm:p-10 w-full md:w-3/5">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight">
+                    <span class="text-blue-600">Üyelik</span> Oluştur
+                </h1>
+                <p class="text-gray-600 text-lg sm:text-xl leading-relaxed max-w-2xl mx-auto">
+                    Şimdi kaydolun, YDS-YÖKDİL-YDT yolculuğunuzda ilk adımı atın!
+                </p>
+            </div>
+
+            <form id="signupForm" class="space-y-6" novalidate>
+                <div>
+                    <label for="fullName" class="block text-sm font-semibold text-gray-700 mb-1">Ad Soyad</label>
+                    <div class="relative">
+                        <input type="text" id="fullName" name="fullName" placeholder="Adınız ve Soyadınız"
+                               class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base"
+                               required aria-required="true" aria-label="Ad Soyad">
+                        <i class="fas fa-user absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1">Cep Telefon Numarası</label>
+                    <div class="relative">
+                        <input type="tel" id="phone" name="phone" placeholder="5xx xxx xx xx"
+                               class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base"
+                               required aria-required="true" aria-label="Cep Telefon Numarası" aria-describedby="phone-help">
+                        <i class="fas fa-phone absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <p id="phone-help" class="text-xs text-gray-500 mt-1">Lütfen geçerli bir Türkiye cep telefonu numarası giriniz.</p>
+                </div>
+
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-1">E-posta Adresi</label>
+                    <div class="relative">
+                        <input type="email" id="email" name="email" placeholder="@gmail.com"
+                               class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base"
+                               required aria-required="true" aria-label="E-posta Adresi">
+                        <i class="fas fa-envelope absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-1">Parola</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" placeholder="Parolanızı girin"
+                               class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base"
+                               required aria-required="true" aria-label="Parola" aria-describedby="password-criteria">
+                        <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                    <ul id="password-criteria" class="text-sm text-gray-600 mt-2 list-none pl-0 space-y-1 password-criteria">
+                        <li id="length-criteria"><i class="fas fa-times-circle text-red-500 mr-2"></i>En az 8 karakter olmalı.</li>
+                        <li id="uppercase-criteria"><i class="fas fa-times-circle text-red-500 mr-2"></i>En az 1 büyük harf içermeli.</li>
+                        <li id="digit-criteria"><i class="fas fa-times-circle text-red-500 mr-2"></i>En az 1 rakam içermeli.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <label for="confirm-password" class="block text-sm font-semibold text-gray-700 mb-1">Parola Doğrulama</label>
+                    <div class="relative">
+                        <input type="password" id="confirm-password" name="confirm-password" placeholder="Parolanızı tekrar girin"
+                               class="mt-1 block w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 text-base"
+                               required aria-required="true" aria-label="Parola Doğrulama">
+                        <i class="fas fa-lock absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between">
+  <label class="flex items-center cursor-pointer select-none">
+    <a class="nounderline" id="password_view_control">
+      <span class="fa fa-eye" id="eyeIcon"></span> Parolaları Göster
+    </a>
+  </label>
+</div>
+
+                <div class="flex items-start">
+                    <input id="terms-checkbox" name="terms-checkbox" type="checkbox"
+                           class="h-5 w-5 text-blue-600 focus:ring-blue-600 border-gray-300 rounded-md mt-1 cursor-pointer"
+                           required aria-required="true" aria-label="Kullanım koşullarını kabul ediyorum">
+                    <label for="terms-checkbox" class="ml-2 block text-sm text-gray-900">
+                        <a href="kullanim-kosullari.html" class="font-medium text-blue-600 hover:text-blue-700 transition duration-200" target="_blank" rel="noopener noreferrer">Kullanım Koşulları</a> ve
+                        <a href="gizlilik-politikası.html" class="font-medium text-blue-600 hover:text-blue-700 transition duration-200" target="_blank" rel="noopener noreferrer">Gizlilik Politikası</a>’nı okudum ve kabul ediyorum.
+                    </label>
+                </div>
+
+                <div>
+                    <button type="submit" id="submitButton"
+                            class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-lg text-xl font-bold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-[1.01] active:scale-100"
+                            aria-live="assertive" aria-atomic="true">
+                        <span id="buttonText">Kayıt Ol</span>
+                        <i id="loadingSpinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        import { getAuth, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+        import { getFirestore, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCoFKoItrd3B9e3n_gycx3YsILeguNCUlY",
+            authDomain: "dilkocum-6a4e0.firebaseapp.com",
+            projectId: "dilkocum-6a4e0",
+            storageBucket: "dilkocum-6a4e0.appspot.com",
+            messagingSenderId: "329707977894",
+            appId: "1:329707977894:web:40226f42583dc70b08c867",
+            measurementId: "G-Z68EB8TBCS"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Mesaj kutusunu gösteren fonksiyon
+        function showMessage(message, isError = false) {
+            const messageBox = document.getElementById('messageBox');
+            messageBox.textContent = message;
+            if (isError) {
+                messageBox.classList.add('error');
+                messageBox.setAttribute('aria-live', 'assertive'); // Hata durumunda daha acil bildirim
+            } else {
+                messageBox.classList.remove('error');
+                messageBox.setAttribute('aria-live', 'polite'); // Başarılı durumda nazik bildirim
+            }
+            messageBox.classList.add('show');
+
+            // 3 saniye sonra mesaj kutusunu gizle
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+            }, 3000);
+        }
+
+        document.getElementById("password_view_control").addEventListener("click", function () {
+    const eyeIcon = document.getElementById("eyeIcon");
+    const passwordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
+
+    passwordFields.forEach(input => {
+      if (input.id !== "showPassword") { // toggle switch'e dokunma
+        if (input.type === "password") {
+          input.type = "text";
+          eyeIcon.classList.remove("fa-eye");
+          eyeIcon.classList.add("fa-eye-slash");
+        } else {
+          input.type = "password";
+          eyeIcon.classList.remove("fa-eye-slash");
+          eyeIcon.classList.add("fa-eye");
+        }
+      }
+    });
+  });
+
+        // Parola kriterlerini dinamik olarak güncelleyen fonksiyon
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const lengthCriteria = document.getElementById('length-criteria');
+            const uppercaseCriteria = document.getElementById('uppercase-criteria');
+            const digitCriteria = document.getElementById('digit-criteria');
+
+            // Kriterleri kontrol eden ve güncelleyen yardımcı fonksiyon
+            const updateCriteria = (element, isValid) => {
+                const icon = element.querySelector('i');
+                if (isValid) {
+                    element.classList.remove('invalid');
+                    element.classList.add('valid');
+                    icon.classList.replace('fa-times-circle', 'fa-check-circle');
+                    icon.classList.replace('text-red-500', 'text-green-500');
+                } else {
+                    element.classList.remove('valid');
+                    element.classList.add('invalid');
+                    icon.classList.replace('fa-check-circle', 'fa-times-circle');
+                    icon.classList.replace('text-green-500', 'text-red-500');
+                }
+            };
+
+            // En az 8 karakter
+            updateCriteria(lengthCriteria, password.length >= 8);
+            // En az 1 büyük harf
+            updateCriteria(uppercaseCriteria, /[A-Z]/.test(password));
+            // En az 1 rakam
+            updateCriteria(digitCriteria, /\d/.test(password));
+        });
+
+        // Form gönderildiğinde çalışacak fonksiyon
+        document.getElementById('signupForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Varsayılan form gönderme işlemini engelle
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const termsCheckbox = document.getElementById('terms-checkbox');
+            const submitButton = document.getElementById('submitButton');
+            const buttonText = document.getElementById('buttonText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            // Butonu devre dışı bırak ve yükleme durumunu göster
+            submitButton.disabled = true;
+            buttonText.textContent = 'Kaydolunuyor...';
+            loadingSpinner.classList.remove('hidden');
+
+            // Basit Ad Soyad kontrolü
+            if (fullName.length < 3) {
+                showMessage('Lütfen geçerli bir ad soyad girin.', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            // Telefon numarası validasyonu (Türkiye için basit regex)
+            const phoneRegex = /^(05|5)\d{9}$/; // Başında 0 olmasa da kabul eder, toplam 10 hane
+            const cleanedPhone = phone.replace(/[\s-]/g, ''); // Boşluk ve tireleri kaldır
+            if (!phoneRegex.test(cleanedPhone)) {
+                showMessage('Lütfen geçerli bir Türkiye cep telefonu numarası girin (Örn: 5xx xxx xx xx).', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            // E-posta validasyonu (daha kapsamlı regex)
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Lütfen geçerli bir e-posta adresi girin.', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            // Parola kriterleri kontrolü
+            if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password)) {
+                showMessage('Lütfen parola kriterlerini karşılayın (en az 8 karakter, 1 büyük harf, 1 rakam).', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('Parolalar uyuşmuyor. Lütfen tekrar deneyin.', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            if (!termsCheckbox.checked) {
+                showMessage('Kullanım Koşulları ve Gizlilik Politikası\'nı kabul etmelisiniz.', true);
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            try {
+                // Firebase ile yeni kullanıcı oluştur
+                const { user } = await createUserWithEmailAndPassword(auth, email, password);
+
+                // Firestore'a kullanıcı bilgilerini kaydet
+                await setDoc(doc(db, "users", user.uid), {
+                    name: fullName,
+                    email: email,
+                    createdAt: serverTimestamp()
+                });
+
+                showMessage('Kayıt başarılı! dilkoçum.com\'a hoş geldiniz!', false);
+
+                // Başarılı kayıt sonrası ogrenci_paneli.html'e yönlendir
+                // Bu sayfa, Firebase oturum durumunu kontrol edip kullanıcıyı otomatik olarak panele alacaktır.
+                window.location.href = 'Giris-yap.html'; 
+
+            } catch (error) {
+                let errorMessage = "Kayıt hatası oluştu";
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = "Bu e-posta zaten kullanımda.";
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = "Geçersiz e-posta formatı.";
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = "Parola çok zayıf. En az 6 karakter olmalıdır.";
+                        break;
+                    default:
+                        errorMessage = `Kayıt hatası: ${error.message}`;
+                }
+                showMessage(errorMessage, true);
+            } finally {
+                // Butonu tekrar etkinleştir ve metni sıfırla
+                submitButton.disabled = false;
+                buttonText.textContent = 'Kayıt Ol';
+                loadingSpinner.classList.add('hidden');
+            }
+        });
+
+        // Sayfa yüklendiğinde parola kriterlerini başlangıçta kontrol et
+        window.addEventListener('load', () => {
+            document.getElementById('password').dispatchEvent(new Event('input'));
+        });
+    </script>
+</body>
+</html>

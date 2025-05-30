@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim Sayfası - Dil Koçum</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65; /* Derin, Zengin Mavi - Ana Koyu Renk (Güven ve Sakinlik) */
+            --accent-blue: #3498DB; /* Canlı Mavi - Vurgu 1 (Dinamizm) */
+            --accent-gold: #FFD700; /* Parlak Altın Sarısı - Vurgu 2 (Profesyonellik ve Güven) */
+            --accent-orange: #E67E22; /* Enerjik Turuncu - Vurgu 3 (Aksiyon Butonları için) */
+            --light-bg: #ECF0F1; /* Daha Açık Nötr Gri Arka Plan */
+            --dark-text: #1F3A65; /* Koyu Metin (Primary Dark Blue ile aynı) */
+            --light-text: #fefefe; /* Açık Metin */
+            --card-shadow: rgba(0, 0, 0, 0.18); /* Gölge biraz daha belirgin */
+            --button-hover-orange: #D35400; /* Turuncu Buton Hover */
+            --button-hover-blue: #2980B9; /* Mavi Buton Hover (Eğer kullanılacaksa) */
+
+            /* Navbar Gradient */
+            --navbar-bg-start: #1F3A65; /* Derin Mavi */
+            --navbar-bg-end: #294A7D; /* Biraz daha açık derin mavi */
+
+            /* Footer için özel renkler (görselden) */
+            --footer-bg: #222a3a; /* Görseldeki koyu lacivert tonu */
+            --footer-link-color: #f1c40f; /* Görseldeki sarı tonu */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden; /* Yatay kaydırmayı engelle */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Sayfanın en az viewport yüksekliği kadar olmasını sağlar */
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark-blue); /* Yeni ana renk */
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue); /* Yeni vurgu renk */
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        }
+
+       /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px;
+            overflow: hidden; /* Global overflow hidden */
+            transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px;
+            overflow: hidden; /* Global overflow hidden */
+            transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+        }
+
+        /* Navbar kaydırıldığında şeffaflık */
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.6); /* Şeffaflığı test etmek için 0.9 yaptım, isterseniz 1.0 bırakabilirsiniz */
+            box-shadow: 0 4px 15px rgba(0,0,0,1);
+            backdrop-filter: blur(3px);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtmek için */
+        }
+
+        header .logo-container:hover {
+            transform: scale(1.10); /* Hover'da hafif büyüme */
+        }
+
+        header .logo-container img {
+            height: 150px;
+            object-fit: contain;
+            margin-top: -15px;
+            filter: brightness(0) invert(1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.8rem;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%) scaleX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+            transform: translateY(-2px);
+        }
+
+
+        /* Hamburger Menü İkonu */
+        .menu-toggle {
+            display: none;
+            font-size: 2.2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Mobil Navigasyon Açık Durumda */
+        nav.active {
+            max-height: 300px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        nav.active ul {
+            flex-direction: column; /* Mobil menüde dikey hizala */
+            width: 100%;
+            gap: 0;
+            align-items: flex-start;
+            padding: 1rem 0;
+            background-color: var(--navbar-bg-start);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        nav.active ul li {
+            width: 100%;
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav.active ul li:last-child {
+            border-bottom: none;
+        }
+
+        nav.active ul li a::after {
+            left: 1rem;
+            transform: translateX(0);
+            width: 0%;
+        }
+
+        nav.active ul li a:hover::after {
+            width: 30%;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1; /* İçeriğin footer'ı aşağı itmesini sağlar */
+            padding: 60px 20px;
+            max-width: 900px; /* Genişliği artırdım */
+            margin: 40px auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px var(--card-shadow);
+            animation: fadeIn 0.8s ease-out; /* Sayfa yüklenirken fade-in animasyonu */
+        }
+
+        main .main-title { /* H3 yerine özel sınıf kullandım */
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 3.5rem;
+            color: var(--primary-dark-blue);
+            position: relative;
+        }
+
+        main .main-title::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 5px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -15px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+
+        /* İletişim Formu Stili */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 1.1rem;
+            color: var(--primary-dark-blue);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Open Sans', sans-serif;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical; /* Sadece dikeyde boyutlandırmaya izin ver */
+        }
+
+        .form-submit-btn {
+            background-color: var(--accent-orange);
+            color: var(--light-text);
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            align-self: center;
+            margin-top: 1.5rem;
+            width: fit-content;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .form-submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-30deg);
+            transition: all 0.7s ease;
+        }
+
+        .form-submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .form-submit-btn:hover {
+            background-color: var(--button-hover-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            animation: none;
+        }
+
+        .form-submit-btn:active {
+            transform: translateY(-1px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Mesaj Kutusu Stili */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745; /* Başarı rengi */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+            font-size: 1.1rem;
+        }
+
+        .message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Altbilgi */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--light-text);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.95rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px; /* Öğeler arası boşluk artırıldı */
+        }
+
+        footer .footer-top-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px; /* Boşluk artırıldı */
+            width: 100%;
+            max-width: 700px; /* Genişliği biraz artırabiliriz */
+        }
+
+        footer .footer-legal-links {
+            font-size: 0.95rem; /* Yazı boyutu ayarlandı */
+            display: flex; /* İçerik yan yana kalması için flexbox */
+            gap: 10px; /* Linkler arası boşluk */
+            flex-wrap: wrap; /* Küçük ekranlarda alta geçebilir */
+            justify-content: center;
+        }
+
+        footer .footer-legal-links a {
+            color: var(--footer-link-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-legal-links a:hover {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+
+        footer .footer-legal-links span {
+            color: var(--light-text);
+            font-weight: normal;
+        }
+
+        footer .social-icons-title { /* Sosyal medya başlığı için stil */
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        footer .social-icons {
+            display: flex;
+            flex-wrap: wrap; /* Küçük ekranlarda alta geçebilir */
+            justify-content: center;
+            gap: 25px; /* İkonlar arası boşluk artırıldı */
+            margin-top: 10px;
+        }
+
+        footer .social-icons a {
+            color: var(--light-text);
+            font-size: 2.2rem; /* İkon boyutu artırıldı */
+            transition: color 0.3s ease, transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            gap: 5px; /* İkon ve yazı arası boşluk */
+        }
+
+        footer .social-icons a span {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: rgba(255,255,255,0.8);
+        }
+
+        footer .social-icons a:hover {
+            color: var(--accent-gold);
+            transform: scale(1.15);
+        }
+        
+        .copyright-text {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            margin-top: 20px; /* Üstten boşluk eklendi */
+            opacity: 0.9;
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            header .logo-container img {
+                height: 70px;
+            }
+
+            nav ul {
+                gap: 1.8rem;
+            }
+
+            main {
+                margin: 20px auto;
+                padding: 40px 15px;
+            }
+
+            main .main-title {
+                font-size: 2.5rem;
+                margin-bottom: 3rem;
+            }
+
+            footer .social-icons a {
+                font-size: 2rem; /* İkon boyutu ayarlandı */
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+            }
+
+            header .logo-container {
+                margin-bottom: 0;
+            }
+
+            header .logo-container img {
+                height: 90px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                width: 100%;
+                order: 2;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-out;
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+                align-items: flex-start;
+                padding: 1rem 0;
+                background-color: var(--primary-dark-blue);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: left;
+                padding: 0.8rem 1rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav ul li a::after {
+                left: 1rem;
+                transform: translateX(0);
+                width: 0%;
+            }
+
+            nav ul li a:hover::after {
+                width: 30%;
+            }
+
+            main {
+                padding: 30px 10px;
+            }
+
+            main .main-title {
+                font-size: 2rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .contact-form {
+                padding: 10px;
+            }
+
+            footer .footer-legal-links {
+                flex-direction: column; /* Mobil için dikey */
+                gap: 5px;
+            }
+
+            footer .footer-legal-links span {
+                display: none; /* Boru işaretini gizle */
+            }
+
+            footer .social-icons {
+                gap: 15px; /* Mobil ikonlar arası boşluk */
+            }
+
+            footer .social-icons a {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main .main-title {
+                font-size: 1.8rem;
+            }
+            footer .social-icons a {
+                font-size: 1.5rem; /* En küçük ekranlar için ikon boyutu */
+            }
+            footer .social-icons a span {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container" onclick="window.location.href='index.html#hero'">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav id="mainNav">
+            <ul>
+                <ul>
+                <li><a href="index.html#hero">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="index.html#faq">SSS</a></li> 
+                <li><a href="iletisim-no.html">İletişim</a></li>
+				<li><a href="üyelik formu.html">Kayıt Ol</a></li>
+            </ul>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h3 class="main-title">Bize Ulaşın</h3>
+        
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">İletişim Bilgileri</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="flex flex-col items-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
+                    <i class="fas fa-phone-alt text-blue-600 text-3xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-700 text-lg mb-1">Telefon</h3>
+                    <a href="https://api.whatsapp.com/send?phone=05075186699" class="text-blue-700 hover:text-blue-800 font-medium text-base">+90 507 518 66 99</a>
+                </div>
+                <div class="flex flex-col items-center p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
+                    <i class="fas fa-envelope text-green-600 text-3xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-700 text-lg mb-1">E-posta</h3>
+                    <a href="mailto:info@example.com" class="text-green-700 hover:text-green-800 font-medium text-base">dilkocum@gmail.com</a>
+                </div>
+                <div class="flex flex-col items-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300">
+                    <i class="fas fa-map-marker-alt text-purple-600 text-3xl mb-3"></i>
+                    <h3 class="font-semibold text-gray-700 text-lg mb-1">Adres</h3>
+                    <p class="text-gray-600 text-center text-base">Isparta/Merkez</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Bize Yazın</h2>
+            <form class="space-y-6 max-w-2xl mx-auto contact-form"> <div class="form-group">
+                    <label for="name">Adınız Soyadınız</label>
+                    <input type="text" id="name" name="name" placeholder="Adınız Soyadınız" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta Adresiniz</label>
+                    <input type="email" id="email" name="email" placeholder="email@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Konu</label>
+                    <input type="text" id="subject" name="subject" placeholder="Konu" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Mesajınız</label>
+                    <textarea id="message" name="message" rows="6" placeholder="Mesajınızı buraya yazın..." required></textarea>
+                </div>
+                <div>
+                    <button type="submit" class="form-submit-btn">
+                        Mesaj Gönder
+                    </button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-legal-links">
+            <a href="gizlilik-politikası.html">Gizlilik Politikası</a> <span>|</span> <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+        </div>
+        <h2 class="social-icons-title">Bizi Takip Edin</h2> <div class="social-icons">
+            <a href="https://www.instagram.com/dilkocumm/?igsh=MTA2NDk2cXljNGRtbw%3D%3D" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+            <a href="https://api.whatsapp.com/send?phone=05075186699" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-whatsapp"></i>
+                <span>Whatsapp</span>
+            </a>
+        </div>
+        <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const header = document.querySelector('header');
+
+            // Toggle mobile menu
+            menuToggle.addEventListener('click', function() {
+                mainNav.classList.toggle('active');
+            });
+
+            // Close mobile menu when a link is clicked (for smoother navigation on single-page layouts)
+            mainNav.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                    }
+                });
+            });
+
+            // Add scrolled class to header on scroll
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+
+            // Contact form submission (client-side simulation)
+            const contactForm = document.querySelector('.contact-form');
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent actual form submission
+
+                // Simulate success message
+                const messageBox = document.createElement('div');
+                messageBox.classList.add('message-box');
+                messageBox.textContent = 'Mesajınız başarıyla gönderildi!';
+                document.body.appendChild(messageBox);
+
+                // Show and then hide the message box
+                setTimeout(() => {
+                    messageBox.classList.add('show');
+                }, 100);
+
+                setTimeout(() => {
+                    messageBox.classList.remove('show');
+                    setTimeout(() => {
+                        messageBox.remove();
+                    }, 500); // Allow time for fade-out
+                }, 3000); // Message visible for 3 seconds
+
+                // Clear the form
+                contactForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>

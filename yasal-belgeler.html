@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yasal Belgeler - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65; /* Derin, Zengin Mavi - Ana Koyu Renk (Güven ve Sakinlik) */
+            --accent-blue: #3498DB; /* Canlı Mavi - Vurgu 1 (Dinamizm) */
+            --accent-gold: #FFD700; /* Parlak Altın Sarısı - Vurgu 2 (Profesyonellik ve Güven) */
+            --accent-orange: #E67E22; /* Enerjik Turuncu - Vurgu 3 (Aksiyon Butonları için) */
+            --light-bg: #ECF0F1; /* Daha Açık Nötr Gri Arka Plan */
+            --dark-text: #1F3A65; /* Koyu Metin (Primary Dark Blue ile aynı) */
+            --light-text: #fefefe; /* Açık Metin */
+            --card-shadow: rgba(0, 0, 0, 0.18); /* Gölge biraz daha belirgin */
+            --button-hover-orange: #D35400; /* Turuncu Buton Hover */
+            --button-hover-blue: #2980B9; /* Mavi Buton Hover (Eğer kullanılacaksa) */
+
+            /* Navbar Gradient */
+            --navbar-bg-start: #1F3A65; /* Derin Mavi */
+            --navbar-bg-end: #294A7D; /* Biraz daha açık derin mavi */
+
+            /* Hero Section Gradient */
+            --hero-gradient-start: rgba(31, 58, 101, 0.9); /* Derin Mavi'nin şeffaf hali */
+            --hero-gradient-end: rgba(31, 58, 101, 0.8);
+			 /* Footer için özel renkler (görselden) */
+            --footer-bg: #222a3a; /* Görseldeki koyu lacivert tonu */
+            --footer-link-color: #f1c40f; /* Görseldeki sarı tonu */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-dark-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-blue);
+        }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+            50% { transform: scale(1.02); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+            100% { transform: scale(1); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        }
+
+        /* Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 3rem;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 90px;
+            overflow: hidden;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Navbar kaydırıldığında şeffaflık */
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.6); /* Şeffaflığı test etmek için 0.9 yaptım, isterseniz 1.0 bırakabilirsiniz */
+            box-shadow: 0 4px 15px rgba(0,0,0,1);
+            backdrop-filter: blur(3px);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            opacity: 0;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer; /* Tıklanabilir olduğunu belirtmek için */
+        }
+
+        header .logo-container:hover {
+            transform: scale(1.10); /* Hover'da hafif büyüme */
+        }
+
+        header .logo-container img {
+            height: 150px;
+            object-fit: contain;
+            margin-top: -15px;
+            filter: brightness(0) invert(1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.8rem;
+            transition: all 0.3s ease;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 4px;
+            background-color: var(--accent-blue); /* Canlı mavi alt çizgi */
+            left: 50%;
+            bottom: -10px;
+            transform: translateX(-50%) scaleX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+            transform: translateX(-50%) scaleX(1);
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-blue); /* Canlı mavi metin */
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7); /* Mavi parlama */
+            transform: translateY(-2px);
+        }
+
+
+        /* Hamburger Menü İkonu */
+        .menu-toggle {
+            display: none;
+            font-size: 2.2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Mobil Navigasyon Açık Durumda */
+        nav.active {
+            max-height: 300px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        nav.active ul {
+            flex-direction: column;
+            width: 100%;
+            gap: 0;
+            align-items: flex-start;
+            padding: 1rem 0;
+            background-color: var(--navbar-bg-start);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        nav.active ul li {
+            width: 100%;
+            text-align: left;
+            padding: 0.8rem 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        nav.active ul li:last-child {
+            border-bottom: none;
+        }
+
+        nav.active ul li a::after {
+            left: 1rem;
+            transform: translateX(0);
+            width: 0%;
+        }
+
+        nav.active ul li a:hover::after {
+            width: 30%;
+        }
+
+        /* Hero Bölümü */
+        .hero {
+            background: linear-gradient(to bottom right, var(--hero-gradient-start), var(--hero-gradient-end)), url('https://source.unsplash.com/1600x500/?legal,documents,contract,law,policy') no-repeat center center/cover;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: transparent;
+        }
+
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.5rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            color: var(--light-text);
+        }
+
+        /* İçerik Bölümü (legal-section yerine section sınıfı kullanıldı) */
+        .section {
+            max-width: 960px;
+            margin: -120px auto 60px;
+            padding: 60px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 30px var(--card-shadow);
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: var(--primary-dark-blue);
+            border-bottom: 4px solid var(--accent-blue);
+            padding-bottom: 15px;
+            text-align: left;
+        }
+
+        .section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            color: var(--primary-dark-blue);
+            border-bottom: 2px solid var(--accent-gold);
+            padding-bottom: 10px;
+        }
+
+        .section p,
+        .section li {
+            font-size: 1.15rem;
+            margin-bottom: 20px;
+            line-height: 1.9;
+            color: var(--dark-text);
+        }
+
+        .section strong {
+            font-weight: 700;
+            color: var(--primary-dark-blue);
+        }
+
+        .section ul {
+            padding-left: 30px;
+            margin-top: 15px;
+            list-style-type: none; /* Varsayılan olarak kaldırıldı, ::before ile eklenebilir */
+        }
+
+        .section ul li {
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .section ul li::before {
+            content: '\2022'; /* Madde işareti */
+            position: absolute;
+            left: 0;
+            top: 6px;
+            color: var(--accent-blue);
+            font-size: 1.2rem;
+        }
+
+        /* Ana Sayfaya Dön Butonu */
+        .back-button {
+            background-color: var(--accent-orange);
+            color: var(--light-text);
+            padding: 1.2rem 3rem;
+            border: none;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .back-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.3);
+            transform: skewX(-30deg);
+            transition: all 0.7s ease;
+        }
+
+        .back-button:hover::before {
+            left: 100%;
+        }
+
+        .back-button:hover {
+            background-color: var(--button-hover-orange);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            animation: none;
+        }
+
+        .back-button:active {
+            transform: translateY(-2px) scale(0.96);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .back-button-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 60px; /* Footer öncesi boşluk */
+        }
+
+ /* Altbilgi */
+        footer {
+            background-color: var(--footer-bg); /* Görseldeki koyu lacivert */
+            color: var(--light-text);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: auto;
+            font-size: 0.95rem;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            display: flex; /* İçeriği merkezlemek için */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Öğeler arası boşluk */
+        }
+
+        footer .footer-top-row {
+            display: flex;
+            flex-direction: column; /* Mobil için dikey, masaüstü için yan yana */
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 600px; /* Genişliği sınırlayabiliriz */
+        }
+
+        footer .footer-legal-links {
+            white-space: nowrap; /* Linklerin yan yana kalmasını sağlar */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+        }
+
+        footer .footer-legal-links a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 8px; /* Linkler arası boşluk */
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-legal-links a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        footer .footer-legal-links span { /* Boru işareti için */
+            color: var(--light-text); /* Boru işareti rengi */
+            font-weight: normal;
+        }
+
+        footer .social-icons {
+            display: flex;
+            gap: 15px; /* İkonlar arası boşluk */
+            margin-top: 5px; /* Linklerle ikonlar arasına boşluk */
+        }
+
+        footer .social-icons a {
+            color: var(--light-text); /* İkon rengi */
+            font-size: 1.4rem; /* İkon boyutu */
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        footer .social-icons a:hover {
+            color: var(--accent-gold); /* İkon hover rengi */
+            transform: scale(1.1);
+        }
+
+        footer .footer-links-bottom {
+            list-style: none; /* Madde işaretlerini kaldır */
+            padding: 0;
+            margin: 10px 0; /* Üst ve alt boşluk */
+            font-size: 0.9rem; /* Yazıyı küçültme */
+            display: flex;
+            flex-direction: column; /* Dikey sıralama */
+            align-items: center;
+            gap: 8px; /* Liste öğeleri arası boşluk */
+        }
+
+        footer .footer-links-bottom a {
+            color: var(--footer-link-color); /* Sarı link rengi */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer .footer-links-bottom a:hover {
+            color: var(--accent-gold); /* Hover rengi */
+            text-decoration: underline;
+        }
+
+        .copyright-text {
+            color: var(--light-text);
+            font-size: 0.85rem; /* Telif hakkı yazısını küçültme */
+            margin-top: 10px;
+            opacity: 0.8;
+        }
+
+        /* Responsive Tasarım */
+        @media (max-width: 1024px) {
+            header {
+                padding: 1rem 2rem;
+            }
+
+            header .logo-container img {
+                height: 70px;
+            }
+
+            nav ul {
+                gap: 1.8rem;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .section {
+                padding: 40px;
+                margin: -100px auto 40px;
+            }
+
+            .section h1 {
+                font-size: 2.5rem;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem;
+                height: auto;
+            }
+
+            header .logo-container {
+                margin-bottom: 0;
+            }
+
+            header .logo-container img {
+                height: 90px;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                width: 100%;
+                order: 2;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s ease-out;
+            }
+
+            nav.active {
+                max-height: 300px;
+            }
+
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                gap: 0;
+                align-items: flex-start;
+                padding: 1rem 0;
+                background-color: var(--primary-dark-blue);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: left;
+                padding: 0.8rem 1rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+
+            nav ul li:last-child {
+                border-bottom: none;
+            }
+
+            nav ul li a::after {
+                left: 1rem;
+                transform: translateX(0);
+                width: 0%;
+            }
+
+            nav ul li a:hover::after {
+                width: 30%;
+            }
+
+            .hero {
+                height: 250px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .section {
+                padding: 30px;
+                margin: -60px auto 30px;
+                border-radius: 8px;
+            }
+
+            .section h1 {
+                font-size: 2.2rem;
+            }
+
+            .section h2 {
+                font-size: 1.6rem;
+            }
+
+            .section p,
+            .section li {
+                font-size: 1rem;
+            }
+
+            .back-button {
+                font-size: 1rem;
+                padding: 12px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            header .logo-container img {
+                height: 80px;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section h1 {
+                font-size: 1.8rem;
+            }
+            .section h2 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container" onclick="window.location.href='index.html#hero'">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html#hero">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Yasal Belgelerimiz</h1>
+    </div>
+
+    <section class="section">
+        <h1>Aydınlatma Metni (KVKK)</h1>
+        <p><strong>Dil Koçum</strong> olarak, 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında, kullanıcılarımızın kişisel verilerinin gizliliğini korumayı ilke edindik. Bu doğrultuda, tarafımıza iletilen kişisel veriler; yalnızca belirtilen amaçlarla, hukuka ve dürüstlük kurallarına uygun olarak işlenmektedir.</p>
+
+        <p>Kişisel verileriniz, hizmetlerimizden faydalanmanız, tarafınıza özel eğitim çözümleri sunmamız ve sizinle iletişim kurmamız amacıyla sınırlı olarak işlenir. Bu veriler; açık rızanız alınmak suretiyle veya kanunun 5. ve 6. maddelerinde belirtilen şartlara uygun şekilde üçüncü kişilerle paylaşılabilir.</p>
+
+        <p>Veri sahipleri olarak KVKK’nın 11. maddesi kapsamında her zaman bize başvurarak kişisel verilerinizin işlenmesine ilişkin bilgi talep edebilir, silinmesini veya düzeltilmesini isteyebilirsiniz.</p>
+    </section>
+
+    <section class="section">
+        <h1>Mesafeli Satış Sözleşmesi</h1>
+        <p>İşbu sözleşme, <strong>Dil Koçum</strong> ile kullanıcı arasında, internet üzerinden sunulan eğitim hizmetlerine ilişkin olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca kurulmuştur.</p>
+
+        <h2>1. Sözleşmenin Konusu</h2>
+        <p>Bu sözleşme, kullanıcı tarafından www.dilkocum.com adresinden satın alınan birebir koçluk, eğitim ve dijital materyallere erişim hizmetlerini kapsamaktadır.</p>
+
+        <h2>2. Sipariş ve Ödeme</h2>
+        <p>Satın alma işlemi, kredi kartı veya online ödeme sistemleri aracılığıyla gerçekleştirilir. Ödeme yapıldıktan sonra hizmete erişim sağlanır.</p>
+
+        <h2>3. Teslimat</h2>
+        <p>Dijital hizmet olduğu için fiziksel teslimat bulunmamaktadır. Kullanıcı, ödeme sonrasında dijital erişim bilgilerini e-posta yoluyla alır.</p>
+
+        <h2>4. Cayma Hakkı</h2>
+        <p>Kullanıcı, sözleşmenin imzalanmasından itibaren 14 gün içinde herhangi bir gerekçe göstermeksizin ve cezai şart ödemeksizin cayma hakkını kullanabilir. Ancak hizmetin ifasına başlanmışsa cayma hakkı kullanılamaz.</p>
+    </section>
+
+    <section class="section">
+        <h1>İptal ve İade Politikası</h1>
+        <p><strong>Dil Koçum</strong> olarak müşteri memnuniyetini önceliğimiz olarak görmekteyiz. Aşağıdaki şartlar dahilinde iptal ve iade süreci yürütülmektedir:</p>
+
+        <h2>1. Ders Paketi İptali</h2>
+        <p>Derslerin başlamasından önce yapılan iptallerde, ödenen ücretin tamamı iade edilir. Derslere başlandıktan sonra yapılan iptallerde, kullanılmayan kısım oranında iade yapılır.</p>
+
+        <h2>2. Teknik Aksaklıklar</h2>
+        <p>Sistemsel veya teknik bir problem nedeniyle hizmet sunulamıyorsa, kullanıcıya telafi dersi sunulur veya ücret iadesi yapılır.</p>
+
+        <h2>3. Geri Ödeme Süreci</h2>
+        <p>İade talepleri 7 iş günü içinde değerlendirilir ve onaylanması halinde iade işlemi en geç 10 iş günü içerisinde tamamlanır.</p>
+    </section>
+
+    <div class="back-button-container">
+        <a href="index.html" class="back-button">Ana Sayfaya Dön</a>
+    </div>
+
+    <footer>
+        <div class="footer-top-row">
+            <div class="footer-legal-links">
+                <a href="gizlilik-politikası.html">Gizlilik Politikası</a> <span>|</span> <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+            </div>
+            <div class="social-icons">
+                <a href="https://www.instagram.com/dilkocumm/?igsh=MTA2NDk2cXljNGRtbw%3D%3D" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=05075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+        <ul class="footer-links-bottom">
+            <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+            <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+            <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+        </ul>
+        <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+    </footer>
+
+    <script>
+        // Navbar kaydırıldığında şeffaflık efekti
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Sayfa yüklendiğinde logo animasyonu başlat
+        window.onload = function() {
+            document.querySelector('header .logo-container').style.animationDelay = '0.2s';
+        };
+
+        // Hamburger menü toggle fonksiyonu
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+
+        menuToggle.addEventListener('click', () => {
+            mainNav.classList.toggle('active');
+        });
+
+        // Dahili linkler için yumuşak kaydırma (Bu sayfada iç link yok, ancak genel yapı korunuyor)
+        document.querySelectorAll('nav ul li a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                const currentPath = window.location.pathname.split('/').pop();
+
+                // Eğer link ana sayfadaki bir bölüme işaret ediyorsa (örn: index.html#hizmetler)
+                if (href.includes('index.html#')) {
+                    e.preventDefault();
+                    const targetId = href.split('#')[1];
+                    window.location.href = `index.html#${targetId}`;
+                }
+                // Eğer link bu sayfadaki bir bölüme ise (yasal belgeler sayfasında böyle bir iç link yok)
+                else if (href.startsWith('#') && currentPath === 'yasal-belgeler.html') {
+                    e.preventDefault();
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                    }
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+                // Diğer tüm HTML linkleri (örn: hakkimizda.html, iletisim.html, gizlilik-politikasi.html)
+                else {
+                    if (mainNav.classList.contains('active')) {
+                        mainNav.classList.remove('active');
+                    }
+                }
+            });
+        });
+
+        // Bölümlerin görünür olduğunda animasyonunu tetiklemek için Intersection Observer API
+        const sections = document.querySelectorAll('.section');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const sectionObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+    </script>
+</body>
+</html>
