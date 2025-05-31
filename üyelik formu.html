@@ -165,8 +165,7 @@
 
     <main class="flex flex-col md:flex-row items-stretch justify-center w-full max-w-6xl md:max-w-7xl mx-auto rounded-3xl overflow-hidden shadow-2xl border border-gray-100 bg-white" role="main">
         <div class="w-full md:w-1/2 bg-gradient-to-br from-slate-50 via-indigo-100 to-white py-10 px-4 md:px-8 flex flex-col items-center justify-start text-center relative overflow-hidden">
-
-            <img src="Dil Koçum logo.png"
+            <img src="https://placehold.co/600x400/E0F2F7/2C3E50?text=Dil+Koçum+Logo"
                  onerror="this.onerror=null;this.src='https://placehold.co/600x400/E0F2F7/2C3E50?text=Dil+Koçum+Logo';"
                  alt="Arka Plan Logo"
                  class="absolute left-1/2 top-2/4 -translate-x-1/2 -translate-y-1/3 w-full max-w-xl opacity-25 brightness-95 z-0 object-contain pointer-events-none select-none" />
@@ -261,12 +260,12 @@
                 </div>
 
                 <div class="flex items-center justify-between">
-  <label class="flex items-center cursor-pointer select-none">
-    <a class="nounderline" id="password_view_control">
-      <span class="fa fa-eye" id="eyeIcon"></span> Parolaları Göster
-    </a>
-  </label>
-</div>
+                    <label class="flex items-center cursor-pointer select-none">
+                        <a class="nounderline" id="password_view_control">
+                            <span class="fa fa-eye" id="eyeIcon"></span> Parolaları Göster
+                        </a>
+                    </label>
+                </div>
 
                 <div class="flex items-start">
                     <input id="terms-checkbox" name="terms-checkbox" type="checkbox"
@@ -329,24 +328,25 @@
             }, 3000);
         }
 
+        // Parola görünürlüğünü kontrol eden fonksiyon
         document.getElementById("password_view_control").addEventListener("click", function () {
-    const eyeIcon = document.getElementById("eyeIcon");
-    const passwordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
+            const eyeIcon = document.getElementById("eyeIcon");
+            const passwordFields = document.querySelectorAll('input[type="password"], input[type="text"]');
 
-    passwordFields.forEach(input => {
-      if (input.id !== "showPassword") { // toggle switch'e dokunma
-        if (input.type === "password") {
-          input.type = "text";
-          eyeIcon.classList.remove("fa-eye");
-          eyeIcon.classList.add("fa-eye-slash");
-        } else {
-          input.type = "password";
-          eyeIcon.classList.remove("fa-eye-slash");
-          eyeIcon.classList.add("fa-eye");
-        }
-      }
-    });
-  });
+            passwordFields.forEach(input => {
+                if (input.id !== "showPassword") { // toggle switch'e dokunma
+                    if (input.type === "password") {
+                        input.type = "text";
+                        eyeIcon.classList.remove("fa-eye");
+                        eyeIcon.classList.add("fa-eye-slash");
+                    } else {
+                        input.type = "password";
+                        eyeIcon.classList.remove("fa-eye-slash");
+                        eyeIcon.classList.add("fa-eye");
+                    }
+                }
+            });
+        });
 
         // Parola kriterlerini dinamik olarak güncelleyen fonksiyon
         document.getElementById('password').addEventListener('input', function() {
@@ -458,20 +458,23 @@
                 const { user } = await createUserWithEmailAndPassword(auth, email, password);
 
                 // Firestore'a kullanıcı bilgilerini kaydet
+                // BURADA isApproved: false eklenmiştir!
                 await setDoc(doc(db, "users", user.uid), {
                     name: fullName,
                     email: email,
+                    phone: cleanedPhone, // Temizlenmiş telefon numarasını kaydet
+                    isApproved: false, // Varsayılan olarak onaylanmamış
                     createdAt: serverTimestamp()
                 });
 
-                showMessage('Kayıt başarılı! dilkoçum.com\'a hoş geldiniz!', false);
+                showMessage('Kaydınız başarıyla tamamlandı. Yöneticinizin onayını bekleyiniz.', false);
 
-                // Başarılı kayıt sonrası ogrenci_paneli.html'e yönlendir
+                // Başarılı kayıt sonrası Giriş-yap.html'e yönlendir
                 // Bu sayfa, Firebase oturum durumunu kontrol edip kullanıcıyı otomatik olarak panele alacaktır.
                 window.location.href = 'Giris-yap.html'; 
 
             } catch (error) {
-                let errorMessage = "Kayıt hatası oluştu";
+                let errorMessage = "Kayıt hatası oluştu.";
                 switch (error.code) {
                     case 'auth/email-already-in-use':
                         errorMessage = "Bu e-posta zaten kullanımda.";
