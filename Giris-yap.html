@@ -49,7 +49,7 @@
 
         /* Kimlik Doğrulama Bölümü Stilleri */
         #auth-section {
-            background: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+            background: url('https://placehold.co/1350x800/eef2f7/2c3e50?text=Dil+Kocum+Background') no-repeat center center fixed;
             background-size: cover;
             min-height: 100vh;
             display: flex;
@@ -144,7 +144,8 @@
 
         /* Dashboard Stilleri */
         #dashboard {
-            display: none; /* Varsayılan olarak gizli */
+            display: none;
+            /* Varsayılan olarak gizli */
         }
 
         .layout {
@@ -178,13 +179,14 @@
         }
 
         .sidebar h2 .logo-icon img {
-            width: 100%;
+            width: 80px; /* Logo boyutunu ayarlayın */
             height: auto;
             vertical-align: middle;
             filter: none;
             box-shadow: none;
             transition: none;
             cursor: default;
+            margin-bottom: 10px;
         }
 
         .sidebar ul {
@@ -523,6 +525,76 @@
             background: var(--warning);
         }
 
+        /* Modal Stilleri */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            color: var(--text);
+        }
+
+        .modal-overlay.show .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h4 {
+            font-size: 20px;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .modal-body .form-group {
+            margin-bottom: 15px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+
         /* Duyarlı Tasarım */
         @media (max-width: 1024px) {
             .sidebar {
@@ -737,7 +809,7 @@
             <nav class="sidebar">
                 <h2>
                     <span class="logo-icon">
-                        <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu" />
+                        <img src="https://placehold.co/80x80/1F5AA8/ffffff?text=LOGO" alt="Dil Koçum Logosu" />
                     </span>
                     Dil Koçum
                 </h2>
@@ -883,17 +955,41 @@
         <span id="toast-message">İşlem başarılı</span>
     </div>
 
+    <div id="custom-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="modal-title"></h4>
+                <button class="modal-close" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"></p>
+                <div class="form-group" id="modal-input1-group" style="display: none;">
+                    <label for="modal-input1" id="modal-input1-label"></label>
+                    <input type="text" id="modal-input1" class="form-control">
+                </div>
+                <div class="form-group" id="modal-input2-group" style="display: none;">
+                    <label for="modal-input2" id="modal-input2-label"></label>
+                    <textarea id="modal-input2" class="form-control"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modal-cancel-btn">İptal</button>
+                <button class="btn btn-primary" id="modal-confirm-btn">Onayla</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
-        // Firebase Modüllerini İçe Aktar
+        // Firebase Modüllerini İçe Aktar (v11.6.1)
         import {
             initializeApp
-        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js';
+        } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js';
         import {
             getAuth,
             signInWithEmailAndPassword,
             signOut,
             onAuthStateChanged
-        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-auth.js';
+        } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js';
         import {
             getFirestore,
             doc,
@@ -905,7 +1001,7 @@
             updateDoc,
             addDoc,
             serverTimestamp
-        } from 'https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js';
+        } from 'https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js';
 
         // Firebase Yapılandırması (Kendi Firebase projenizin bilgileriyle güncelleyin)
         const firebaseConfig = {
@@ -933,6 +1029,26 @@
             PROGRAM: 'program',
             DOSYA: 'dosyalar'
         };
+
+        /**
+         * Veri türüne göre ilgili liste ve boş durum elementlerinin ID'lerini döndürür.
+         * @param {string} type - Veri türü (VERI_TURU sabitlerinden biri).
+         * @returns {{listId: string, emptyId: string}} Liste ve boş durum element ID'leri.
+         */
+        function getElementIdsForType(type) {
+            switch (type) {
+                case VERI_TURU.NOT:
+                    return { listId: 'notes-list', emptyId: 'empty-notes' };
+                case VERI_TURU.ODEV:
+                    return { listId: 'homework-list', emptyId: 'empty-homework' };
+                case VERI_TURU.PROGRAM:
+                    return { listId: 'schedule-list', emptyId: 'empty-schedule' };
+                case VERI_TURU.DOSYA:
+                    return { listId: 'files-list', emptyId: 'empty-files' };
+                default:
+                    return { listId: '', emptyId: '' }; // Varsayılan boş değerler
+            }
+        }
 
         /**
          * Tarih nesnesini okunabilir bir string formatına dönüştürür.
@@ -1007,6 +1123,77 @@
         }
 
         /**
+         * Özel bir modal pencere gösterir.
+         * @param {string} modalTitle - Modal başlığı.
+         * @param {string} modalMessage - Modal mesajı (isteğe bağlı).
+         * @param {string} input1Label - Birinci giriş alanı etiketi (isteğe bağlı).
+         * @param {string} input1Value - Birinci giriş alanı varsayılan değeri (isteğe bağlı).
+         * @param {string} input2Label - İkinci giriş alanı etiketi (isteğe bağlı).
+         * @param {string} input2Value - İkinci giriş alanı varsayılan değeri (isteğe bağlı).
+         * @param {function} confirmCallback - Onaylandığında çalışacak geri çağrı fonksiyonu.
+         * @param {boolean} isConfirmOnly - Sadece onay/iptal modalı mı (giriş alanları olmadan).
+         */
+        function showCustomModal(modalTitle, modalMessage, input1Label = '', input1Value = '', input2Label = '', input2Value = '', confirmCallback, isConfirmOnly = false) {
+            const modalOverlay = document.getElementById('custom-modal');
+            const titleElement = document.getElementById('modal-title');
+            const messageElement = document.getElementById('modal-message');
+            const input1Group = document.getElementById('modal-input1-group');
+            const input1LabelElement = document.getElementById('modal-input1-label');
+            const input1Element = document.getElementById('modal-input1');
+            const input2Group = document.getElementById('modal-input2-group');
+            const input2LabelElement = document.getElementById('modal-input2-label');
+            const input2Element = document.getElementById('modal-input2');
+            const confirmButton = document.getElementById('modal-confirm-btn');
+            const cancelButton = document.getElementById('modal-cancel-btn');
+            const closeButton = document.getElementById('modal-close-btn');
+
+            titleElement.textContent = modalTitle;
+            messageElement.textContent = modalMessage;
+
+            if (isConfirmOnly) {
+                input1Group.style.display = 'none';
+                input2Group.style.display = 'none';
+                messageElement.style.display = 'block';
+            } else {
+                input1Group.style.display = 'block';
+                input1LabelElement.textContent = input1Label;
+                input1Element.value = input1Value;
+
+                if (input2Label && input2Value !== undefined) {
+                    input2Group.style.display = 'block';
+                    input2LabelElement.textContent = input2Label;
+                    input2Element.value = input2Value;
+                } else {
+                    input2Group.style.display = 'none';
+                }
+                messageElement.style.display = 'none'; // Mesajı gizle eğer inputlar varsa
+            }
+
+            // Önceki olay dinleyicilerini kaldır
+            confirmButton.onclick = null;
+            cancelButton.onclick = null;
+            closeButton.onclick = null;
+
+            confirmButton.onclick = () => {
+                modalOverlay.classList.remove('show');
+                const val1 = isConfirmOnly ? null : input1Element.value;
+                const val2 = isConfirmOnly ? null : input2Element.value;
+                confirmCallback(true, val1, val2);
+            };
+
+            const closeAndCancel = () => {
+                modalOverlay.classList.remove('show');
+                confirmCallback(false, null, null); // İptal edildiğini bildir
+            };
+
+            cancelButton.onclick = closeAndCancel;
+            closeButton.onclick = closeAndCancel;
+
+            modalOverlay.classList.add('show');
+        }
+
+
+        /**
          * Uygulamanın temasını değiştirir ve seçimi localStorage'a kaydeder.
          */
         window.temaDegistir = function() {
@@ -1025,10 +1212,14 @@
          * Belirli bir kullanıcıya ait öğeleri (notlar, ödevler vb.) Firestore'dan yükler ve listeler.
          * @param {string} uid - Kullanıcının UID'si.
          * @param {string} type - Yüklenecek veri türü (VERI_TURU sabitlerinden biri).
-         * @param {string} listId - Öğelerin listeleneceği HTML ul elementinin ID'si.
-         * @param {string} emptyId - Boş durum mesajının gösterileceği HTML elementinin ID'si.
          */
-        async function loadItems(uid, type, listId, emptyId) {
+        async function loadItems(uid, type) {
+            const { listId, emptyId } = getElementIdsForType(type);
+            if (!listId || !emptyId) {
+                console.error("Geçersiz veri türü:", type);
+                return;
+            }
+
             try {
                 const listElement = document.getElementById(listId);
                 const emptyElement = document.getElementById(emptyId);
@@ -1104,7 +1295,7 @@
                     document.getElementById('note-content').value = '';
                 }
 
-                await loadItems(currentUser.uid, type, 'notes-list', 'empty-notes'); // Notlar için listeyi güncelle
+                await loadItems(currentUser.uid, type); // İlgili listeyi güncelle
                 showToast('Başarıyla eklendi', 'success');
             } catch (error) {
                 showToast("Ekleme hatası: " + error.message, 'error');
@@ -1125,25 +1316,33 @@
                 return;
             }
 
-            // Kullanıcıya yeni başlık ve içerik girmesi için modal benzeri bir uyarı göster
-            // NOT: confirm() ve prompt() yerine daha kullanıcı dostu bir modal UI kullanılması önerilir.
-            const newTitle = window.prompt("Yeni başlık:", currentTitle || '');
-            if (newTitle === null) return; // Kullanıcı iptal ettiyse çık
-
-            const newContent = window.prompt("Yeni içerik:", currentContent || '');
-            if (newContent === null) return; // Kullanıcı iptal ettiyse çık
-
-            try {
-                await updateDoc(doc(db, "users", currentUser.uid, type, id), {
-                    title: newTitle,
-                    content: newContent
-                });
-                await loadItems(currentUser.uid, type, 'notes-list', 'empty-notes'); // Güncellenen türe göre listeyi güncelle
-                showToast('Başarıyla güncellendi', 'success');
-            } catch (error) {
-                showToast('Güncelleme hatası: ' + error.message, 'error');
-                console.error("Öğe güncelleme hatası:", error);
-            }
+            showCustomModal(
+                "Öğeyi Düzenle",
+                "", // Mesaj boş bırakılır, inputlar kullanılacak
+                "Başlık:", currentTitle,
+                "İçerik:", currentContent,
+                async (confirmed, newTitle, newContent) => {
+                    if (confirmed) {
+                        if (!newTitle || !newContent) {
+                            showToast("Başlık ve içerik boş bırakılamaz.", 'warning');
+                            return;
+                        }
+                        try {
+                            await updateDoc(doc(db, "users", currentUser.uid, type, id), {
+                                title: newTitle,
+                                content: newContent
+                            });
+                            await loadItems(currentUser.uid, type); // Güncellenen türe göre listeyi güncelle
+                            showToast('Başarıyla güncellendi', 'success');
+                        } catch (error) {
+                            showToast('Güncelleme hatası: ' + error.message, 'error');
+                            console.error("Öğe güncelleme hatası:", error);
+                        }
+                    } else {
+                        showToast('Düzenleme iptal edildi.', 'info');
+                    }
+                }
+            );
         };
 
         /**
@@ -1157,19 +1356,26 @@
                 return;
             }
 
-            // Kullanıcıya silme onayı için modal benzeri bir uyarı göster
-            // NOT: confirm() ve prompt() yerine daha kullanıcı dostu bir modal UI kullanılması önerilir.
-            const confirmation = window.confirm("Bu öğeyi silmek istediğinize emin misiniz?");
-            if (!confirmation) return; // Kullanıcı iptal ettiyse çık
-
-            try {
-                await deleteDoc(doc(db, "users", currentUser.uid, type, id));
-                await loadItems(currentUser.uid, type, 'notes-list', 'empty-notes'); // Silinen türe göre listeyi güncelle
-                showToast('Başarıyla silindi', 'success');
-            } catch (error) {
-                showToast('Silme hatası: ' + error.message, 'error');
-                console.error("Öğe silme hatası:", error);
-            }
+            showCustomModal(
+                "Silme Onayı",
+                "Bu öğeyi silmek istediğinize emin misiniz? Bu işlem geri alınamaz.",
+                '', '', '', '', // Input alanları kullanılmayacak
+                async (confirmed) => {
+                    if (confirmed) {
+                        try {
+                            await deleteDoc(doc(db, "users", currentUser.uid, type, id));
+                            await loadItems(currentUser.uid, type); // Silinen türe göre listeyi güncelle
+                            showToast('Başarıyla silindi', 'success');
+                        } catch (error) {
+                            showToast('Silme hatası: ' + error.message, 'error');
+                            console.error("Öğe silme hatası:", error);
+                        }
+                    } else {
+                        showToast('Silme işlemi iptal edildi.', 'info');
+                    }
+                },
+                true // Sadece onay/iptal modalı
+            );
         };
 
         // Giriş Yap Butonu Olay Dinleyicisi
@@ -1194,6 +1400,7 @@
                         break;
                     case 'auth/user-not-found':
                     case 'auth/wrong-password':
+                    case 'auth/invalid-login-credentials': // Bu hatayı da açıkça yakala
                         errorMessage = "E-posta veya şifre hatalı.";
                         break;
                     case 'auth/too-many-requests':
@@ -1242,7 +1449,7 @@
             if (!currentUser) { showToast("Lütfen giriş yapınız", 'error'); return; }
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             document.querySelectorAll('.sidebar li')[0].classList.add('active'); // Notlar menü öğesini aktif yap
-            await loadItems(currentUser.uid, VERI_TURU.NOT, 'notes-list', 'empty-notes');
+            await loadItems(currentUser.uid, VERI_TURU.NOT);
             document.querySelectorAll('.card').forEach(card => card.style.display = 'none'); // Tüm kartları gizle
             document.getElementById('notesCard').style.display = 'block'; // Notlar kartını göster
             document.getElementById('noteAddCard').style.display = 'block'; // Not ekleme kartını göster
@@ -1255,7 +1462,7 @@
             if (!currentUser) { showToast("Lütfen giriş yapınız", 'error'); return; }
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             document.querySelectorAll('.sidebar li')[1].classList.add('active'); // Ödevler menü öğesini aktif yap
-            await loadItems(currentUser.uid, VERI_TURU.ODEV, 'homework-list', 'empty-homework');
+            await loadItems(currentUser.uid, VERI_TURU.ODEV);
             document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
             document.getElementById('homeworkCard').style.display = 'block';
         };
@@ -1267,7 +1474,7 @@
             if (!currentUser) { showToast("Lütfen giriş yapınız", 'error'); return; }
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             document.querySelectorAll('.sidebar li')[2].classList.add('active'); // Program menü öğesini aktif yap
-            await loadItems(currentUser.uid, VERI_TURU.PROGRAM, 'schedule-list', 'empty-schedule');
+            await loadItems(currentUser.uid, VERI_TURU.PROGRAM);
             document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
             document.getElementById('scheduleCard').style.display = 'block';
         };
@@ -1279,7 +1486,7 @@
             if (!currentUser) { showToast("Lütfen giriş yapınız", 'error'); return; }
             document.querySelectorAll('.sidebar li').forEach(li => li.classList.remove('active'));
             document.querySelectorAll('.sidebar li')[3].classList.add('active'); // Dosyalar menü öğesini aktif yap
-            await loadItems(currentUser.uid, VERI_TURU.DOSYA, 'files-list', 'empty-files');
+            await loadItems(currentUser.uid, VERI_TURU.DOSYA);
             document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
             document.getElementById('filesCard').style.display = 'block';
         };
@@ -1303,29 +1510,53 @@
 
         // Ödev Ekle Butonu Olay Dinleyicisi (Ödev kartında)
         document.getElementById('add-homework-btn').addEventListener('click', () => {
-            const title = window.prompt("Ödev Başlığı:");
-            if (title === null) return;
-            const content = window.prompt("Ödev İçeriği:");
-            if (content === null) return;
-            addItem(VERI_TURU.ODEV, title, content);
+            showCustomModal(
+                "Yeni Ödev Ekle",
+                "",
+                "Ödev Başlığı:", "",
+                "Ödev İçeriği:", "",
+                (confirmed, title, content) => {
+                    if (confirmed) {
+                        addItem(VERI_TURU.ODEV, title, content);
+                    } else {
+                        showToast('Ödev ekleme iptal edildi.', 'info');
+                    }
+                }
+            );
         });
 
         // Program Ekle Butonu Olay Dinleyicisi (Program kartında)
         document.getElementById('add-schedule-btn').addEventListener('click', () => {
-            const title = window.prompt("Program Başlığı (örn: Pazartesi Çalışması):");
-            if (title === null) return;
-            const content = window.prompt("Program İçeriği (örn: 10:00-12:00 İngilizce):");
-            if (content === null) return;
-            addItem(VERI_TURU.PROGRAM, title, content);
+            showCustomModal(
+                "Yeni Program Ekle",
+                "",
+                "Program Başlığı (örn: Pazartesi Çalışması):", "",
+                "Program İçeriği (örn: 10:00-12:00 İngilizce):", "",
+                (confirmed, title, content) => {
+                    if (confirmed) {
+                        addItem(VERI_TURU.PROGRAM, title, content);
+                    } else {
+                        showToast('Program ekleme iptal edildi.', 'info');
+                    }
+                }
+            );
         });
 
         // Dosya Ekle Butonu Olay Dinleyicisi (Dosyalar kartında)
         document.getElementById('add-file-btn').addEventListener('click', () => {
-            const title = window.prompt("Dosya Adı:");
-            if (title === null) return;
-            const content = window.prompt("Dosya Açıklaması/Link (örn: Ders Notları PDF Linki):");
-            if (content === null) return;
-            addItem(VERI_TURU.DOSYA, title, content);
+            showCustomModal(
+                "Yeni Dosya Ekle",
+                "",
+                "Dosya Adı:", "",
+                "Dosya Açıklaması/Link (örn: Ders Notları PDF Linki):", "",
+                (confirmed, title, content) => {
+                    if (confirmed) {
+                        addItem(VERI_TURU.DOSYA, title, content);
+                    } else {
+                        showToast('Dosya ekleme iptal edildi.', 'info');
+                    }
+                }
+            );
         });
 
         /**
