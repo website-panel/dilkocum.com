@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Başvuru Sihirbazı | Gelişmiş Arayüz</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         :root {
             --primary-bg: #f4f7fc;
@@ -239,9 +239,12 @@
             justify-content: space-between;
             margin-bottom: 1rem;
             font-size: 0.9rem;
+            /* Added for better mobile responsiveness */
+            flex-wrap: wrap; 
+            align-items: baseline;
         }
         .summary-item .label { color: var(--secondary-text); }
-        .summary-item .value { font-weight: 600; }
+        .summary-item .value { font-weight: 600; text-align: right; word-break: break-word; flex-basis: 50%; }
         
         .summary-total {
             margin-top: auto;
@@ -334,6 +337,24 @@
 
             .payment-options-grid {
                 grid-template-columns: 1fr;
+            }
+
+            /* Added for better readability on smaller screens for summary items */
+            .summary-item .label, .summary-item .value {
+                flex-basis: auto; /* Reset flex-basis */
+                width: 100%; /* Take full width */
+                text-align: left; /* Align text to left */
+            }
+            .summary-item .value {
+                font-size: 1rem; /* Slightly larger for better visibility */
+                margin-top: 0.25rem; /* Add some space */
+            }
+            .summary-item {
+                flex-direction: column; /* Stack label and value vertically */
+                align-items: flex-start; /* Align stacked items to start */
+            }
+            .summary-total .value {
+                font-size: 1.5rem; /* Adjust total font size for mobile */
             }
         }
 
@@ -526,6 +547,9 @@
     const summaryInstallmentsInfo = document.getElementById('summary-installments-info');
     const summaryFinalPrice = document.getElementById('summary-final-price');
 
+    // Yeni eklenecek buton ve hata mesajı değişkenleri
+    const backToPackagesButton = document.getElementById('back-to-packages-btn');
+
     const goToStep = (step) => {
         currentStep = step;
         formSteps.forEach(s => {
@@ -552,7 +576,7 @@
             const isInstallmentCountSelected = selectedInstallmentCount > 0;
             // Tüm tarih inputlarının dolu olup olmadığını kontrol et
             const allDatesFilled = Array.from(document.querySelectorAll('.installment-date-input'))
-                                        .every(input => input.value !== '');
+                                             .every(input => input.value !== '');
             btnSubmitFinal.disabled = !(isInstallmentCountSelected && allDatesFilled);
         } else {
             btnSubmitFinal.disabled = false;
@@ -565,9 +589,13 @@
                 <div class="icon" style="color: #ef4444;"><i class="fas fa-exclamation-circle"></i></div>
                 <h2>Bir Hata Oluştu</h2>
                 <p>${message}</p>
-                <a href="Paketlerimiz.html" class="btn btn-primary">Paketlere Geri Dön</a>
+                <button id="back-to-packages-btn" class="btn btn-primary">Paketlere Geri Dön</button>
             </div>`;
         wizardContainer.style.justifyContent = 'center';
+        // Yeni buton için event listener ekle
+        document.getElementById('back-to-packages-btn').addEventListener('click', () => {
+            window.location.href = "Paketlerimiz.html";
+        });
     };
 
     const updatePaymentSummary = () => {
@@ -638,8 +666,8 @@
 
     const updateInstallmentDatesArray = () => {
         installmentDates = Array.from(document.querySelectorAll('.installment-date-input'))
-                                .map(input => input.value)
-                                .filter(Boolean); // Sadece dolu olanları al
+                                     .map(input => input.value)
+                                     .filter(Boolean); // Sadece dolu olanları al
         updatePaymentSummary(); // Bu fonksiyon zaten validateStep2'yi çağırıyor
     };
     
@@ -693,9 +721,9 @@
                     installmentCount: selectedInstallmentCount,
                     totalAmount: finalCalculatedPrice,
                     installments: installmentDates.map((date, index) => ({
-                      date: date,
-                      amount: parseFloat(installmentAmounts[index]),
-                      status: 'unpaid'
+                        date: date,
+                        amount: parseFloat(installmentAmounts[index]),
+                        status: 'unpaid'
                     }))
                 };
             }
@@ -707,10 +735,14 @@
                 <div class="icon"><i class="fas fa-check-circle"></i></div>
                 <h2>Başvurunuz Başarıyla Alındı!</h2>
                 <p>Paket seçiminiz tamamlanmıştır. Ekibimiz en kısa sürede sizlerle iletişime geçecektir.</p>
-                <a href="Paketlerimiz.html" class="btn btn-primary">Yeni Paket Seç</a>
+                <button id="back-to-packages-btn" class="btn btn-primary">Yeni Paket Seç</button>
             </div>`;
             wizardContainer.style.justifyContent = 'center';
             localStorage.removeItem('purchaseDetails');
+            // Başarılı durumda da butona event listener ekle
+            document.getElementById('back-to-packages-btn').addEventListener('click', () => {
+                window.location.href = "Paketlerimiz.html";
+            });
         } catch (error) {
             console.error("Hata:", error);
             renderError('Başvurunuz gönderilirken beklenmedik bir hata oluştu.');
