@@ -596,7 +596,7 @@
         wizardContainer.style.justifyContent = 'center';
         // Yeni buton için event listener ekle
         document.getElementById('back-to-packages-btn').addEventListener('click', () => {
-            window.location.href = "Paketlerimiz.html";
+            window.location.href = "paketlerimiz.html";
         });
     };
 
@@ -745,7 +745,7 @@
             localStorage.removeItem('purchaseDetails');
             // Başarılı durumda da butona event listener ekle
             document.getElementById('back-to-packages-btn').addEventListener('click', () => {
-                window.location.href = "Paketlerimiz.html";
+                window.location.href = "paketlerimiz.html";
             });
         } catch (error) {
             console.error("Hata:", error);
