@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eğitim Paketlerimiz - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- CSS Değişkenleri --- */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --light-text: #fefefe;
+            --button-hover-blue: #2980B9;
+            --slate-50: #f8fafc;
+            --indigo-50: #eef2ff;
+            --light-gray: #f7f9fc;
+            --success-green: #28a745;
+            --disabled-gray: #bdc3c7;
+            --text-color-primary: #2c3e50;
+            --text-color-secondary: #5a6778;
+        }
+
+        /* --- Global Stiller --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to bottom right, var(--slate-50), var(--indigo-50));
+            color: var(--text-color-primary);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- Ana Konteyner ve Başlık --- */
+        .package-system-container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 2rem auto; /* Mobil için margin ayarlandı */
+            padding: 0 1rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .main-title-wrapper {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-title-wrapper h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-size: clamp(2rem, 5vw, 2.6rem); /* Akıcı font boyutu */
+            position: relative;
+            padding-bottom: 15px;
+            display: inline-block;
+            color: var(--primary-dark-blue);
+        }
+
+        .main-title-wrapper h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-gold));
+            border-radius: 3px;
+        }
+
+        .main-title-wrapper .title-slogan {
+            font-size: clamp(1rem, 3vw, 1.1rem);
+            color: var(--text-color-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Paket Detayları --- */
+        .hidden {
+            display: none;
+        }
+
+        .package-detail-container {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.07);
+            padding: 1.5rem; /* Mobil için padding ayarlandı */
+            margin: 1rem auto;
+            border-top: 6px solid var(--accent-blue);
+            position: relative;
+            animation: fadeInDown 0.5s ease-out;
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--indigo-50);
+            color: var(--primary-dark-blue);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .detail-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--primary-dark-blue);
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin-top: 3.5rem; /* Geri butonuna yer açmak için */
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-header .slogan {
+            font-family: 'Open Sans', sans-serif;
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: var(--text-color-secondary);
+            font-style: italic;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobil için varsayılan tek sütun */
+            gap: 2rem;
+        }
+
+        .package-detail-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .package-detail-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .package-detail-section ul li {
+            display: flex;
+            align-items: flex-start; /* Uzun metinler için daha iyi */
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            margin-bottom: 1rem;
+            background-color: var(--light-gray);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            gap: 1rem;
+        }
+        
+        .package-detail-section ul li i {
+             color: var(--accent-blue);
+             font-size: 1.2rem;
+             margin-top: 4px; /* Hizalama için */
+        }
+
+        .package-detail-section ul li:hover {
+            transform: translateX(5px);
+            background-color: var(--indigo-50);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Daha esnek */
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--indigo-50);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease-out;
+        }
+
+        .content-card:hover {
+            transform: translateY(-8px);
+            background-color: var(--indigo-50);
+            box-shadow: 0 12px 30px rgba(52, 152, 219, 0.1);
+        }
+
+        .content-icon {
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+            margin-bottom: 1rem;
+        }
+
+        .content-card h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .content-card p {
+            font-size: 0.95rem;
+            color: var(--text-color-secondary);
+            line-height: 1.6;
+        }
+        
+        .why-this-package-box {
+            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .why-this-package-box h3 {
+            color: var(--primary-dark-blue);
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
+        }
+        
+        .why-this-package-box h3 i {
+            color: var(--accent-gold);
+        }
+        
+        .why-this-package-box p {
+            font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+            line-height: 1.8;
+            color: var(--text-color-secondary);
+        }
+
+        /* --- YAN MENÜ VE FİYATLANDIRMA KUTUSU --- */
+        .detail-sidebar {
+            position: -webkit-sticky; /* Safari için */
+            position: sticky;
+            top: 2rem; /* Üstten boşluk */
+            z-index: 5; /* Diğer elementlerin üzerinde kalması için */
+        }
+
+        .pricing-box {
+            background-color: var(--light-gray);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .pricing-box h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark-blue);
+        }
+
+        .tier-btn {
+            background-color: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 0.8rem 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 0.5rem;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+        }
+
+        .tier-btn.selected {
+            border-color: var(--accent-blue);
+            background-color: var(--indigo-50);
+            font-weight: 600;
+        }
+        
+        .discount-tag {
+            background: linear-gradient(45deg, var(--accent-gold), #ffc107);
+            color: var(--primary-dark-blue);
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+        }
+
+        .price-display {
+            text-align: center;
+            margin: 1.5rem 0;
+        }
+
+        .final-price {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: clamp(2rem, 8vw, 2.5rem);
+            color: var(--primary-dark-blue);
+        }
+
+        .btn-purchase {
+            display: block;
+            width: 100%;
+            text-align: center;
+            text-decoration: none;
+            background: linear-gradient(135deg, var(--success-green), #208e3a);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(40, 167, 69, 0.2);
+        }
+
+        .btn-purchase:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(40, 167, 69, 0.3);
+        }
+        
+        .btn-see-all {
+            display: block;
+            width: fit-content;
+            margin: 2.5rem auto 0 auto;
+            background: transparent;
+            color: var(--primary-dark-blue);
+            border: 2px solid var(--primary-dark-blue);
+            padding: 0.8rem 2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-see-all:hover {
+            background: var(--primary-dark-blue);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        /* --- Geniş Ekranlar için Medya Sorguları --- */
+        @media (min-width: 768px) {
+            .package-system-container {
+                margin: 40px auto;
+            }
+            .package-detail-container {
+                padding: 2.5rem;
+            }
+            .detail-grid {
+                grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+                gap: 3rem;
+            }
+            /* .detail-sidebar için sticky özelliği artık genel olarak tanımlandı. */
+             .why-this-package-box {
+                grid-column: 1 / -1; /* Geniş ekranda iki sütunu kapla */
+            }
+             .btn-see-all {
+                grid-column: 1 / -1; /* Geniş ekranda iki sütunu kapla */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="package-system-container">
+        <!-- Başlık ve Paket Listesi başlangıçta gizli, JS ile gösterilecek -->
+        <div class="main-title-wrapper hidden">
+            <h1 id="main-title">Eğitim Paketlerimiz</h1>
+            <p class="title-slogan">Sınav hazırlık sürecinizde hedeflerinize ulaşmanız için tasarlanmış, size özel çözümler burada.</p>
+        </div>
+        <div id="package-list" class="hidden"></div>
+        
+        <!-- Paket Detayları doğrudan bu alana render edilecek -->
+        <div id="package-detail"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Veri
+            const packages = [{
+                id: 'mock-exam-package',
+                name: 'DENEME PAKETİ',
+                icon: 'fas fa-award',
+                summary: 'Gerçek sınavın bir simülasyonu olan denemeler, başarının en kritik provalarıdır. Bu paketle sadece bilginizi ölçmekle kalmaz, zaman yönetimi, stres kontrolü ve soru stratejileri gibi hayati becerileri kazanarak sınav gününe tam donanımlı hazırlanırsınız.',
+                tierUnitName: "'li Deneme Paketi",
+                priceTiers: [
+                    { quantity: 12, price: 5500, note: '' },
+                    { quantity: 24, price: 9850, note: '1.150 TL İndirimli!' }
+                ],
+                slogan: 'Sınava tam hazır olmak için kritik provalar.',
+                forWhom: [
+                    'Sınav tecrübesini defalarca yaşayarak heyecanını kontrol altına almak isteyenler.',
+                    'Zaman yönetimi becerisini geliştirmek ve sınavı yetiştirme sorunu yaşamak istemeyenler.',
+                    'Yaptığı hataları analiz ederek, eksik konularını net bir şekilde görmek isteyenler.',
+                    'Farklı soru tiplerine aşina olup, sınav anında sürprizle karşılaşmak istemeyenler.',
+                    'Gerçek sınav disiplininde düzenli olarak pratik yaparak netlerini istikrarlı bir şekilde artırmayı hedefleyenler.'
+                ],
+                content: [
+                    { icon: 'fas fa-file-alt', title: 'Güncel Deneme Sınavları', text: 'ÖSYM formatına en uygun, güncel müfredata göre hazırlanmış denemelerle kendinizi test edersiniz.' },
+                    { icon: 'fas fa-video', title: 'Detaylı Soru Çözümleri', text: 'Her denemeden sonra, tüm soruların çözümünün yapıldığı video oturumlarına erişim sağlarsınız.' },
+                    { icon: 'fas fa-search-plus', title: 'Kişisel Performans Analizi', text: 'Her deneme sonrası netleriniz, yanlış ve doğru sayılarınız analiz edilerek size özel geri bildirimler sunulur.' },
+                    { icon: 'fas fa-user-check', title: 'Strateji Geliştirme', text: 'Deneme sonuçlarınıza göre eksiklerinizi nasıl kapatacağınız ve netlerinizi nasıl artıracağınız konusunda rehberlik alırsınız.' }
+                ],
+                whyThisPackage: 'Bilgiyi sınav anında performansa dönüştürmek, başlı başına bir sanattır ve bu sanat ancak gerçekçi provalarla ustalaşır. Bu paket, size sadece deneme sunmaz; strateji geliştirme seansı ve kendinizi yeniden keşfetme fırsatı verir. Her bir deneme, sınav anının baskısını yönetmeyi, zamanı lehinize çevirmeyi ve hatalarınızı birer derse dönüştürmeyi öğreten bir simülasyondur. Sınav gününe bir aday olarak değil, tüm senaryolara hakim bir stratejist olarak girin.'
+            }];
+
+            const packageDetailDiv = document.getElementById('package-detail');
+
+            function initiatePurchase(pkgId) {
+                const pkg = packages.find(p => p.id === pkgId);
+                if (!pkg) {
+                    console.error('Paket bulunamadı!');
+                    return;
+                }
+
+                const priceDisplay = document.getElementById('price-display');
+                const selectedTierButton = document.querySelector('.tier-btn.selected');
+                
+                const purchaseDetails = {
+                    id: pkg.id,
+                    name: pkg.name,
+                    price: priceDisplay ? priceDisplay.textContent : 'Hesaplanamadı',
+                    details: selectedTierButton ? selectedTierButton.querySelector('span').textContent.trim() : 'Paket seçilmedi'
+                };
+                
+                localStorage.setItem('purchaseDetails', JSON.stringify(purchaseDetails));
+                window.location.href = 'onay.html';
+            }
+
+            function setupTierCalculator() {
+                const tierButtons = document.querySelectorAll('.tier-btn');
+                const priceDisplay = document.getElementById('price-display');
+                
+                tierButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        tierButtons.forEach(btn => btn.classList.remove('selected'));
+                        button.classList.add('selected');
+                        priceDisplay.textContent = `${Number(button.dataset.price).toLocaleString('tr-TR')} TL`;
+                    });
+                });
+            }
+
+            function showPackageDetail(id) {
+                const pkg = packages.find(p => p.id === id);
+                if (!pkg) return;
+
+                packageDetailDiv.classList.remove('hidden');
+
+                const forWhomHtml = pkg.forWhom.map(item => `<li><i class="fas fa-check-circle"></i><span>${item}</span></li>`).join('');
+                const contentHtml = pkg.content.map(feature => `
+                    <div class="content-card">
+                        <div class="content-icon"><i class="${feature.icon}"></i></div>
+                        <h4>${feature.title}</h4>
+                        <p>${feature.text}</p>
+                    </div>`).join('');
+                
+                const pricingHtml = `
+                    <div class="pricing-box">
+                        <h3>Paket Seçimi</h3>
+                        <div class="tier-selector">
+                            ${pkg.priceTiers.map((tier, index) => `
+                                <button class="tier-btn ${index === 0 ? 'selected' : ''}" data-price="${tier.price}">
+                                    <span>${tier.quantity}${pkg.tierUnitName}</span>
+                                    ${tier.note ? `<span class="discount-tag">${tier.note}</span>` : ''}
+                                </button>`).join('')}
+                        </div>
+                        <div class="price-display">
+                            <span id="price-display" class="final-price">${pkg.priceTiers[0].price.toLocaleString('tr-TR')} TL</span>
+                        </div>
+                        <button id="purchase-button" class="btn-purchase">
+                            <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Paketi Satın Al
+                        </button>
+                    </div>`;
+
+                packageDetailDiv.innerHTML = `
+                    <div class="package-detail-container">
+                        <div class="detail-header">
+                            <button class="back-button" onclick="window.location.href='index.html#paketlerimiz'">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2>${pkg.name}</h2>
+                            <p class="slogan">${pkg.slogan}</p>
+                        </div>
+                        <div class="detail-grid">
+                            <div class="detail-content">
+                                <div class="package-detail-section">
+                                    <h3><i class="fas fa-user-graduate"></i> Kimler İçin Uygun?</h3>
+                                    <ul>${forWhomHtml}</ul>
+                                </div>
+                                <div class="package-detail-section">
+                                    <h3><i class="fas fa-cubes"></i> Paket Neler Sunuyor?</h3>
+                                    <div class="content-grid">${contentHtml}</div>
+                                </div>
+                            </div>
+                            <div class="detail-sidebar">${pricingHtml}</div>
+                            ${pkg.whyThisPackage ? `
+                                <div class="why-this-package-box">
+                                    <h3><i class="fas fa-lightbulb"></i> Neden Bu Paket?</h3>
+                                    <p>${pkg.whyThisPackage}</p>
+                                </div>` : ''}
+                            <a href="paketlerimiz.html" class="btn-see-all">
+                                <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Tüm Paketleri Gör
+                            </a>
+                        </div>
+                    </div>`;
+                
+                // Event listener'ları dinamik olarak oluşturulan elementlere bağla
+                setupTierCalculator();
+                document.getElementById('purchase-button').addEventListener('click', () => initiatePurchase(pkg.id));
+            }
+            
+            // Sayfa yüklendiğinde doğrudan Deneme Paketinin detayını göster
+            showPackageDetail('mock-exam-package');
+        });
+    </script>
+</body>
+</html>

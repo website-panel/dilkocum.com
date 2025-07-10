@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canlı Ders & Soru Çözümleri - Dil Koçum</title>
+    
+    <meta name="description" content="Dil Koçum ile interaktif canlı dersler, 7/24 soru çözüm desteği ve özel ders imkanlarıyla YDS, YÖKDİL ve YDT'ye tam donanımlı hazırlanın.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <style>
+        /* 1. TEMEL DEĞİŞKENLER VE SIFIRLAMA */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --accent-orange: #E67E22;
+            --light-bg: #ECF0F1;
+            --dark-text: #1F3A65;
+            --light-text: #fefefe;
+            --navbar-bg-start: #1F3A65;
+            --navbar-bg-end: #294A7D;
+            --footer-bg: #222a3a;
+            --footer-link-color: #f1c40f;
+            --border-color: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+        main { flex-grow: 1; }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ORTAK COMPONENTLER (Header, Footer, Butonlar) --- */
+
+        /* Header & Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky; top: 0; z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 80px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+        header .logo-container {
+            display: flex; align-items: center;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        header .logo-container:hover { transform: scale(1.05); }
+        header .logo-container img {
+            height: 120px; width: auto; object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        nav ul { list-style: none; display: flex; gap: 2.5rem; }
+        nav ul li a {
+            color: var(--light-text); text-decoration: none;
+            font-weight: 600; font-size: 1.1rem;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover { color: var(--accent-blue); }
+
+        .menu-toggle {
+            display: none; font-size: 2.2rem; color: var(--light-text);
+            cursor: pointer; z-index: 1001; background: none; border: none;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .menu-toggle:hover { color: var(--accent-blue); transform: scale(1.1); }
+
+        footer {
+            background-color: var(--footer-bg); color: var(--light-text);
+            padding: 2.5rem 1.5rem; text-align: center; margin-top: auto;
+        }
+        .footer-content { max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-top-row { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-legal-links a { color: var(--footer-link-color); text-decoration: none; font-weight: 600; margin: 0 8px; transition: color 0.3s ease; }
+        .footer-legal-links a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .social-icons { display: flex; gap: 1.5rem; }
+        .social-icons a { color: var(--light-text); font-size: 1.4rem; transition: color 0.3s ease, transform 0.3s ease; }
+        .social-icons a:hover { color: var(--accent-gold); transform: translateY(-3px); }
+        .footer-links-bottom { list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .footer-links-bottom a { color: var(--footer-link-color); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
+        .footer-links-bottom a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .copyright-text { color: var(--light-text); font-size: 0.85rem; margin-top: 1rem; opacity: 0.8; }
+        
+        /* 3. SAYFA İÇERİK STİLLERİ */
+        .hero {
+            padding: 4rem 1.5rem; height: 350px;
+            display: flex; align-items: center; justify-content: center;
+            text-align: center; color: var(--light-text);
+            background-size: cover; background-position: center; position: relative;
+            background-image: linear-gradient(rgba(31, 58, 101, 0.8), rgba(41, 74, 125, 0.8)), url('https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1974&auto=format&fit=crop');
+        }
+        .hero h1 { font-family: 'Montserrat', sans-serif; font-size: clamp(2rem, 5vw, 3.2rem); }
+
+         .section {
+            max-width: 960px;
+            margin: -120px auto 60px;
+            padding: 50px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 30px var(--card-shadow);
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .section h2 {
+            font-family: 'Montserrat', sans-serif; font-size: 2rem;
+            margin-top: 2.5rem; margin-bottom: 1rem; color: var(--primary-dark-blue);
+            border-bottom: 2px solid var(--accent-gold); padding-bottom: 0.5rem;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .section h2:first-of-type { margin-top: 0; }
+        .section h2 i { font-size: 1.8rem; color: var(--accent-blue); }
+        .section p, .section li { font-size: 1.1rem; color: var(--dark-text); }
+        
+        .section ul { list-style: none; padding: 0; margin-top: 1.5rem; }
+        .section ul li {
+            display: grid; grid-template-columns: 20px 1fr;
+            gap: 1rem; align-items: start;
+            margin-bottom: 1rem;
+        }
+        .section ul li i { color: var(--accent-blue); margin-top: 0.3em; font-size: 1.1rem; text-align: center; }
+
+        .back-button-container { text-align: center; margin-top: 3rem; }
+        .back-button {
+            display: inline-block; background-color: var(--accent-orange);
+            color: var(--light-text); padding: 0.9rem 2.5rem;
+            border-radius: 50px; text-decoration: none;
+            font-weight: 700; font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        .back-button:hover { background-color: var(--button-hover-orange); transform: translateY(-3px); }
+
+        /* 4. RESPONSIVE KODLARI */
+        @media (max-width: 992px) {
+            header { padding: 0 1.5rem; }
+            .section { margin: -80px auto 40px; width: 90%; }
+        }
+        @media (max-width: 768px) {
+            header { height: 80px; }
+            .menu-toggle { display: block; }
+            nav {
+                position: absolute; top: 80px; left: 0; width: 100%;
+                background: var(--navbar-bg);
+                max-height: 0; overflow: hidden;
+                transition: max-height 0.4s ease-out;
+            }
+            nav.active { max-height: calc(100vh - 80px); overflow-y: auto; }
+            body.menu-active { overflow: hidden; }
+            nav ul { flex-direction: column; align-items: flex-start; padding: 0.5rem 0; gap: 0; }
+            nav ul li { width: 100%; border-bottom: 1px solid rgba(255,255,255,0.1); }
+            nav ul li:last-child { border-bottom: none; }
+            nav ul li a { display: block; padding: 1.1rem 1.5rem; width: 100%; font-size: 1.1rem; }
+            nav ul li a:hover { background-color: rgba(0,0,0,0.2); }
+            
+            .hero { height: 250px; }
+            .section { width: 100%; margin: -60px 0 3rem; border-radius: 0; padding: 2rem 1.5rem; }
+            .section p, .section li { font-size: 1rem; }
+            .section h2 { font-size: 1.5rem;}
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-container" aria-label="Ana Sayfa">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </a>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#paketlerimiz">Paketlerimiz</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="üyelik formu.html" target="_blank">Kayıt Ol</a></li>
+                <li><a href="Giris-yap.html" target="_blank">Giriş Yap</a></li>
+            </ul>
+        </nav>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç/kapat">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+    <main>
+        <section class="hero">
+            <h1>Canlı Ders & Soru Çözümleri & Özel Dersler</h1>
+        </section>
+        <section class="section">
+            <p>YDS, YÖKDİL ve YDT sınavlarında başarıya ulaşmanın en etkili yolu, doğru rehberlik ve aktif öğrenme sürecidir. Dil Koçum, alanında deneyimli ve uzman eğitmen kadrosuyla, sizi sınava tam donanımlı şekilde hazırlamak için interaktif canlı dersler sunar.</p>
+            <h2><i class="fas fa-chalkboard-teacher"></i> Canlı Derslerde Neler Var?</h2>
+            <ul>
+                <li><i class="fas fa-check"></i><div>Sınav müfredatının tüm önemli konuları detaylı ve anlaşılır şekilde anlatılır.</div></li>
+                <li><i class="fas fa-lightbulb"></i><div>Her ders, sınavda karşılaşabileceğiniz soru tiplerine ve stratejilerine odaklanır.</div></li>
+                <li><i class="fas fa-comments"></i><div>Canlı ders esnasında kafanıza takılan soruları anında sesli ya da yazılı olarak eğitmenlere sorabilir, doğru ve hızlı geri bildirim alabilirsiniz.</div></li>
+            </ul>
+            <h2><i class="fas fa-clock"></i> 7/24 Soru Çözüm Desteği</h2>
+            <p>Ders dışında kalan zamanlarda da desteğimiz yanınızda! Anlamadığınız ya da zorlandığınız soruları istediğiniz an uzman eğitmenlerimize iletebilir, çözümlerini ve mantığını detaylı şekilde öğrenebilirsiniz. Böylece eksiklerinizi hızlıca tamamlayarak sınav performansınızı artırırsınız.</p>
+            <h2><i class="fas fa-globe-americas"></i> Her Yerden, Her Cihazdan Erişim</h2>
+            <p>Dil Koçum’un gelişmiş canlı ders platformuna bilgisayar, tablet veya telefonunuzdan kolayca bağlanabilirsiniz. Böylece mekan ve zaman kısıtlaması olmadan, kaliteli eğitim almanın konforunu yaşarsınız.</p>
+            <h2><i class="fas fa-award"></i> Neden Dil Koçum?</h2>
+            <ul>
+                <li><i class="fas fa-check"></i><div>Sınava yönelik özgün ve güncel içerikler,</div></li>
+                <li><i class="fas fa-user-tie"></i><div>Alanında uzman, deneyimli eğitmenler,</div></li>
+                <li><i class="fas fa-question-circle"></i><div>Anında soru çözüm ve birebir destek imkânı,</div></li>
+                <li><i class="fas fa-laptop-code"></i><div>Esnek ve kullanıcı dostu canlı ders platformu,</div></li>
+                <li><i class="fas fa-heart"></i><div>Kesintisiz iletişim ve öğrenme motivasyonu.</div></li>
+            </ul>
+            <p>Başarıya giden yolda, doğru adımlar atmak için Dil Koçum’un canlı ders ve soru çözüm ayrıcalığını keşfedin. Hedeflerinize emin adımlarla ilerlemek için şimdi bize katılın!</p>
+            <div class="back-button-container">
+                <a class="back-button" href="index.html">Ana Sayfaya Dön</a>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-top-row">
+                <div class="footer-legal-links">
+                    <a href="gizlilik-politikası.html">Gizlilik Politikası</a> | <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/dilkocumm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/send?phone=905075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <ul class="footer-links-bottom">
+                <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+                <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+                <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+            </ul>
+            <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const mainNav = document.getElementById('mainNav');
+            const body = document.body;
+
+            // Sayfa kaydırıldığında header'a 'scrolled' class'ı ekle/kaldır
+            if (header) {
+                window.addEventListener('scroll', () => {
+                    // Sadece sticky ise bu özelliği çalıştır
+                    if (getComputedStyle(header).position === 'sticky') {
+                        header.classList.toggle('scrolled', window.scrollY > 50);
+                    }
+                });
+            }
+
+            // Mobil menü açma/kapama
+            if (menuToggle && mainNav) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isMenuOpen = mainNav.classList.toggle('active');
+                    body.classList.toggle('menu-active', isMenuOpen);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

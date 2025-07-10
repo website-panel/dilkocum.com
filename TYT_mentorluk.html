@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dil Öğrencilerine Özel TYT Mentorluk – Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* DEĞİŞİKLİK: TÜM CSS KODLARI BİRLEŞTİRİLDİ, TEMİZLENDİ VE MANTIKSAL OLARAK SIRALANDI */
+        
+        /* --- 1. Genel Ayarlar ve Renk Paleti --- */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --accent-orange: #E67E22;
+            --light-bg: #F3F4F6;
+            --dark-text: #333;
+            --light-text: #fefefe;
+            --card-shadow: rgba(0, 0, 0, 0.08);
+            --button-hover-orange: #D35400;
+            --navbar-bg-start: #1F3A65;
+            --navbar-bg-end: #294A7D;
+            --footer-bg: #111827;
+            --footer-link-color: #f1c40f;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body.menu-active {
+            overflow: hidden;
+        }
+
+        /* --- 2. Ortak Componentler (Header, Footer, Button) --- */
+        
+        /* Header & Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text); display: flex; justify-content: space-between;
+            align-items: center; padding: 0 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky; top: 0; z-index: 1000;
+            height: 80px;
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.9);
+            backdrop-filter: blur(5px);
+        }
+        header .logo-container img {
+            height: 120px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease;
+        }
+        header .logo-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        nav ul {
+            list-style: none; display: flex; gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--light-text); text-decoration: none; font-family: 'Montserrat', sans-serif;
+            font-weight: 600; font-size: 1.1rem; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease;
+        }
+        nav ul li a::after {
+            content: ''; position: absolute; width: 0; height: 3px;
+            background-color: var(--accent-blue); left: 0; bottom: 0;
+            transition: width 0.4s ease;
+        }
+        nav ul li a:hover { color: var(--accent-blue); }
+        nav ul li a:hover::after { width: 100%; }
+
+        /* Mobil Menü Butonu */
+        .menu-toggle {
+            display: none; font-size: 1.8rem; color: var(--light-text); cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .menu-toggle:hover {
+            color: var(--accent-blue); transform: scale(1.1);
+        }
+
+        /* İletişim Butonu */
+        .cta-button {
+            background-color: var(--accent-orange); color: var(--light-text);
+            padding: 1rem 2.5rem; border: none; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+            display: inline-block;
+        }
+        .cta-button:hover {
+            background-color: var(--button-hover-orange); transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(211, 84, 0, 0.5);
+        }
+
+       footer {
+            background-color: var(--footer-bg); color: var(--light-text);
+            padding: 2.5rem 1.5rem; text-align: center; margin-top: auto;
+            font-size: 0.9rem; width: 100%;
+        }
+
+        .footer-content { max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-top-row { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-legal-links a { color: var(--footer-link-color); text-decoration: none; font-weight: 600; margin: 0 8px; transition: color 0.3s ease; }
+        .footer-legal-links a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .social-icons { display: flex; gap: 1.5rem; }
+        .social-icons a { color: var(--light-text); font-size: 1.4rem; transition: color 0.3s ease, transform 0.3s ease; }
+        .social-icons a:hover { color: var(--accent-gold); transform: translateY(-3px); }
+        .footer-links-bottom { list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .footer-links-bottom a { color: var(--footer-link-color); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
+        .footer-links-bottom a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .copyright-text { color: var(--light-text); font-size: 0.85rem; margin-top: 1rem; opacity: 0.8; }
+
+        /* --- 3. Sayfaya Özel Stiller --- */
+        
+        /* Hero Alanı */
+        .hero {
+            background: linear-gradient(rgba(31, 58, 101, 0.85), rgba(20, 40, 75, 0.9)), url('https://plus.unsplash.com/premium_photo-1664461662789-b72903263bad?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') no-repeat center center/cover;
+            height: 300px; display: flex; align-items: center; justify-content: center;
+            color: var(--light-text); text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); text-align: center;
+            padding: 0 1rem;
+        }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 3rem;
+        }
+
+        /* Ana İçerik Alanı */
+        main {
+            flex-grow: 1;
+        }
+        .content-container {
+            max-width: 900px; width: 95%;
+            margin: -100px auto 60px;
+            padding: 40px 50px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px var(--card-shadow);
+            position: relative; z-index: 10;
+        }
+
+        .content-container .content-title {
+            font-family: 'Montserrat', sans-serif; font-size: 2.2rem; font-weight: 700;
+            color: var(--primary-dark-blue); margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem; border-bottom: 3px solid var(--accent-blue);
+        }
+        
+        .content-container p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .content-container h3 {
+            font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700;
+            color: var(--primary-dark-blue); margin-top: 2.5rem; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px solid var(--accent-gold);
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .content-container h3 i {
+             font-size: 1.3rem; color: var(--primary-dark-blue);
+        }
+
+        .content-container ul {
+            list-style: none; padding-left: 0.5rem;
+        }
+        .content-container ul li {
+            display: flex; align-items: flex-start; gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .content-container ul li i {
+            color: var(--accent-blue);
+            margin-top: 0.3em;
+        }
+        
+        .tip-box {
+            background-color: #eaf5fc;
+            border-left: 5px solid var(--accent-blue);
+            padding: 1.25rem 1.5rem; border-radius: 8px;
+            margin: 2rem 0; display: flex; align-items: center; gap: 1rem;
+        }
+        .tip-box i {
+            font-size: 1.8rem; color: var(--accent-blue);
+        }
+        .tip-box p {
+            margin: 0; font-weight: 600;
+        }
+        /* DEĞİŞİKLİK: inline style yerine modifier class kullanıldı */
+        .tip-box--alt {
+            background-color: #fff8f0;
+            border-left-color: var(--accent-orange);
+        }
+        .tip-box--alt i {
+            color: var(--accent-orange);
+        }
+
+
+        /* --- 4. Responsive Tasarım --- */
+
+        /* Tablet (1024px ve altı) */
+        @media (max-width: 1024px) {
+            header { padding: 0 1.5rem; }
+            .content-container { margin: -80px auto 40px; padding: 30px 40px; }
+            .hero h1 { font-size: 2.5rem; }
+            .content-container .content-title { font-size: 2rem; }
+            .content-container h3 { font-size: 1.4rem; }
+        }
+
+        /* Mobil (768px ve altı) */
+        @media (max-width: 768px) {
+            header { height: 70px; padding: 0 1rem; }
+            .menu-toggle { display: block; }
+            nav {
+                position: absolute; top: 70px; left: 0; width: 100%;
+                background: var(--navbar-bg-start); max-height: 0;
+                overflow: hidden; transition: max-height 0.5s ease-out;
+            }
+            nav.active { max-height: calc(100vh - 70px); }
+            nav ul { flex-direction: column; width: 100%; gap: 0; padding: 0.5rem 0; }
+            nav ul li a {
+                display: block; padding: 1rem 1.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            nav ul li:last-child a { border-bottom: none; }
+            nav ul li a:hover { background: rgba(0,0,0,0.2); }
+            nav ul li a::after { display: none; }
+
+            .hero { height: 220px; }
+            .hero h1 { font-size: 2rem; text-align: center; }
+
+            .content-container {
+                margin: -60px 0 30px; padding: 25px 20px;
+                width: 100%; border-radius: 0;
+            }
+            .content-container .content-title { font-size: 1.6rem; }
+            .content-container h3 { font-size: 1.3rem; }
+            .content-container p, .content-container li { font-size: 0.95rem; }
+            
+            .footer-links { flex-direction: column; gap: 10px; }
+            .footer-links span { display: none; }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-container" aria-label="Ana Sayfa">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç/kapat" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="üyelik formu.html">Kayıt Ol</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>DİL ÖĞRENCİLERİNE ÖZEL TYT MENTORLUK</h1>
+    </div>
+    
+    <main>
+        <div class="content-container">
+            <h2 class="content-title">🎯 Dil Koçum TYT Mentorluk Sistemi</h2>
+            <p>YDT’ye hazırlanan öğrenciler için başarıya giden yol sadece yabancı dil bilgisiyle sınırlı değildir. Üniversite yerleştirme puanınızın önemli bir kısmını oluşturan <strong>TYT, dil öğrencileri için de kritik bir virajdır.</strong></p>
+            <p>Dil Koçum Sistemi olarak, yalnızca YDT'de değil, TYT alanında da dil öğrencilerine özel rehberlik ve mentorluk desteği sunuyoruz. Amacımız, öğrencilerimizin her iki sınavda da kendilerinden emin ve tam hazırlıklı olmalarını sağlamaktır.</p>
+
+            <h3><i class="fas fa-compass"></i> Bu Sistem Size Ne Sağlar?</h3>
+            <ul>
+                <li><i class="fa-solid fa-crosshairs"></i>Hedef netlerinizi belirlemenize yardımcı olur.</li>
+                <li><i class="fa-solid fa-calendar-days"></i>Günlük ve haftalık çalışma rutinini sizinle birlikte oluşturur.</li>
+                <li><i class="fa-solid fa-list-check"></i>Konu ve soru çözüm takibinizi düzenli olarak yapar.</li>
+                <li><i class="fa-solid fa-book-open-reader"></i>Zaman yönetimi ve kaynak kullanımı konusunda sizi yönlendirir.</li>
+                <li><i class="fa-solid fa-magnifying-glass-chart"></i>Deneme analizleriyle gelişiminizi objektif şekilde değerlendirir.</li>
+                <li><i class="fa-solid fa-hand-holding-heart"></i>Motivasyonunuzu canlı tutar, desteğini asla eksik etmez.</li>
+            </ul>
+
+            <h3><i class="fas fa-book-open"></i> TYT Derslerinde Odak Noktalarımız</h3>
+            <ul>
+                <li><i class="fa-solid fa-arrow-right"></i></i><strong>Türkçe:</strong>Paragraf çözüm rutini oluşturma, günlük hedef takibi ve zaman yönetimi stratejileri.</li>
+                <li><i class="fa-solid fa-arrow-right"></i><strong>Temel Matematik:</strong>Sıfırdan başlayarak basamaklı planlama, hedef odaklı konu seçimi ve gelişimin düzenli takibi.</li>
+                <li><i class="fa-solid fa-arrow-right"></i><strong>Sosyal Bilimler:</strong>Ezberi kolaylaştıran tekrar planları, kronolojik ve tematik çalışma önerileri.</li>
+                <li><i class="fa-solid fa-arrow-right"></i><strong>Fen Bilimleri:</strong>Sadece dil öğrencilerine uygun, net getirecek konulara odaklanmış, verimli ve stratejik bir çalışma planı.</li>
+            </ul>
+            
+            <h3><i class="fas fa-user-graduate"></i> Bu Sistem Kimler İçin?</h3>
+            <p>Bu mentorluk sistemi;</p>
+            <ul>
+                <li><i class="fa-solid fa-arrow-right"></i>YDT hedefi yüksek olan ama TYT'de zorlanan,</li>
+                <li><i class="fa-solid fa-arrow-right"></i>TYT derslerine nereden ve nasıl çalışacağını bilemeyen,</li>
+                <li><i class="fa-solid fa-arrow-right"></i>Planlı çalışmak isteyen fakat kendi başına bunu sürdüremeyen,</li>
+                <li><i class="fa-solid fa-arrow-right"></i>Hem dil hem de TYT’de tam potansiyeline ulaşmak isteyen tüm öğrenciler için tasarlanmıştır.</li>
+            </ul>
+
+            <div class="tip-box">
+                <i class="fas fa-bullhorn"></i>
+                <p><strong>Unutma:</strong> YDT başarısı seni hedefine yaklaştırır, <strong>TYT başarısı ise o hedefe yerleştirir.</strong></p>
+            </div>
+            
+            <div class="tip-box tip-box--alt">
+                <i class="fas fa-user-friends"></i>
+                <p>TYT’de yalnız değilsin, <strong>Dil Koçun hep yanında!</strong></p>
+            </div>
+
+            <div class="back-button-container">
+                <a class="cta-button" href="iletisim-no.html">Bilgi Al & İletişime Geç</a>
+            </div>
+        </div>
+    </main>
+
+   <footer>
+        <div class="footer-content">
+            <div class="footer-top-row">
+                <div class="footer-legal-links">
+                    <a href="gizlilik-politikası.html">Gizlilik Politikası</a> | <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/dilkocumm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/send?phone=905075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <ul class="footer-links-bottom">
+                <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+                <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+                <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+            </ul>
+            <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <script>
+        // DEĞİŞİKLİK: JAVASCRIPT sadeleştirildi ve sadece gerekli fonksiyonlar bırakıldı.
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const body = document.body;
+
+            // Header'a scroll efekti ekle
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // Mobil menüyü aç/kapat
+            menuToggle.addEventListener('click', () => {
+                const isMenuOpen = mainNav.classList.toggle('active');
+                body.classList.toggle('menu-active', isMenuOpen);
+                menuToggle.setAttribute('aria-expanded', isMenuOpen);
+            });
+            
+            // Menü linkine tıklanınca menüyü kapat
+            mainNav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mainNav.classList.remove('active');
+                    body.classList.remove('menu-active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

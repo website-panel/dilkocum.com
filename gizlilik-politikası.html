@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gizlilik Politikası - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* DEĞİŞİKLİK: TÜM CSS KODLARI BİRLEŞTİRİLDİ, TEMİZLENDİ VE MANTIKSAL OLARAK SIRALANDI */
+        
+        /* --- 1. Genel Ayarlar ve Renk Paleti --- */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --accent-orange: #E67E22;
+            --light-bg: #F3F4F6;
+            --dark-text: #333;
+            --light-text: #fefefe;
+            --card-shadow: rgba(0, 0, 0, 0.08);
+            --button-hover-orange: #D35400;
+            --navbar-bg-start: #1F3A65;
+            --navbar-bg-end: #294A7D;
+            --footer-bg: #111827;
+            --footer-link-color: #f1c40f;
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        body.menu-active {
+            overflow: hidden;
+        }
+
+        /* --- 2. Ortak Componentler (Header, Footer, Button) --- */
+        
+        /* Header & Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text); display: flex; justify-content: space-between;
+            align-items: center; padding: 0 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky; top: 0; z-index: 1000;
+            height: 80px;
+            transition: background 0.3s ease, backdrop-filter 0.3s ease;
+        }
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.9);
+            backdrop-filter: blur(5px);
+        }
+        header .logo-container img {
+            height: 120px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            transition: transform 0.3s ease;
+        }
+        header .logo-container:hover img {
+            transform: scale(1.05);
+        }
+        
+        nav ul {
+            list-style: none; display: flex; gap: 2rem;
+        }
+        nav ul li a {
+            color: var(--light-text); text-decoration: none; font-family: 'Montserrat', sans-serif;
+            font-weight: 600; font-size: 1.1rem; padding: 0.5rem 0; position: relative;
+            transition: color 0.3s ease;
+        }
+        nav ul li a::after {
+            content: ''; position: absolute; width: 0; height: 3px;
+            background-color: var(--accent-blue); left: 0; bottom: 0;
+            transition: width 0.4s ease;
+        }
+        nav ul li a:hover { color: var(--accent-blue); }
+        nav ul li a:hover::after { width: 100%; }
+
+        /* Mobil Menü Butonu */
+        .menu-toggle {
+            display: none; font-size: 1.8rem; color: var(--light-text); cursor: pointer;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .menu-toggle:hover {
+            color: var(--accent-blue); transform: scale(1.1);
+        }
+
+        /* Ana Sayfaya Dön Butonu */
+        .back-button-container {
+            text-align: center; margin: 40px 0;
+        }
+        .back-button {
+            background-color: var(--accent-orange); color: var(--light-text);
+            padding: 1rem 2.5rem; border: none; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(230, 126, 34, 0.4);
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: var(--button-hover-orange); transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(211, 84, 0, 0.5);
+        }
+
+         /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: var(--light-text);
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: auto; /* İçerik kısa olsa bile altta kalmasını sağlar */
+            flex-shrink: 0;
+        }
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .footer-links a, .footer-legal-links a {
+            color: var(--footer-link-color);
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover, .footer-legal-links a:hover {
+            color: var(--accent-gold);
+            text-decoration: underline;
+        }
+        .social-icons a {
+            color: var(--light-text);
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-icons a:hover {
+            color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+        .copyright-text {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.6);
+            margin-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        /* --- 3. Sayfaya Özel Stiller --- */
+        
+        /* Hero Alanı */
+        .hero {
+            background: linear-gradient(rgba(31, 58, 101, 0.8), rgba(20, 40, 75, 0.9)), url('https://source.unsplash.com/1600x500/?privacy,security,lock') no-repeat center center/cover;
+            height: 300px; display: flex; align-items: center; justify-content: center;
+            color: var(--light-text); text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5); text-align: center;
+        }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 3rem;
+        }
+
+        /* Ana İçerik Alanı */
+        main {
+            flex-grow: 1;
+        }
+        .content-container {
+            max-width: 900px; width: 90%;
+            margin: -100px auto 60px;
+            padding: 40px 50px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px var(--card-shadow);
+            position: relative; z-index: 10;
+        }
+        .content-container h2 {
+            font-family: 'Montserrat', sans-serif; font-size: 2rem; font-weight: 700;
+            color: var(--primary-dark-blue); margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem; border-bottom: 3px solid var(--accent-blue);
+            text-align: center;
+        }
+        .content-container p {
+            margin-bottom: 1.25rem;
+        }
+
+        /* --- 4. Responsive Tasarım --- */
+
+        /* Tablet (1024px ve altı) */
+        @media (max-width: 1024px) {
+            header { padding: 0 1.5rem; }
+            .content-container { width: 95%; margin: -80px auto 40px; padding: 30px 40px; }
+            .hero h1 { font-size: 2.5rem; }
+            .content-container h2 { font-size: 1.8rem; }
+        }
+
+        /* Mobil (768px ve altı) */
+        @media (max-width: 768px) {
+            header { height: 70px; padding: 0 1rem; }
+            .menu-toggle { display: block; }
+            nav {
+                position: absolute; top: 70px; left: 0; width: 100%;
+                background: var(--navbar-bg-start); max-height: 0;
+                overflow: hidden; transition: max-height 0.5s ease-out;
+            }
+            nav.active {
+                max-height: calc(100vh - 70px);
+            }
+            nav ul { flex-direction: column; width: 100%; gap: 0; padding: 0.5rem 0; }
+            nav ul li a {
+                display: block; padding: 1rem 1.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            nav ul li:last-child a { border-bottom: none; }
+            nav ul li a:hover { background: rgba(0,0,0,0.2); }
+            nav ul li a::after { display: none; }
+
+            .hero { height: 220px; }
+            .hero h1 { font-size: 2rem; }
+
+            .content-container {
+                margin: -60px 0 30px; padding: 25px 20px;
+                width: 100%; border-radius: 0;
+            }
+            .content-container h2 { font-size: 1.5rem; }
+            .content-container p { font-size: 0.95rem; }
+            
+            .footer-links { flex-direction: column; gap: 10px; }
+            .footer-links span { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-container" aria-label="Ana Sayfa">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </a>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç/kapat" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="üyelik formu.html">Kayıt Ol</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Gizlilik Politikası</h1>
+    </div>
+
+    <main>
+        <article class="content-container">
+            <h2>Gizlilik ve Güvenlik Sözleşmesi</h2>
+
+            <p><strong>Ayazmana Mh. 4412 Sk. No: 19 Merkez/ISPARTA</strong> adresinde mukim <strong>Dil Koçum Özel Eğitim Limited Şirketi</strong> ("Dil Koçum"), kullanıcıların dilkocum.com ve alt alan adları ("Web Sitesi") üzerinden ilettikleri kişisel bilgileri, bu Gizlilik Politikası ile belirlenen amaçlar ve kapsam dışında kullanmayacak, ayrıca izinsiz olarak üçüncü kişilerle paylaşmayacaktır.</p>
+
+            <p>Bununla beraber kullanıcı, paylaşmış olduğu bilgilerin kendisine özel avantajlar sunulabilmesi, satış, pazarlama ve benzer amaçlı her türlü iletişim faaliyetlerinin bildirimi maksatlarıyla, tüm Dil Koçum iştirakleriyle de paylaşılmasına izin vermektedir. Kişisel bilgiler; ad soyad, adres, telefon numarası, e-posta adresi gibi kullanıcıyı doğrudan ya da dolaylı olarak tanımlamaya yönelik her türlü kişisel bilgiyi içermekte olup, kısaca "<strong>Gizli Bilgiler</strong>" olarak anılacaktır.</p>
+
+            <p>Dil Koçum, kişisel bilgileri kendi bünyesinde profilleme, istatistiksel çalışmalar, reklam, tanıtım, pazarlama ve sair iletişim faaliyetleri amacıyla kullanabilecektir. Dil Koçum, kişisel bilgileri kesinlikle gizli tutmayı, bunu bir sır saklama yükümlülüğü olarak addetmeyi, gizliliğin sağlanması ve sürdürülmesi, gizli bilginin tamamının veya herhangi bir kısmının kamu alanına girmesini veya yetkisiz kullanımını ya da üçüncü bir kişiye ifşasını önlemek için gerekli tüm tedbirleri almayı ve gerekli özeni göstermeyi taahhüt etmektedir.</p>
+            
+            <p>Dil Koçum’un gerekli bilgi güvenliği önlemlerini almasına karşın Web Sitesi’ne ve sisteme yapılan saldırılar sonucunda gizli bilgilerin zarar görmesi veya üçüncü kişilerin eline geçmesi durumunda, Dil Koçum’un herhangi bir sorumluluğu olmayacaktır.</p>
+
+            <p>Dil Koçum, kullanıcılara ve kullanıcıların Web Sitesi’ni kullanımına dair bilgileri, teknik bir iletişim dosyası (Çerez-Cookie) kullanarak elde edebilir. Ancak kullanıcılar dilerlerse, teknik iletişim dosyasının gelmemesini veya teknik iletişim dosyası gönderildiğinde uyarı verilmesini sağlayacak biçimde tarayıcı ayarlarını değiştirebilirler.</p>
+
+            <p>Kullanıcılar, üyelik/kişisel bilgilerini ve iletişim tercihlerini her zaman sistem üzerinden güncelleyebilir veya bu konudaki taleplerini Web Sitesi’nde yer alan iletişim bilgileri aracılığıyla bize ulaştırabilirler. Talebiniz en kısa sürede değerlendirilerek uygulamaya alınacaktır. Her kullanıcı, işbu Web Sitesi’ni ziyaret etmekle veya kullanmakla, bu Gizlilik Politikası hükümlerini kabul etmiş sayılır.</p>
+        </article>
+        
+        <div class="back-button-container">
+            <a href="index.html" class="back-button">Ana Sayfaya Dön</a>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="https://www.instagram.com/dilkocumm/?igsh=MTA2NDk2cXljNGRtbw%3D%3D" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://api.whatsapp.com/send?phone=05075186699" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+            </div>
+            <div class="footer-legal-links">
+                <a href="gizlilik-politikası.html">Gizlilik Politikası</a> | <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+            </div>
+            <div class="footer-links">
+                <a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a> | <a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a>
+            </div>
+            <div class="copyright-text">
+                &copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DEĞİŞİKLİK: JAVASCRIPT sadeleştirildi ve sadece gerekli fonksiyonlar bırakıldı.
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const menuToggle = document.getElementById('menuToggle');
+            const mainNav = document.getElementById('mainNav');
+            const body = document.body;
+
+            // Header'a scroll efekti ekle
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+
+            // Mobil menüyü aç/kapat
+            menuToggle.addEventListener('click', () => {
+                const isMenuOpen = mainNav.classList.toggle('active');
+                body.classList.toggle('menu-active', isMenuOpen);
+                menuToggle.setAttribute('aria-expanded', isMenuOpen);
+            });
+            
+            // Menü linkine tıklanınca menüyü kapat
+            mainNav.addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    mainNav.classList.remove('active');
+                    body.classList.remove('menu-active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

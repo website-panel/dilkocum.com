@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dilkocum.com | Online YDS/YÖKDİL/YDT Kursu ve Özel Koçluk</title>
+    
+    <meta name="title" content="dilkocum.com | Online YDS-YÖKDİL-YDT Kursu ve Özel Koçluk">
+    <meta name="description" content="dilkocum.com - Profesyonel Online YDS, YÖKDİL ve YDT Hazırlık Kursları ile hedeflerinize ulaşın.">
+    <meta name="author" content="dilkocum.com">
+    <meta name="keywords" content="YDS, e-YDS, YÖKDİL, yokdil, YDS Video, YDS Video Ders, YDS Kelimeleri, YDS Soru Çözümleri, YÖKDİL Soru Çözümleri, yokdil başvuru, YDS kelime listeleri, YDS Uzaktan Eğitim, Uzaktan YDS, Online YDS, YDS Kursu, Dil Koçum, dilkocum, e-YÖKDİL, e-YDS Hazırlık">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --accent-orange: #E67E22;
+            --light-bg: #F4F6F9; /* Daha yumuşak bir arka plan */
+            --dark-text: #1F3A65;
+            --light-text: #fefefe;
+            --card-shadow: rgba(0, 0, 0, 0.1); /* Daha yumuşak gölge */
+            --button-hover-orange: #D35400;
+            --button-hover-blue: #2980B9;
+            --navbar-bg-start: #1F3A65;
+            --navbar-bg-end: #294A7D;
+            --footer-bg: #222a3a;
+            --footer-link-color: #f1c40f;
+        }
+
+        /* Genel Reset ve Body Stilleri */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%; /* iOS'ta font büyütme sorununu engeller */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--light-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-dark-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+
+        /* Header & Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem; /* Üst-alt padding kaldırıldı, yükseklik ile kontrol edilecek */
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-blue);
+            height: 80px; /* Sabit yükseklik */
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.9);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            animation: slideInLeft 0.8s ease-out forwards;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+        }
+        header .logo-container:hover { transform: scale(1.05); }
+        header .logo-container img {
+            height: 120px; /* Daha uygun bir boyut */
+            width: auto;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        nav {
+             /* Mobil için temel hazırlık, masaüstünde flex ile yönetilecek */
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem; /* Aralıklar ayarlandı */
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem; /* Daha modern bir boyut */
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 4px;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -8px;
+            transform: translateX(-50%);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+        }
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
+
+        /* Hamburger Menu */
+        .menu-toggle {
+            display: none;
+            font-size: 2rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .menu-toggle:hover {
+            color: var(--accent-blue);
+            transform: rotate(90deg);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-size: cover;
+            background-position: center;
+            height: calc(100vh - 80px); /* Ekranın geri kalanını kapla */
+            min-height: 500px;
+            max-height: 700px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--light-text);
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after { /* Overlay gradyan */
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.3) 100%);
+            z-index: 1;
+        }
+
+        .hero > img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: cover;
+            z-index: 0; /* Gradayandan geride */
+        }
+
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 1s ease-out .2s both;
+            padding: 2.5rem;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .hero-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 1.2rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0px 4px 15px rgba(0,0,0,0.6);
+        }
+
+        .hero-content p {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto; margin-right: auto;
+            text-shadow: 0px 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Buttons */
+        .btn, .btn-s {
+            color: var(--light-text);
+            border: none;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .btn {
+            background-color: var(--accent-orange);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            animation: pulse 2.5s infinite ease-in-out;
+        }
+        .btn-s {
+            background-color: var(--accent-blue);
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover { background-color: var(--button-hover-orange); transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.3); animation: none; }
+        .btn-s:hover { background-color: var(--button-hover-blue); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.3); }
+
+        /* General Section Styling */
+        .section {
+            padding: clamp(3rem, 8vw, 6rem) 2rem; /* Akışkan padding */
+            max-width: 1200px;
+            margin: auto;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .section.is-visible { opacity: 1; transform: translateY(0); }
+        .section h3 {
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 3.5rem;
+            color: var(--primary-dark-blue);
+            position: relative;
+        }
+        .section h3::after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background-color: var(--accent-blue);
+            left: 50%; bottom: -15px;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+        
+        /* Hakkımızda Bölümü */
+        .about-summary { background-color: white; }
+        .about-summary .content-wrapper { max-width: 900px; margin: auto; text-align: center; }
+        .about-summary .intro-text { font-size: 1.1rem; color: #555; margin-bottom: 3rem; line-height: 1.8; }
+        .about-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem; text-align: left; margin-bottom: 3rem;
+        }
+        .feature-item { display: flex; align-items: flex-start; gap: 1.5rem; }
+        .feature-item .icon { font-size: 2rem; color: var(--accent-blue); margin-top: 5px; width: 30px; text-align: center;}
+        .feature-item h4 { font-family: 'Montserrat', sans-serif; font-size: 1.25rem; color: var(--primary-dark-blue); margin-bottom: 0.5rem; }
+        .feature-item p { font-size: 0.95rem; color: #666; line-height: 1.6; }
+        .about-summary .btn.about-btn { background-color: var(--accent-blue); box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3); }
+        .about-summary .btn.about-btn:hover { background-color: var(--button-hover-blue); box-shadow: 0 12px 30px rgba(52, 152, 219, 0.4); }
+
+        /* Hizmetler Bölümü */
+        #hizmetler { background-color: var(--light-bg); }
+        .hizmet-swiper-container { width: 100%; padding: 40px 0; position: relative; }
+        .hizmet-swiper .swiper-slide { width: 320px; min-height: 380px; height: auto; display: flex; }
+        .hizmet-kart {
+            width: 100%; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px -10px var(--card-shadow);
+            border-top: 4px solid var(--accent-orange); padding: 2.5rem; text-align: center;
+            display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hizmet-swiper .swiper-slide-visible .hizmet-kart:hover { transform: translateY(-10px); box-shadow: 0 18px 40px -15px rgba(31, 58, 101, 0.25); }
+        .hizmet-kart .icon-wrapper { width: 70px; height: 70px; border-radius: 50%; background-color: rgba(52, 152, 219, 0.1); display: flex; justify-content: center; align-items: center; margin: 0 auto 1.5rem auto; transition: background-color 0.3s ease;}
+        .hizmet-kart:hover .icon-wrapper { background-color: rgba(52, 152, 219, 0.2); }
+        .hizmet-kart .icon-wrapper i { font-size: 2.5rem; color: var(--accent-blue); }
+        .hizmet-kart h4 { font-family: 'Montserrat', sans-serif; margin-bottom: 1rem; font-size: 1.4rem; color: var(--primary-dark-blue); }
+        .hizmet-kart p { font-size: 0.95rem; color: #666; margin-bottom: 1.5rem; flex-grow: 1; }
+        .hizmet-swiper .swiper-button-next, .hizmet-swiper .swiper-button-prev { color: var(--primary-dark-blue); transition: color 0.3s ease; }
+        .hizmet-swiper .swiper-button-next:hover, .hizmet-swiper .swiper-button-prev:hover { color: var(--accent-blue); }
+
+        /* Koçluk Detayları */
+        .kocluk-ozel { background-color: white; }
+        .kocluk-icerik { display: flex; flex-wrap: wrap; gap: 3rem; align-items: center; max-width: 1100px; margin: 2rem auto; text-align: left; }
+        .kocluk-yazi { flex: 1 1 500px; font-size: 1.1rem; line-height: 1.8; color: #444; }
+        .kocluk-yazi p { margin-bottom: 1.5rem; }
+        .kocluk-gorsel { flex: 1 1 400px; display: flex; justify-content: center; align-items: center; }
+        .kocluk-gorsel img { border-radius: 15px; box-shadow: 0 8px 25px var(--card-shadow); transition: transform 0.4s ease; }
+        .kocluk-gorsel img:hover { transform: scale(1.05); }
+        .kocluk-cta { margin-top: 2rem; text-align: center; }
+        
+        /* Paketler Bölümü */
+        #paketlerimiz { background-color: var(--light-bg); position: relative; overflow: hidden; }
+        .paket-swiper-container { width: 100%; padding: 60px 0; z-index: 1; }
+        .paket-swiper .swiper-slide { width: 340px; height: auto; }
+        .paket-kart {
+            background: #fff; border-radius: 20px; box-shadow: 0 10px 30px var(--card-shadow);
+            border: 1px solid #e0e0e0; overflow: hidden; display: flex; flex-direction: column;
+            height: 100%; text-align: center; padding: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease; position: relative;
+        }
+        .paket-swiper .swiper-slide-active .paket-kart { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(31, 58, 101, 0.2); }
+        .paket-kart__baslik { font-family: 'Montserrat', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--primary-dark-blue); margin-bottom: 8px; }
+        .paket-kart__aciklama { font-size: 0.95rem; color: #555; margin-bottom: 20px; min-height: 2.5em; }
+        .paket-kart__fiyat { font-family: 'Montserrat', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 15px 0; color: var(--primary-dark-blue); }
+        .paket-kart__fiyat span { font-size: 1rem; font-weight: 500; color: #777; margin-left: 5px; }
+        .paket-kart__ozellikler { list-style: none; padding: 0; margin: 25px 0; flex-grow: 1; text-align: left; }
+        .paket-kart__ozellikler li { display: flex; align-items: center; margin-bottom: 15px; font-size: 0.95rem; color: #333; }
+        .paket-kart__ozellikler i { color: var(--accent-blue); margin-right: 15px; font-size: 1.2rem; width: 20px; text-align: center; }
+        .paket-kart__buton { display: inline-block; width: 100%; padding: 15px; text-decoration: none; color: var(--light-text); background: var(--accent-blue); border: none; border-radius: 12px; font-weight: 700; font-size: 1.05rem; cursor: pointer; transition: all 0.3s ease; margin-top: auto; }
+        .paket-kart__buton:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -8px rgba(52, 152, 219, 0.5); background: var(--button-hover-blue); }
+
+        .paket-swiper .swiper-slide.is-popular { transform: scale(1.06); z-index: 10;}
+        .paket-swiper .swiper-slide.is-popular .paket-kart { border: 2px solid var(--accent-gold); box-shadow: 0 20px 50px -15px rgba(255, 215, 0, 0.35); }
+        .paket-swiper .swiper-slide.is-popular .paket-kart::before { content: "En Popüler"; position: absolute; top: 0; left: 50%; transform: translateX(-50%); background-color: var(--accent-gold); color: var(--primary-dark-blue); padding: 6px 30px; font-weight: 700; font-size: 0.9rem; border-radius: 0 0 10px 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .paket-swiper .swiper-slide.is-popular .paket-kart__buton { background: var(--accent-gold); color: var(--primary-dark-blue); }
+        .paket-swiper .swiper-slide.is-popular .paket-kart__buton:hover { background: #e6c300; }
+        .paket-swiper .swiper-button-next, .paket-swiper .swiper-button-prev { color: var(--primary-dark-blue); transform: translateY(-20px); }
+        .paket-swiper .swiper-button-next:hover, .paket-swiper .swiper-button-prev:hover { color: var(--accent-blue); }
+
+        /* Öğrenci Yorumları */
+        #testimonials { background-color: white; }
+        .testimonials-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 1200px; margin: auto; }
+        .testimonial-card {
+            background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 8px 25px var(--card-shadow);
+            text-align: center; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center;
+        }
+        .testimonial-card:hover { transform: translateY(-10px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12); }
+        .testimonial-card img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 4px solid var(--accent-gold); }
+        .testimonial-card h4 { font-family: 'Montserrat', sans-serif; font-size: 1.4rem; color: var(--primary-dark-blue); margin-bottom: 10px; }
+        .testimonial-card .stars { color: var(--accent-gold); margin-bottom: 15px; }
+        .testimonial-card p { font-style: italic; font-size: 0.95rem; color: #555; margin-bottom: 15px; flex-grow: 1; border-left: 3px solid var(--accent-blue); padding-left: 15px; text-align: left;}
+        .testimonial-card span { font-weight: 600; color: var(--accent-blue); font-size: 0.9rem; }
+        
+        /* Blog Bölümü */
+        #blog .blog-posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 0 auto; }
+        #blog .post { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 25px var(--card-shadow); transition: all 0.3s ease; display: flex; flex-direction: column; }
+        #blog .post:hover { transform: translateY(-8px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); }
+        #blog .post img { width: 100%; height: 250px; object-fit: cover; }
+        #blog .post-content { padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
+        #blog .post-content h4 { font-family: 'Montserrat', sans-serif; margin-bottom: 1rem; font-size: 1.3rem; color: var(--primary-dark-blue); line-height: 1.4; }
+        #blog .post-content p { font-size: 0.95rem; color: #555; line-height: 1.6; margin-bottom: 1.5rem; }
+
+        /* SSS Bölümü */
+        .faq .faq-container { max-width: 800px; margin: auto; }
+        .faq .faq-item { background-color: white; border: 1px solid #ddd; margin-bottom: 15px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); }
+        .faq .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 20px 25px; cursor: pointer; font-family: 'Montserrat', sans-serif; font-size: 1.15rem; transition: background-color 0.3s ease; }
+        .faq .faq-item.active .faq-question { background-color: var(--primary-dark-blue); color: var(--light-text); }
+        .faq .faq-question h4 { margin: 0; flex-grow: 1; }
+        .faq .faq-question i { transition: transform 0.3s ease; }
+        .faq .faq-item.active .faq-question i { transform: rotate(180deg); }
+        .faq .faq-answer { padding: 0 25px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out, padding 0.4s ease-out; background-color: #f8f9fa; }
+        .faq .faq-item.active .faq-answer { max-height: 500px; padding: 20px 25px; }
+        .faq .faq-answer p { font-size: 1rem; color: #555; line-height: 1.7; }
+        
+        /* İletişim Bölümü */
+        #bize-ulasin { background: var(--primary-dark-blue); color: var(--light-text); text-align: center; }
+        #bize-ulasin .content-wrapper { max-width: 750px; margin: auto; background-color: rgba(31,58,101,0.8); padding: 3rem; border-radius: 10px; }
+        #bize-ulasin h3 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 1rem; color: var(--accent-gold); }
+        #bize-ulasin p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; }
+
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg); color: var(--light-text);
+            padding: 2rem 1rem; text-align: center; margin-top: auto;
+            font-size: 0.95rem; width: 100%;
+        }
+        .footer-content { max-width: 1200px; margin: auto; display: flex; flex-direction: column; align-items: center; gap: 1.5rem;}
+        .footer-main { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1.5rem; }
+        .footer-legal-links a { color: var(--footer-link-color); text-decoration: none; font-weight: 600; margin: 0 10px; transition: color 0.3s ease; }
+        .footer-legal-links a:hover { color: var(--accent-gold); }
+        .social-icons { display: flex; gap: 1rem; }
+        .social-icons a { color: var(--light-text); font-size: 1.5rem; transition: color 0.3s ease, transform 0.3s ease; }
+        .social-icons a:hover { color: var(--accent-gold); transform: scale(1.1); }
+        .footer-links-bottom { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 15px; }
+        .footer-links-bottom a { color: var(--footer-link-color); text-decoration: none; transition: color 0.3s ease; font-size: 0.9rem;}
+        .footer-links-bottom a:hover { color: var(--accent-gold); }
+        .copyright-text { color: var(--light-text); font-size: 0.85rem; opacity: 0.7; }
+        
+        /* WhatsApp Bubble */
+        .whatsapp-chat-bubble { position: fixed; bottom: 20px; right: 20px; z-index: 999; }
+        .whatsapp-button {
+            background-color: #25D366; color: var(--light-text); width: 60px; height: 60px;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            font-size: 2.2rem; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease; text-decoration: none;
+        }
+        .whatsapp-button:hover { background-color: #1DA851; transform: scale(1.1); }
+
+
+        /* ----------- RESPONSIVE TASARIM DÜZENLEMELERİ ----------- */
+
+        /* TABLET GÖRÜNÜMÜ (1024px ve altı) */
+        @media (max-width: 1024px) {
+            header { padding: 0 1.5rem; height: 70px; }
+            nav ul { gap: 1.5rem; }
+            nav ul li a { font-size: 1rem; }
+            .section { padding: clamp(3rem, 7vw, 5rem) 1.5rem; }
+            .kocluk-icerik { flex-direction: column; text-align: center; }
+            .kocluk-yazi { order: 2; }
+            .kocluk-gorsel { order: 1; }
+        }
+
+        /* MOBİL NAVİGASYON (900px ve altı) */
+        @media (max-width: 900px) {
+            .menu-toggle { display: block; }
+            nav {
+                position: absolute;
+                top: 70px; /* Header yüksekliği kadar */
+                left: 0;
+                width: 100%;
+                background: var(--navbar-bg-start);
+                flex-direction: column;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            body.menu-active {
+                overflow: hidden; /* Menü açıkken arkaplanın kaymasını engelle */
+            }
+            nav.active { max-height: calc(100vh - 70px); overflow-y: auto; }
+            nav ul {
+                flex-direction: column;
+                width: 100%;
+                padding: 1rem 0;
+                gap: 0;
+            }
+            nav ul li { width: 100%; }
+            nav ul li a {
+                display: block;
+                padding: 1rem 1.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            nav ul li:last-child a { border-bottom: none; }
+            nav ul li a::after { display: none; /* Mobilde alt çizgiyi kaldır */ }
+            nav ul li a:hover, nav ul li a.active {
+                background-color: rgba(0,0,0,0.2);
+                color: var(--accent-blue);
+            }
+        }
+
+        /* GENEL MOBİL GÖRÜNÜM (768px ve altı) */
+        @media (max-width: 768px) {
+            .hero { height: auto; min-height: 80vh; }
+            .hero-content { padding: 2rem 1.5rem; }
+            .btn { padding: 0.9rem 2rem; font-size: 1rem; }
+            .about-features, .testimonials-container, #blog .blog-posts { grid-template-columns: 1fr; } /* Tek sütuna düşür */
+            .footer-main { flex-direction: column; }
+        }
+        
+        /* KÜÇÜK MOBİL EKRANLAR (480px ve altı) */
+        @media (max-width: 480px) {
+            header { padding: 0 1rem; }
+            .section { padding: clamp(2rem, 6vw, 4rem) 1rem; }
+            .hero-content { padding: 1.5rem; }
+            .paket-swiper .swiper-slide { width: 90%; }
+            .faq .faq-question { padding: 15px 20px; font-size: 1rem; }
+            #bize-ulasin .content-wrapper { padding: 2rem; }
+            .whatsapp-button::before { display: none; } /* Mobilde tooltip'i gizle */
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-container" aria-label="Ana Sayfa">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logo">
+        </a>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="#hero" class="nav-link active">Ana Sayfa</a></li>
+                <li><a href="#hakkimizda" class="nav-link">Hakkımızda</a></li>
+                <li><a href="#hizmetler" class="nav-link">Hizmetlerimiz</a></li>
+                <li><a href="#paketlerimiz" class="nav-link">Paketlerimiz</a></li>
+                <li><a href="#blog" class="nav-link">Blog</a></li>
+                <li><a href="#faq" class="nav-link">SSS</a></li>
+                <li><a href="#bize-ulasin" class="nav-link">İletişim</a></li>
+                <li><a href="TYT_mentorluk.html" class="nav-link">TYT</a></li>
+                <li><a href="üyelik formu.html" class="nav-link" target="_blank">Kayıt Ol</a></li>
+                <li><a href="Giris-yap.html" class="nav-link" target="_blank">Giriş Yap</a></li>
+            </ul>
+        </nav>
+        <button class="menu-toggle" id="menuToggle" aria-label="Menüyü aç/kapat" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+
+    <main>
+    
+        <section class="hero" id="hero">
+            <img src="ChatGPT Image 27 May 2025 19_04_22.png" alt="Masa başında YDS, YÖKDİL, YDT sınavlarına çalışan bir öğrenci">
+            <div class="hero-content">
+                <h2>YDS, YÖKDİL, YDT İçin Kişisel Koçluk</h2>
+                <p>Akademik ve profesyonel hayatta önemli bir yere sahip olan YDS, YÖKDİL ve YDT sınavları, yalnızca bilgi birikimi değil, aynı zamanda doğru stratejiler ve disiplinli bir hazırlık süreci gerektirir.</p>
+                <a href="üyelik formu.html" class="btn">Hemen Başla</a>
+            </div>
+        </section>
+
+        <section class="section about-summary" id="hakkimizda">
+            <div class="content-wrapper">
+                <h3>Neden Dil Koçum?</h3>
+                <p class="intro-text"> <i>Çünkü yalnızca ders anlatmıyoruz — strateji geliştiriyor, yol arkadaşlığı yapıyoruz.</i><br><br> Sınav süreci yalnızca bilgiyle değil, doğru yönlendirme ve istikrarlı destekle aşılır.
+<br><strong>Dil Koçum</strong>, YDS, YÖKDİL ve YDT gibi dil sınavlarına hazırlanan öğrenciler için özel olarak tasarlanmış bir rehberlik ve eğitim platformudur. Amacımız, her öğrenciyi kendi potansiyeli doğrultusunda geliştirmek ve bu süreci sistematik, etkili ve sürdürülebilir bir hale getirmektir.
+<br><br><strong>Sıradan bir kurs değil, gerçek bir plan ortağı arıyorsan; buradayız.</strong></p>
+                
+                <div class="about-features">
+                    <div class="feature-item">
+                        <i class="fas fa-user-check icon"></i>
+                        <div>
+                            <h4>Kişiselleştirilmiş Stratejik Planlama</h4>
+                            <p>Dil Koçum, her öğrencinin öğrenme tarzını, hedeflerini ve mevcut durumunu analiz eder. Bu analiz doğrultusunda öğrenciye özel bir çalışma planı hazırlanır ve süreç boyunca düzenli takip sağlanır. Sistematik ve sürdürülebilir bir çalışma düzeni oluşturmak, platformun temel prensiplerinden biridir.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-chalkboard-teacher icon"></i>
+                        <div>
+                            <h4>Uzman ve Rehber Kadro</h4>
+                            <p>Eğitim kadrosu, akademik İngilizce konusunda deneyimli öğretmen ile psikolojik rehberlik ve öğrenme süreçleri konusunda uzman danışmandan oluşmaktadır. Bu yapı sayesinde öğrenci yalnızca bilgiye değil; aynı zamanda motivasyon, yönlendirme ve sınav kaygısını yönetme becerilerine de erişim sağlar.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-book-open icon"></i>
+                        <div>
+                            <h4>Güncel, Özgün ve Hedef Odaklı İçerikler</h4>
+                            <p>Dil Koçum, ÖSYM tarafından uygulanan YDS, YÖKDİL ve YDT gibi dil sınavlarının güncel formatlarını esas alarak, sınav odaklı ve özgün materyaller üretir. Hazırlanan tüm içerikler, yalnızca bilgi aktarmakla kalmaz; aynı zamanda sınav pratiği yapmaya ve sınav stratejilerini geliştirmeye yönelik olarak yapılandırılır.</p>
+                        </div>
+                    </div>
+					 <div class="feature-item">
+					 <i class="fas fa-check-circle icon"></i>
+                        <div>
+                            <h4> Sistemli, Güvenilir ve Sonuca Yönelik Bir Model</h4>
+                            <p> Dil koçum platform, geleneksel kurs anlayışının ötesine geçerek öğrenciyi merkeze alan, bireysel farkları dikkate alan bir yapı sunar. Bilgi aktarımının yanı sıra planlama, takip ve psikolojik destek ile başarıyı sistemli hâle getirir.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="hakkimizda.html" class="btn about-btn">Hakkımızda Daha Fazla Bilgi</a>
+            </div>
+        </section>
+
+        <section class="section" id="hizmetler">
+            <h3>Hizmetlerimiz</h3>
+            
+            <div class="hizmet-swiper-container">
+                <div class="swiper hizmet-swiper">
+                    <div class="swiper-wrapper">
+
+                        <div class="swiper-slide">
+                            <div class="hizmet-kart">
+                                <div>
+                                    <div class="icon-wrapper"><i class="fas fa-user-graduate"></i></div>
+                                    <h4>Birebir Koçluk & Mentörlük</h4>
+                                    <p>Size özel oluşturulmuş haftalık çalışma planları, düzenli ilerleme takibi ve kişisel motivasyon desteği.</p>
+                                </div>
+                                <a href="mentorluk.html" class="btn-s">Daha Fazla Bilgi</a>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="hizmet-kart">
+                                <div>
+                                    <div class="icon-wrapper"><i class="fas fa-book-open"></i></div>
+                                    <h4>Özgün ve Güncel Kaynaklar</h4>
+                                    <p>YDS, YÖKDİL, YDT formatına uygun, güncel kelime setleri, okuma metinleri, deneme sınavları ve soru bankaları.</p>
+                                </div>
+                                <a href="hizmetlerimiz-2.html" class="btn-s">Daha Fazla Bilgi</a>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="hizmet-kart">
+                                <div>
+                                    <div class="icon-wrapper"><i class="fas fa-video"></i></div>
+                                    <h4>Canlı Ders & Soru Çözümleri</h4>
+                                    <p>Uzman eğitmenlerle interaktif canlı dersler, anlamadığınız sorular için anında sesli/yazılı destek.</p>
+                                </div>
+                                <a href="canlı_egitim.html" class="btn-s">Daha Fazla Bilgi</a>
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="hizmet-kart">
+                                <div>
+                                    <div class="icon-wrapper"><i class="fas fa-chart-line"></i></div>
+                                    <h4>Detaylı Performans Analizi</h4>
+                                    <p>Deneme sınavı analizleri, eksik konuların belirlenmesi ve hedefe yönelik özel çalışma programları.</p>
+                                </div>
+                                <a href="analiz.html" class="btn-s">Daha Fazla Bilgi</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </section>
+
+        <section class="section kocluk-ozel" id="kocluk-detaylari">
+            <h3>Kazanmanız İçin Koçluk Hizmetini Kişiye Özel Hale Getiriyoruz</h3>
+            <div class="kocluk-icerik">
+                <div class="kocluk-yazi">
+                    <p>Koçluk hizmetinin amacı; öğrenciyi hedefleri doğrultusunda yönlendirmek, motive etmek ve bu süreç içerisinde yaşadığı zorluklar ile baş etmesini sağlamaktır. Koçunuz, hedefinize ulaşmanız için sizi destekler, motivasyonunuzu artırır ve doğru çalışma stratejilerini size gösterir.</p>
+                    <p>Sunduğumuz koçluk hizmeti; bireyselleştirilmiş hedef belirleme, etkili çalışma planları, düzenli geri bildirimler ve kapsamlı deneme analizleri içerir. Öğrencilerimize sadece teknik bilgi sunmakla kalmıyor, motivasyon ve zaman yönetimi desteğiyle başarılarını maksimuma çıkarıyoruz.</p>
+                </div>
+                <div class="kocluk-gorsel">
+                    <img src="ChatGPT Image 26 May 2025 20_06_21.png" alt="Öğrencisiyle online görüşme yapan bir dil koçu">
+                </div>
+            </div>
+            <div class="kocluk-cta">
+                <a href="iletisim-no.html" class="btn">Detaylı Bilgi Alın</a>
+            </div>
+        </section>
+
+        <section class="section" id="paketlerimiz">
+            <h3>Paketlerimiz</h3>
+            <div class="paket-swiper-container">
+                <div class="swiper paket-swiper">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <div class="paket-kart">
+                                <h4 class="paket-kart__baslik">Koçluk Paketi</h4>
+                                <p class="paket-kart__aciklama">Kişiye özel yol haritası ile zirveye oynayın.</p>
+                                <div class="paket-kart__fiyat">₺7500<span>/en az 3 aylık</span></div>
+                                <ul class="paket-kart__ozellikler">
+                                    <li><i class="fas fa-check-circle"></i> Kişiye Özel Stratejik Planlama </li>
+                                    <li><i class="fas fa-check-circle"></i> Haftalık ve Günlük Planlama </li>
+                                    <li><i class="fas fa-check-circle"></i> Performans Takibi</li>
+                                    <li><i class="fas fa-check-circle"></i> Motivasyon ve Disiplin</li>
+                                </ul>
+                                <a href="Koçluk Paketi.html" class="paket-kart__buton">Paketi Seç</a>
+                            </div>
+                        </div>
+                        <div class="swiper-slide is-popular">
+                            <div class="paket-kart">
+                                <h4 class="paket-kart__baslik">Tam Destek Paketi</h4>
+                                <p class="paket-kart__aciklama">Başarı için ihtiyacınız olan her şey bir arada.</p>
+                                <ul class="paket-kart__ozellikler">
+                                    <li><i class="fas fa-check-circle"></i> Tüm Koçluk Paketi Özellikleri</li>
+                                    <li><i class="fas fa-check-circle"></i> Canlı Grup Dersleri</li>
+                                    <li><i class="fas fa-check-circle"></i> Özel Soru Çözüm </li>
+                                    <li><i class="fas fa-check-circle"></i> Tüm Deneme Sınavları</li>
+                                    <li><i class="fas fa-check-circle"></i> Öncelikli Destek</li>
+                                    <li><i class="fas fa-check-circle"></i> YKS-DİL Öğrencilerimiz için <br>TYT Ücretsiz Koçluk</li>
+                                </ul>
+                                <a href="tam_destek_paket.html" class="paket-kart__buton">En Popüler</a>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="paket-kart">
+                                <h4 class="paket-kart__baslik">Grup Dersi & Soru Çözüm Paketi</h4>
+                                <p class="paket-kart__aciklama">Takıldığınız yerleri anında çözüme kavuşturun.</p>
+                                <div class="paket-kart__fiyat">₺450<span>/en az 3 saat</span></div>
+                                <ul class="paket-kart__ozellikler">
+                                    <li><i class="fas fa-check-circle"></i> Haftalık Canlı Grup Dersleri</li>
+                                    <li><i class="fas fa-check-circle"></i> Yoğun Soru Çözümü</li>
+                                    <li><i class="fas fa-check-circle"></i> Ders Kayıtlarına Erişim</li>
+                                    <li><i class="fas fa-check-circle"></i> Sınav Stratejileri</li>
+                                </ul>
+                                <a href="grup_soru_cozum.html" class="paket-kart__buton">Paketi Seç</a>
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="paket-kart">
+                                <h4 class="paket-kart__baslik">Deneme Paketi</h4>
+                                <p class="paket-kart__aciklama">Gerçek sınav deneyimi ile kendinizi ölçün.</p>
+                                <div class="paket-kart__fiyat">₺5500 <span>/12 deneme</span> </div>
+                                <ul class="paket-kart__ozellikler">
+                                    <li><i class="fas fa-check-circle"></i> Güncel Deneme Sınavları</li>
+                                    <li><i class="fas fa-check-circle"></i> Detaylı Soru Çözümleri</li>
+                                    <li><i class="fas fa-check-circle"></i> Kişisel Performans Analizi</li>
+                                    <li><i class="fas fa-check-circle"></i> Sıralama ve Performans Takibi</li>
+                                    <li><i class="fas fa-check-circle"></i> Strateji Geliştirme</li>
+                                </ul>
+                                <a href="deneme_paket.html" class="paket-kart__buton">Paketi Seç</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section" id="blog">
+            <h3>Blog Yazılarımız</h3>
+            <div class="blog-posts">
+                <div class="post">
+                    <img src="Gemini_Generated_Image_oznzmfoznzmfoznz.png" alt="Açık bir kitap ve kütüphane ortamı">
+                    <div class="post-content">
+                        <div>
+                            <h4>YDS'de Okuma Becerilerini Geliştirmenin Sırları</h4>
+                            <p>📚 YDS, Türkiye’de lisansüstü eğitim ve akademik kariyer hedefleyen adaylar için oldukça kritik bir sınav. Bu sınavda %70’e yakın kısım okuduğunu anlamaya dayanır. Peki, bu beceriyi nasıl geliştirirsiniz? İşte bu blogda YDS’de okuma becerilerinizi geliştirecek 7 altın stratejiyi birlikte öğrenelim.</p>
+                        </div>
+                        <a href="blogger.html" class="btn-s">Daha Fazla Oku</a>
+                    </div>
+                </div>
+                <div class="post">
+                    <img src="Gemini_Generated_Image_dum60ldum60ldum6.png" alt="Kelime kartları ve not defteri">
+                    <div class="post-content">
+                        <div>
+                            <h4>YDS/YÖKDİL/YDT’de Başarıya Giden Kelime Taktikleri</h4>
+                            <p>📚 YDS, YÖKDİL ve YDT sınavlarında başarıya giden yolun anahtarı: <strong>Kelime bilgisi!</strong> Bu sınavlarda doğru cevaba giden ipuçları çoğu zaman tek bir kelimenin içinde gizlidir. Peki, bu kelimeleri kalıcı şekilde nasıl öğrenirsiniz? Ezberlemeden, unutmadan ve gerçekten işe yarayan yöntemlerle kelime hazinenizi nasıl güçlendirirsiniz? İşte, sınavlarda fark yaratacak 5 etkili kelime öğrenme stratejisini birlikte keşfedelim!.</p>
+                        </div>
+                        <a href="Blogger-2.html" class="btn-s">Daha Fazla Oku</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section faq" id="faq">
+            <h3>Sıkça Sorulan Sorular</h3>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Koçluk programları ne kadar sürer?</h4><i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Koçluk programlarımız genellikle öğrencinin mevcut seviyesi ve hedef puanına göre 3 ila 6 ay arasında değişmektedir. Detaylı bilgi için ücretsiz ön görüşme talep edebilirsiniz.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Dersler online mı yüz yüze mi yapılıyor?</h4><i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tüm derslerimiz ve koçluk seanslarımız tamamen online platformlar üzerinden gerçekleştirilmektedir. Bu sayede Türkiye'nin her yerinden ulaşım kolaylığı sağlıyoruz.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Kaynaklar ve materyaller nasıl sağlanıyor?</h4><i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Size özel hazırlanan özgün PDF materyaller, deneme sınavları ve soru bankaları dijital ortamda sizinle paylaşılmaktadır. Ek olarak, önerilen ek kaynaklar hakkında da bilgi veriyoruz.</p>
+                    </div>
+                </div>
+				<div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Koçluk hizmeti hangi sınavları kapsıyor?</h4><i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Hizmetimiz YDS, YÖKDİL ve YDT sınavlarına yönelik birebir koçluk ve mentörlük desteği sağlamaktadır.</p>
+                    </div>
+                </div>
+				<div class="faq-item">
+                    <div class="faq-question">
+                        <h4>Ödeme seçenekleri nelerdir?</h4><i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Ödeme seçeneklerimiz hakkında detaylı bilgiyi iletişim sayfamızdan veya ücretsiz ön görüşme sırasında alabilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+		
+		<section class="section testimonials" id="testimonials">
+            <h3>Öğrencilerimizden Gelenler</h3>
+            <div class="testimonials-container">
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=E.L.K" alt="Öğrenci Profil Fotoğrafı">
+                    <h4>Elif Leyla K*****</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"Kesinlikle gönül rahatlığıyla tavsiye ediyorum!!! Sürecin en başından sınav gününe kadar her şey planlı, özenli ve motive ediciydi kişiye özel programlar ve özellikle Muhammet Hoca'nın anlatımı ve Yusuf hocamın özel bir şekilde ilgilenmesiyle online değil birebir bir dersteymişim gibi hissettim. İiyki sizlerle bu yola çıkmışım emekleriniz için teşekkür ediyorum HOCALARIMM...."</p>
+                    <span>YDS Puanı: 85</span>
+                </div>
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=B.K." alt="Öğrenci Profil Fotoğrafı">
+                    <h4>Büşra K*****</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i></div>
+                    <p>"Bu sürece başlarken bu kadar yol kat edeceğimi hiç düşünmemiştim... Ama Muhammet Hoca’nın ders anlatımıyla her şey netleşti, Yusuf Hoca’nın ilgisiyle de hep motive kaldım. Beni ben yapan, sürecin her anında yanımda hissettiren iki güzel insan... İyi ki varsınız, iyi ki Dil Koçum! Emeğinizin hakkı ödenmez. 💙"</p>
+                    <span>YÖKDİL Puanı: 78</span>
+                </div>
+                <div class="testimonial-card">
+                    <img src="https://placehold.co/100x100/A0A0A0/FFFFFF?text=M.U." alt="Öğrenci Profil Fotoğrafı">
+                    <h4>Mustafa U***</h4>
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p>"YDT’ye hazırlanırken ne yapacağımı hiç bilmiyordum, kafam çok karışıktı. Dil Koçum karşıma çıktı ve her şey değişti. Ezbere boğulmadan, gerçekten neyin nasıl çalışılması gerektiğini öğrendim. Muhammet Hoca'nın dersleri sadece ders değil, resmen “anlama sanatıydı” diyebilirim :) Yusuf Hoca’nın desteği ise sürecin tam kalbiydi. Ne zaman tıkansam, hep bir çözüm sundular. Robot gibi değil, gerçekten anlayarak çalıştım ve sonucunu da aldım. Bu ekip sadece öğretmiyor, seni yolda da tutuyor. Gözüm kapalı tavsiye ederim! 🙌📚 "</p>
+                    <span>YDT Net: 77,50</span>
+                </div>
+            </div>
+        </section>
+        
+        <section class="section" id="bize-ulasin">
+            <div class="content-wrapper">
+                <h3>Bizimle İletişime Geçin</h3>
+                <p>Sınavlara hazırlık sürecinizde size nasıl destek olabileceğimizi merak mı ediyorsunuz? Eğitim programlarımız veya aklınızdaki diğer sorular için bize ulaşmaktan çekinmeyin!</p>
+                <a href="iletisim-no.html" class="btn">Hemen İletişime Geç</a>
+            </div>
+        </section>
+    </main>
+
+    <div class="whatsapp-chat-bubble">
+        <a href="https://api.whatsapp.com/send?phone=905075186699&text=Merhaba,%20dil%20koçum%20web%20sitenizden%20geliyorum%20daha%20ayrıntılı%20bilgilendirme%20istiyorum." target="_blank" class="whatsapp-button" aria-label="WhatsApp üzerinden iletişime geçin">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-legal-links">
+                    <a href="gizlilik-politikası.html">Gizlilik Politikası</a> | <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/dilkocumm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/send?phone=905075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <ul class="footer-links-bottom">
+                <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+                <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+                <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+            </ul>
+            <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+    
+   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const header = document.querySelector('header');
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const body = document.body;
+
+        // Header scroll efekti
+        if (header) {
+            window.addEventListener('scroll', () => {
+                header.classList.toggle('scrolled', window.scrollY > 50);
+            });
+        }
+
+        // Hamburger menü
+        if (menuToggle && mainNav) {
+            menuToggle.addEventListener('click', () => {
+                const isMenuOpen = mainNav.classList.toggle('active');
+                menuToggle.setAttribute('aria-expanded', isMenuOpen);
+                body.classList.toggle('menu-active', isMenuOpen);
+            });
+        }
+
+        // Mobil menüde bir linke tıklanınca menüyü kapat
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    menuToggle.setAttribute('aria-expanded', 'false');
+                    body.classList.remove('menu-active');
+                }
+            });
+        });
+
+        // SSS (FAQ) akordiyon menü
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                const parent = item.closest('.faq-item');
+                parent.classList.toggle('active');
+            });
+        });
+        
+        // Swiper Kurulumları
+        new Swiper(".hizmet-swiper", {
+            effect: "slide",
+            grabCursor: true,
+            centeredSlides: true,
+            loop: true,
+            slidesPerView: "auto",
+            spaceBetween: 30,
+            navigation: { nextEl: ".hizmet-swiper-container .swiper-button-next", prevEl: ".hizmet-swiper-container .swiper-button-prev" }
+        });
+        new Swiper(".paket-swiper", {
+            effect: "coverflow",
+            grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: "auto",
+            loop: true,
+            initialSlide: 1,
+            coverflowEffect: { rotate: 0, stretch: 50, depth: 200, modifier: 1, slideShadows: false },
+            navigation: { nextEl: ".paket-swiper-container .swiper-button-next", prevEl: ".paket-swiper-container .swiper-button-prev" },
+        });
+
+        // Section'lar ekrana gelince animasyonla belirsin
+        const visibilityObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    visibilityObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.section').forEach(section => {
+            visibilityObserver.observe(section);
+        });
+
+        // Scroll Spy
+        const navLinks = document.querySelectorAll('nav a.nav-link[href^="#"]');
+        const sections = Array.from(navLinks).map(link => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+        
+        const scrollSpyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.getAttribute('id');
+                    document.querySelector('nav a.active')?.classList.remove('active');
+                    const activeLink = document.querySelector(`nav a[href="#${id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
+                }
+            });
+        }, { rootMargin: '-40% 0px -60% 0px' });
+
+        sections.forEach(section => {
+            if (section) scrollSpyObserver.observe(section);
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grup Dersleri Soru Çözüm Paketi - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* --- CSS Değişkenleri --- */
+        :root {
+            --primary-dark-blue: #1F3A65;
+            --accent-blue: #3498DB;
+            --accent-gold: #FFD700;
+            --light-text: #fefefe;
+            --button-hover-blue: #2980B9;
+            --slate-50: #f8fafc;
+            --indigo-50: #eef2ff;
+            --light-gray: #f7f9fc;
+            --success-green: #28a745;
+            --disabled-gray: #bdc3c7;
+            --text-color-primary: #2c3e50;
+            --text-color-secondary: #5a6778;
+        }
+
+        /* --- Global Stiller --- */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: linear-gradient(to bottom right, var(--slate-50), var(--indigo-50));
+            color: var(--text-color-primary);
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        
+        /* --- Ana Konteyner --- */
+        .package-system-container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 2rem auto;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* --- Paket Detayları --- */
+        .package-detail-container {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px rgba(0, 0, 0, 0.07);
+            padding: 1.5rem;
+            margin: 1rem auto;
+            border-top: 6px solid var(--accent-blue);
+            position: relative;
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-top: 3rem; /* Geri butonu için boşluk */
+        }
+        
+        .back-button {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--indigo-50);
+            color: var(--primary-dark-blue);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background-color: var(--accent-blue);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .detail-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            color: var(--primary-dark-blue);
+            font-size: clamp(1.8rem, 6vw, 2.5rem);
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-header .slogan {
+            font-family: 'Open Sans', sans-serif;
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: var(--text-color-secondary);
+            font-style: italic;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr; /* Mobil için varsayılan tek sütun */
+            gap: 2rem;
+        }
+
+        .package-detail-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            color: var(--accent-blue);
+            font-size: clamp(1.3rem, 5vw, 1.8rem);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .package-detail-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .package-detail-section ul li {
+            display: flex;
+            align-items: flex-start;
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            margin-bottom: 1rem;
+            background-color: var(--light-gray);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            gap: 1rem;
+        }
+        
+        .package-detail-section ul li i {
+             color: var(--accent-blue);
+             font-size: 1.2rem;
+             margin-top: 4px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid var(--indigo-50);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .content-icon { font-size: 2.5rem; color: var(--accent-blue); margin-bottom: 1rem; }
+        .content-card h4 { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 0.5rem; }
+        .content-card p { font-size: 0.95rem; color: var(--text-color-secondary); line-height: 1.6; }
+        
+        .why-this-package-box {
+            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .why-this-package-box h3 { color: var(--primary-dark-blue); font-size: clamp(1.2rem, 4vw, 1.5rem); }
+        .why-this-package-box h3 i { color: var(--accent-gold); }
+        .why-this-package-box p { font-size: clamp(0.95rem, 2.5vw, 1.05rem); line-height: 1.8; color: var(--text-color-secondary); }
+
+        /* --- Paket Yapılandırma --- */
+        .package-configurator-wrapper {
+            background: linear-gradient(to top, white, var(--light-gray));
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .configurator-title { font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(1.5rem, 5vw, 2rem); color: var(--primary-dark-blue); margin-bottom: 2rem; }
+        .configurator-steps-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin: 0 auto 2rem auto; }
+        .configurator-step h4 { font-family: 'Montserrat'; font-weight: 700; font-size: 1.2rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem; }
+        .configurator-step h4 .step-number { background-color: var(--accent-blue); color: white; border-radius: 50%; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+        .configurator-select { width: 100%; background-color: white; border: 2px solid #ddd; border-radius: 8px; padding: 0.8rem; cursor: pointer; transition: all 0.2s; font-size: 1rem; }
+        .configurator-select:focus { border-color: var(--accent-blue); outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
+        
+        .configurator-summary-section { max-width: 450px; margin: 0 auto; }
+        #dynamic-summary-box { background-color: var(--indigo-50); color: var(--primary-dark-blue); border-radius: 0.5rem; padding: 1rem; margin-bottom: 1.5rem; font-size: 0.95rem; line-height: 1.6; border-left: 4px solid var(--accent-blue); text-align: left; }
+        
+        .quantity-adjuster { display: flex; justify-content: space-between; align-items: center; background-color: white; border-radius: 30px; padding: 0.5rem; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .quantity-adjuster button { background-color: var(--accent-blue); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 1.5rem; line-height: 1; cursor: pointer; transition: all 0.2s ease; }
+        .quantity-adjuster button:hover:not(:disabled) { background-color: var(--button-hover-blue); transform: scale(1.1); }
+        .quantity-adjuster button:disabled { background-color: var(--disabled-gray); cursor: not-allowed; transform: none;}
+        
+        .final-pricing-section { margin-top: 1.5rem; }
+        .price-display { text-align: center; margin-bottom: 1rem; }
+        .final-price { font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: clamp(2rem, 8vw, 2.5rem); color: var(--primary-dark-blue); }
+        
+        .btn-purchase { display: block; width: 100%; text-align: center; text-decoration: none; background: linear-gradient(135deg, var(--success-green), #208e3a); color: white; padding: 1rem; border: none; border-radius: 10px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 15px rgba(40, 167, 69, 0.2); }
+        .btn-purchase:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(40, 167, 69, 0.3); }
+        
+        .btn-see-all { display: block; width: fit-content; margin: 2.5rem auto 0 auto; background: transparent; color: var(--primary-dark-blue); border: 2px solid var(--primary-dark-blue); padding: 0.8rem 2rem; border-radius: 30px; font-weight: 600; transition: all 0.3s; text-decoration: none; }
+        .btn-see-all:hover { background: var(--primary-dark-blue); color: white; transform: translateY(-3px); }
+
+        /* --- Geniş Ekranlar için Medya Sorguları --- */
+        @media (min-width: 768px) {
+             .package-detail-container { padding: 2.5rem; }
+             .configurator-steps-grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+             .package-configurator-wrapper { padding: 3rem 2rem; }
+             .why-this-package-box { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="package-system-container">
+        <!-- Paket Detayları doğrudan bu alana render edilecek -->
+        <div id="package-detail"></div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Veri
+            const packages = [{
+                id: 'group-question-solving-package',
+                name: 'GRUP DERSLERİ SORU ÇÖZÜM PAKETİ',
+                slogan: '“Konu eksiğim az, bol soruyla pekiştirmem lazım.” diyenler için.',
+                pricePer3Hours: 450,
+                subPackages: ['Grammar', 'Vocabulary', 'Reading', 'Question Types', 'Prepositions'],
+                exams: [
+                    { name: 'YÖKDİL/1 - 2026', date: '2026-02-16' },
+                    { name: 'YDS/1 - 2026', date: '2026-03-09' },
+                    { name: 'YKS-DİL (YDT) - 2026', date: '2026-06-21' }
+                ],
+                forWhom: [
+                    'Konu temeli olan ancak soru pratiği eksiği bulunanlar',
+                    'Farklı soru tiplerini bir uzmanla çözerek strateji öğrenmek isteyenler',
+                    'Belirli bir konuda (örn: Reading) netlerini artırmayı hedefleyenler',
+                    'Grup içinde motive olan ve interaktif bir ders ortamı arayanlar',
+                    'Sınava kalan zamanı en verimli şekilde soru çözerek değerlendirmek isteyenler',
+                    'Kendi başına çalışırken yaptığı hataların nedenini anlamakta zorlananlar'
+                ],
+                content: [
+                    { icon: 'fas fa-layer-group', title: 'Odaklı Ders Grupları', text: 'Grammar, Vocabulary, Reading gibi seçtiğiniz alana özel oluşturulmuş gruplarda eğitim alırsınız.' },
+                    { icon: 'fas fa-rocket', title: 'Yoğun Soru Çözümü', text: 'Her ders, hedefinize yönelik yüzlerce soru üzerinden, zaman yönetimi ve çözüm teknikleri odaklı geçer.' },
+                    { icon: 'fas fa-cogs', title: 'Sınav Stratejileri', text: 'Sadece doğru cevabı değil, doğru cevaba en hızlı ve en emin yoldan nasıl ulaşılacağını öğrenirsiniz.' },
+                    { icon: 'fas fa-users-cog', title: 'Uzman Eğitmen Liderliği', text: 'Alanında uzman eğitmenler, sık yapılan hataları gösterir ve anında geri bildirimde bulunur.' }
+                ],
+                whyThisPackage: 'Bilgiyi nete dönüştürmenin en etkili yolu, bol bol ve bilinçli bir şekilde soru çözmektir. Bu paket, sizi tek başınıza yapacağınız verimsiz pratiklerden kurtarır. Uzman bir eğitmen rehberliğinde, sizinle aynı hedefi paylaşan bir grupla birlikte, sadece soru çözmekle kalmaz, sınavın mantığını ve stratejilerini de kavrarsınız. Sınava kalan süreyi, en zayıf olduğunuz alanı güçlendirerek akıllıca kullanın.'
+            }];
+
+            const packageDetailDiv = document.getElementById('package-detail');
+
+            function initiatePurchase(pkgId) {
+                const pkg = packages.find(p => p.id === pkgId);
+                if (!pkg) return;
+
+                const priceDisplay = document.getElementById('price-display');
+                const quantityDisplay = document.getElementById('quantity-display');
+                const subPackageSelect = document.getElementById('sub-package-select');
+                const examSelect = document.getElementById('exam-select');
+                const selectedExamOption = examSelect.options[examSelect.selectedIndex];
+                
+                const purchaseDetails = {
+                    id: pkg.id,
+                    name: pkg.name,
+                    price: priceDisplay ? priceDisplay.textContent.trim() : 'Hesaplanamadı',
+                    details: `Ders: ${subPackageSelect.value}, Hedef Sınav: ${selectedExamOption.dataset.examName}, Süre: ${quantityDisplay.textContent.trim()}`
+                };
+                
+                localStorage.setItem('purchaseDetails', JSON.stringify(purchaseDetails));
+                window.location.href = 'onay.html';
+            }
+
+            function setupGroupLessonCalculator(pkg) {
+                const examSelect = document.getElementById('exam-select');
+                const decreaseBtn = document.getElementById('decrease-btn');
+                const increaseBtn = document.getElementById('increase-btn');
+                const quantityDisplay = document.getElementById('quantity-display');
+                const priceDisplay = document.getElementById('price-display');
+                const summaryBox = document.getElementById('dynamic-summary-box');
+                
+                let currentHours = 3;
+                let maxHours = 3;
+
+                const calculateWeeksRemaining = (examDateStr) => {
+                    const examDate = new Date(examDateStr);
+                    const today = new Date();
+                    const daysUntilNextMonday = (8 - today.getDay()) % 7;
+                    const startDate = new Date(today);
+                    startDate.setDate(today.getDate() + daysUntilNextMonday);
+                    startDate.setHours(0, 0, 0, 0);
+
+                    if (startDate >= examDate) return 0;
+
+                    const diffTime = examDate - startDate;
+                    return Math.floor(diffTime / (1000 * 60 * 60 * 24 * 7));
+                };
+                
+                const updateUI = () => {
+                    const selectedOption = examSelect.options[examSelect.selectedIndex];
+                    const examDate = selectedOption.value;
+                    const examName = selectedOption.dataset.examName;
+                    
+                    const weeks = calculateWeeksRemaining(examDate);
+                    maxHours = weeks > 0 ? weeks * 3 : 3;
+                    
+                    if (currentHours > maxHours) currentHours = maxHours;
+                    if (currentHours < 3) currentHours = 3;
+                    
+                    summaryBox.innerHTML = `<p>Seçtiğiniz <strong>${examName}</strong> sınavına yaklaşık <strong>${weeks} hafta</strong> var.</p><p>Maksimum <strong>${maxHours} saat</strong> ders alabilirsiniz.</p>`;
+
+                    const price = (currentHours / 3) * pkg.pricePer3Hours;
+                    priceDisplay.textContent = `${price.toLocaleString('tr-TR')} TL`;
+                    quantityDisplay.textContent = `${currentHours} Saat`;
+
+                    decreaseBtn.disabled = currentHours <= 3;
+                    increaseBtn.disabled = currentHours >= maxHours;
+                };
+                
+                examSelect.addEventListener('change', updateUI);
+                increaseBtn.addEventListener('click', () => {
+                    if (currentHours < maxHours) {
+                        currentHours += 3;
+                        updateUI();
+                    }
+                });
+                decreaseBtn.addEventListener('click', () => {
+                    if (currentHours > 3) {
+                        currentHours -= 3;
+                        updateUI();
+                    }
+                });
+                
+                updateUI();
+            }
+
+            function showPackageDetail(id) {
+                const pkg = packages.find(p => p.id === id);
+                if (!pkg) return;
+
+                packageDetailDiv.classList.remove('hidden');
+
+                const forWhomHtml = pkg.forWhom.map(item => `<li><i class="fas fa-check-circle"></i><span>${item}</span></li>`).join('');
+                const contentHtml = pkg.content.map(feature => `
+                    <div class="content-card">
+                        <div class="content-icon"><i class="${feature.icon}"></i></div>
+                        <h4>${feature.title}</h4>
+                        <p>${feature.text}</p>
+                    </div>`).join('');
+                
+                const configuratorHtml = `
+                    <div class="package-configurator-wrapper">
+                        <h3 class="configurator-title">Paketinizi Adım Adım Oluşturun</h3>
+                        <div class="configurator-steps-grid">
+                            <div class="configurator-step">
+                                <h4><span class="step-number">1</span>Ders Alanı Seçin</h4>
+                                <select id="sub-package-select" class="configurator-select">
+                                    ${pkg.subPackages.map(sub => `<option value="${sub}">${sub}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="configurator-step">
+                                <h4><span class="step-number">2</span>Hedef Sınavı Seçin</h4>
+                                <select id="exam-select" class="configurator-select">
+                                    ${pkg.exams.map(exam => `<option value="${exam.date}" data-exam-name="${exam.name}">${exam.name}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="configurator-summary-section">
+                            <h4><span class="step-number"></span>Ders Saati Belirleyin</h4>
+                            <div id="dynamic-summary-box"></div>
+                            <div class="quantity-adjuster">
+                                <button id="decrease-btn"><i class="fas fa-minus"></i></button>
+                                <span id="quantity-display" class="font-bold text-lg">3 Saat</span>
+                                <button id="increase-btn"><i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="final-pricing-section">
+                                <div class="price-display">
+                                    <span id="price-display" class="final-price">--,-- TL</span>
+                                </div>
+                                <button id="purchase-button" class="btn-purchase">
+                                    <i class="fas fa-shopping-cart" style="margin-right: 8px;"></i> Paketi Satın Al
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                packageDetailDiv.innerHTML = `
+                    <div class="package-detail-container">
+                        <div class="detail-header">
+                            <button class="back-button" onclick="window.location.href='index.html#paketlerimiz'">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2>${pkg.name}</h2>
+                            <p class="slogan">${pkg.slogan}</p>
+                        </div>
+                        <div class="detail-content">
+                             <div class="package-detail-section">
+                                <h3><i class="fas fa-user-graduate"></i> Kimler İçin Uygun?</h3>
+                                <ul>${forWhomHtml}</ul>
+                            </div>
+                            <div class="package-detail-section">
+                                <h3><i class="fas fa-cubes"></i> Paket Neler Sunuyor?</h3>
+                                <div class="content-grid">${contentHtml}</div>
+                            </div>
+                            ${pkg.whyThisPackage ? `
+                                <div class="why-this-package-box">
+                                    <h3><i class="fas fa-lightbulb"></i> Neden Bu Paket?</h3>
+                                    <p>${pkg.whyThisPackage}</p>
+                                </div>` : ''}
+                            ${configuratorHtml}
+                             <a href="paketlerimiz.html" class="btn-see-all">
+                                <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> Tüm Paketleri Gör
+                            </a>
+                        </div>
+                    </div>`;
+                
+                setupGroupLessonCalculator(pkg);
+                document.getElementById('purchase-button').addEventListener('click', () => initiatePurchase(pkg.id));
+            }
+            
+            showPackageDetail('group-question-solving-package');
+        });
+    </script>
+</body>
+</html>

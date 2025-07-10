@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birebir Koçluk & Mentörlük - Dil Koçum</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Genel Renk Paleti ve Fontlar */
+        :root {
+            --primary-dark-blue: #1F3A65; /* Derin, Zengin Mavi - Ana Koyu Renk (Güven ve Sakinlik) */
+            --accent-blue: #3498DB;      /* Canlı Mavi - Vurgu 1 (Dinamizm) */
+            --accent-gold: #FFD700;      /* Parlak Altın Sarısı - Vurgu 2 (Profesyonellik ve Güven) */
+            --light-bg: #ECF0F1;         /* Daha Açık Nötr Gri Arka Plan */
+            --dark-text: #1F3A65;        /* Koyu Metin (Primary Dark Blue ile aynı) */
+            --light-text: #fefefe;       /* Açık Metin */
+            --card-shadow: rgba(0, 0, 0, 0.18); /* Gölge biraz daha belirgin */
+            --navbar-bg-start: #1F3A65;   /* Derin Mavi */
+            --navbar-bg-end: #294A7D;     /* Biraz daha açık derin mavi */
+            --hero-gradient-start: rgba(31, 58, 101, 0.9); /* Derin Mavi'nin şeffaf hali */
+            --hero-gradient-end: rgba(31, 58, 101, 0.8);
+            --footer-bg: #222a3a;
+            --footer-link-color: #f1c40f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.7;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Body için scroll kilidi */
+        body.menu-active {
+            overflow: hidden;
+        }
+
+        /* Scrollbar Stili */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--light-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-dark-blue); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+        /* Animasyonlar */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- ORTAK COMPONENTLER --- */
+
+        /* Header & Navbar */
+        header {
+            background: linear-gradient(to right, var(--navbar-bg-start), var(--navbar-bg-end));
+            color: var(--light-text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: sticky; top: 0; z-index: 1000;
+            height: 80px;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+        }
+        header.scrolled {
+            background: rgba(31, 58, 101, 0.95);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+            backdrop-filter: blur(5px);
+        }
+        header .logo-container {
+            display: flex; align-items: center;
+            transition: transform 0.3s ease;
+            height: 100%;
+        }
+        header .logo-container:hover { transform: scale(1.05); }
+        header .logo-container img {
+            height: 120px; width: auto; object-fit: contain;
+            filter: brightness(0) invert(1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2.5rem;
+        }
+        nav ul li a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent-blue);
+            left: 50%;
+            bottom: -5px;
+            transform: translateX(-50%) scaleX(0);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 2px;
+        }
+        nav ul li a:hover::after,
+        nav ul li a.active::after {
+            width: 100%;
+            transform: translateX(-50%) scaleX(1);
+        }
+        nav ul li a:hover {
+            color: var(--accent-blue);
+            text-shadow: 0 0 8px rgba(52, 152, 219, 0.7);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.8rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 1001;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .menu-toggle:hover {
+            color: var(--accent-blue);
+            transform: scale(1.1);
+        }
+
+        /* Hero Bölümü */
+        .hero {
+            background: linear-gradient(var(--hero-gradient-start), var(--hero-gradient-end)), url('Gemini_Generated_Image_7iz0bs7iz0bs7iz0.png') no-repeat center center/cover;
+            height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text);
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.8);
+            text-align: center;
+        }
+        .hero h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3.2rem;
+            margin: 0;
+            color: var(--light-text);
+            animation: fadeInDown 1.2s ease-out;
+        }
+
+        /* Ana İçerik Bölümü */
+        main {
+            flex-grow: 1;
+        }
+        .section {
+            max-width: 960px;
+            margin: -120px auto 60px;
+            padding: 50px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 30px var(--card-shadow);
+            position: relative;
+            z-index: 10;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .section h2 { /* H1 yerine H2 kullanımı SEO ve yapısal olarak daha doğru olabilir */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: var(--primary-dark-blue);
+            border-bottom: 4px solid var(--accent-blue);
+            padding-bottom: 15px;
+            text-align: left;
+        }
+        .section p,
+        .section li {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            line-height: 1.8;
+            color: var(--dark-text);
+        }
+        .section strong {
+            font-weight: 700;
+            color: var(--primary-dark-blue);
+        }
+        .contact-link {
+            text-decoration: underline;
+            text-decoration-color: #007bff;
+            text-decoration-thickness: 2px;
+            font-weight: bold;
+            color: #007bff;
+            transition: color 0.3s ease;
+        }
+        .contact-link:hover {
+            color: var(--primary-dark-blue);
+        }
+        .contact-link i {
+            color: #007bff;
+        }
+
+        footer {
+            background-color: var(--footer-bg); color: var(--light-text);
+            padding: 2.5rem 1.5rem; text-align: center; margin-top: auto;
+            font-size: 0.9rem; width: 100%;
+        }
+
+        .footer-content { max-width: 600px; margin: auto; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-top-row { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+        .footer-legal-links a { color: var(--footer-link-color); text-decoration: none; font-weight: 600; margin: 0 8px; transition: color 0.3s ease; }
+        .footer-legal-links a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .social-icons { display: flex; gap: 1.5rem; }
+        .social-icons a { color: var(--light-text); font-size: 1.4rem; transition: color 0.3s ease, transform 0.3s ease; }
+        .social-icons a:hover { color: var(--accent-gold); transform: translateY(-3px); }
+        .footer-links-bottom { list-style: none; padding: 0; margin-top: 1rem; display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+        .footer-links-bottom a { color: var(--footer-link-color); text-decoration: none; font-size: 0.9rem; transition: color 0.3s ease; }
+        .footer-links-bottom a:hover { text-decoration: underline; color: var(--accent-gold); }
+        .copyright-text { color: var(--light-text); font-size: 0.85rem; margin-top: 1rem; opacity: 0.8; }
+
+        /* --- RESPONSIVE TASARIM --- */
+
+        /* TABLET (900px ve altı) */
+        @media (max-width: 900px) {
+            header { padding: 0 1.5rem; height: 70px; }
+            .menu-toggle { display: block; }
+            nav {
+                position: fixed; top: 70px; left: 0; width: 100%;
+                background: var(--navbar-bg-start);
+                flex-direction: column;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            nav.active {
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+                border-top: 1px solid var(--accent-blue);
+            }
+            nav ul { flex-direction: column; width: 100%; padding: 1rem 0; gap: 0; }
+            nav ul li { width: 100%; text-align: center;}
+            nav ul li a {
+                display: block;
+                padding: 1.2rem 1.5rem;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+            }
+            nav ul li:last-child a { border-bottom: none; }
+            nav ul li a:hover { background-color: rgba(0,0,0,0.2); color: var(--accent-blue); }
+            nav ul li a::after { display: none; } /* Hover alt çizgiyi mobilde kaldır */
+        }
+
+        /* GENEL MOBİL GÖRÜNÜM (768px ve altı) */
+        @media (max-width: 768px) {
+            .hero { height: 300px; }
+            .hero h1 { font-size: 2.5rem; }
+            .section {
+                /* margin: -80px auto 40px; */
+                margin-left: 20px;
+                margin-right: 20px;
+                padding: 2rem 1.5rem;
+            }
+            .section h2 { font-size: 2rem; }
+            .footer-links { flex-direction: column; gap: 0.8rem; }
+        }
+
+        /* KÜÇÜK MOBİL EKRANLAR (480px ve altı) */
+        @media (max-width: 480px) {
+            header { padding: 0 1rem; }
+            .hero { height: 250px; }
+            .hero h1 { font-size: 2rem; }
+            .section {
+                margin: -100px 10px 40px; /* Üste çekme mesafesi ayarlandı */
+                padding: 1.5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo-container" aria-label="Ana Sayfa">
+            <img src="Dil Koçum logo.png" alt="Dil Koçum Logosu">
+        </a>
+        <div class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav id="mainNav">
+            <ul>
+                <li><a href="index.html#hero">Ana Sayfa</a></li>
+                <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                <li><a href="index.html#hizmetler">Hizmetler</a></li>
+                <li><a href="index.html#blog">Blog</a></li>
+                <li><a href="iletisim-no.html">İletişim</a></li>
+                <li><a href="index.html#faq">SSS</a></li>
+                <li><a href="üyelik formu.html">Kayıt Ol</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="hero">
+        <h1>Birebir Koçluk & Mentörlük</h1>
+    </div>
+
+    <main>
+        <section class="section">
+            <h2>Size Özel Yol Haritası</h2>
+            <p><strong>Her öğrencinin ihtiyacı, hedefi ve öğrenme tarzı farklıdır. Biz bu farkındalıkla yanınızdayız.</strong></p>
+            <p><i class="fas fa-graduation-cap" style="color: var(--accent-blue);"></i> <strong>Dil Koçum</strong> olarak, YDS, YÖKDİL ve YDT gibi sınavlara hazırlanırken sadece konu çalışmanın yeterli olmadığının farkındayız. Doğru bir strateji, düzenli takip, bireysel farklara uygun yönlendirme ve sürdürülebilir motivasyon, sürecin en önemli parçalarıdır. İşte tam bu noktada, size özel birebir koçluk ve mentörlük hizmetimiz devreye giriyor.</p>
+            <p>Alanında uzman koçlarımızla birlikte seviyenizi, hedeflerinizi ve günlük yaşam temponuzu analiz ederek size en uygun çalışma planını oluşturuyoruz. Haftalık görüşmelerle ilerlemenizi takip ediyor, zorluk yaşadığınız alanlarda anlık çözümler sunuyor, deneme sınavlarınızı detaylı şekilde analiz ediyor ve sizi hedefinize adım adım yaklaştırıyoruz.</p>
+            <p>Bu süreçte yalnızca akademik destek değil, aynı zamanda motivasyon, zaman yönetimi ve sınav kaygısı gibi konularda da profesyonel rehberlik sağlıyoruz. Başarıya giden yolda size özel bir pusula arıyorsanız, doğru yerdesiniz.</p>
+            <p><strong>Ders çalışmayı değil, doğru çalışmayı öğrenin. Başarıyı birlikte inşa edelim.</strong></p>
+            <p><strong>Doğru adımı atmak için tıklayın, <a href="iletisim-no.html" class="contact-link"><i class="fas fa-graduation-cap"></i> Dil Koçum</a> yanınızda!</strong></p>
+        </section>
+    </main>
+
+   <footer>
+        <div class="footer-content">
+            <div class="footer-top-row">
+                <div class="footer-legal-links">
+                    <a href="gizlilik-politikası.html">Gizlilik Politikası</a> | <a href="kullanim-kosullari.html">Kullanım Koşulları</a>
+                </div>
+                <div class="social-icons">
+                    <a href="https://www.instagram.com/dilkocumm/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://api.whatsapp.com/send?phone=905075186699" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <ul class="footer-links-bottom">
+                <li><a href="yasal-belgeler.html">Aydınlatma Metni (KVKK)</a></li>
+                <li><a href="yasal-belgeler.html">Mesafeli Satış Sözleşmesi</a></li>
+                <li><a href="yasal-belgeler.html">İptal ve İade Politikası</a></li>
+            </ul>
+            <p class="copyright-text">&copy; 2025 Dil Koçum. Tüm Hakları Saklıdır.</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const mainNav = document.getElementById('mainNav');
+        const body = document.body;
+        const icon = menuToggle.querySelector('i');
+
+        // Menü açma/kapama
+        menuToggle.addEventListener('click', () => {
+            const isActive = mainNav.classList.toggle('active');
+            body.classList.toggle('menu-active', isActive);
+            icon.className = isActive ? 'fas fa-times' : 'fas fa-bars';
+        });
+
+        // Navbar'a scroll efekti ekleme
+        const header = document.querySelector('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobil menüde linke tıklanınca menüyü kapat
+        document.querySelectorAll('#mainNav a').forEach(link => {
+            link.addEventListener('click', () => {
+                if (mainNav.classList.contains('active')) {
+                    mainNav.classList.remove('active');
+                    body.classList.remove('menu-active');
+                    icon.className = 'fas fa-bars';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

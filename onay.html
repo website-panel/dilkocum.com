@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Başvuru Sihirbazı | Gelişmiş Arayüz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root {
+            --primary-bg: #f4f7fc;
+            --container-bg: #ffffff;
+            --primary-text: #111827;
+            --secondary-text: #4b5563;
+            --accent-blue: #3b82f6;
+            --accent-blue-dark: #2563eb;
+            --accent-green: #10b981;
+            --border-color: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --border-radius: 0.75rem; /* 12px */
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        .wizard-container {
+            width: 100%;
+            max-width: 900px;
+            height: 95vh;
+            max-height: 700px;
+            background-color: var(--container-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            display: flex;
+            transition: all 0.4s ease;
+        }
+
+        .form-steps-container {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-step {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(30px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+        }
+        
+        .step-content {
+            padding: 2.5rem 3rem;
+            box-sizing: border-box;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .form-step.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+        
+        .step-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-header p {
+            font-size: 1rem;
+            color: var(--secondary-text);
+            margin-bottom: 2.5rem;
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 0.5rem; font-size: 0.875rem; }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
+            box-sizing: border-box;
+        }
+        .form-control:focus {
+            border-color: var(--accent-blue);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        
+        .payment-options-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .payment-option-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .payment-option-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        .payment-option-card.selected {
+            border-color: var(--accent-blue);
+            background-color: #f0f9ff;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+        }
+        
+        .payment-option-card input[type="radio"] { display: none; }
+        .payment-option-card .icon { font-size: 1.5rem; color: var(--accent-blue); }
+        .payment-option-card label { font-weight: 600; font-size: 1rem; cursor: pointer; }
+
+        #installment-details {
+            padding: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: var(--border-radius);
+            margin-top: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 3rem;
+            background-color: var(--container-bg);
+            flex-shrink: 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn:disabled {
+            background-color: #e5e7eb;
+            color: #9ca3af;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-blue);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--accent-blue-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--secondary-text);
+        }
+        .btn-secondary:hover:not(:disabled) {
+            background-color: #f3f4f6;
+        }
+
+        .summary-panel {
+            background-color: #f9fafb;
+            padding: 2.5rem;
+            width: 340px;
+            flex-shrink: 0;
+            border-left: 1px solid var(--border-color);
+            transition: all 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .summary-panel h3 {
+            font-weight: 700;
+            font-size: 1.25rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .summary-content {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        .summary-item .label { color: var(--secondary-text); }
+        .summary-item .value { font-weight: 600; }
+        
+        .summary-total {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .summary-total .label { font-size: 1.1rem; font-weight: 600;}
+        .summary-total .value { font-size: 1.75rem; font-weight: 800; color: var(--accent-green); }
+        
+        .hidden { display: none !important; }
+
+        .success-view {
+            width: 100%;
+            text-align: center;
+            padding: 4rem;
+            animation: fadeIn 0.5s ease;
+        }
+        .success-view .icon {
+            font-size: 4rem;
+            color: var(--accent-green);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+        }
+        .success-view h2 { font-size: 2rem; font-weight: 800; }
+        .success-view p { color: var(--secondary-text); margin-bottom: 2rem; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* ================================================= */
+        /* MOBİL VE TABLET İÇİN RESPONSIVE DÜZENLEMELER */
+        /* ================================================= */
+        @media (max-width: 992px) {
+            .wizard-container {
+                flex-direction: column;
+                height: auto;
+                max-height: none;
+                overflow-y: auto;
+            }
+
+            .summary-panel {
+                width: 100%;
+                order: -1; /* Özet panelini en üste taşı */
+                border-left: none;
+                border-bottom: 1px solid var(--border-color);
+                padding: 1.5rem;
+            }
+
+            .summary-panel h3 {
+                font-size: 1.1rem;
+                padding-bottom: 0.75rem;
+                margin-bottom: 1rem;
+            }
+
+            .summary-content {
+                overflow-y: visible;
+            }
+            
+            .summary-total {
+                padding-top: 1rem;
+            }
+
+            .form-steps-container {
+                height: auto;
+            }
+
+            .form-step {
+                position: static; /* Mutlak konumlandırmayı kaldır */
+                height: auto;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                display: none; /* Adımları JS ile göstermek için başlangıçta gizle */
+            }
+
+            .form-step.active {
+                display: flex; /* Aktif adımı göster */
+            }
+
+            .step-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .navigation-buttons {
+                padding: 1rem 1.5rem;
+            }
+
+            .payment-options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0;
+                align-items: flex-start;
+            }
+            .wizard-container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+            .step-header h2 {
+                font-size: 1.5rem;
+            }
+            .step-header p {
+                margin-bottom: 1.5rem;
+            }
+            .step-content {
+                padding: 1.5rem 1rem;
+            }
+            .navigation-buttons {
+                padding: 1rem;
+            }
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.6rem 1rem;
+            }
+            .success-view {
+                padding: 2rem 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="wizard-container" id="wizard-container">
+        
+        <div class="summary-panel" id="summary-panel">
+            <h3>Sipariş Özeti</h3>
+            <div class="summary-content">
+                <div class="summary-item">
+                    <span class="label">Paket Adı:</span>
+                    <span class="value" id="summary-package-name">-</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Paket Fiyatı:</span>
+                    <span class="value" id="summary-original-price">-</span>
+                </div>
+                <div id="summary-discount-item" class="summary-item hidden">
+                    <span class="label">Peşin İndirimi (%10):</span>
+                    <span class="value" id="summary-discount-amount">-</span>
+                </div>
+                <div id="summary-installments-item" class="summary-item hidden">
+                    <span class="label">Taksit Planı:</span>
+                    <span class="value" id="summary-installments-info">-</span>
+                </div>
+            </div>
+            <div class="summary-total">
+                <div class="summary-item">
+                    <span class="label">Toplam Tutar</span>
+                    <span class="value" id="summary-final-price">-</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="form-steps-container" id="form-steps-container">
+            
+            <div class="form-step active" data-step="1">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h2>Başvuru Bilgileri</h2>
+                        <p>Lütfen bilgilerinizi eksiksiz olarak doldurun.</p>
+                    </div>
+                    <form id="step1-form">
+                        <div class="form-group">
+                            <label for="fullName" class="form-label">Adınız ve Soyadınız</label>
+                            <input type="text" id="fullName" class="form-control" required placeholder="Adınız Soyadınız">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Telefon Numaranız</label>
+                            <input type="tel" id="phone" class="form-control" required placeholder="05XX XXX XX XX">
+                        </div>
+                        <p style="font-size: 0.8rem; color: var(--secondary-text); text-align: center; margin-top: 2rem;">Başvurunuz <strong><span id="user-email-info"></span></strong> e-posta adresiyle ilişkilendirilecektir.</p>
+                    </form>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" disabled>Geri</button>
+                    <button class="btn btn-primary" id="btn-next-step1" disabled>
+                        İleri <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-step" data-step="2">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h2>Ödeme Planı</h2>
+                        <p>Size en uygun ödeme yöntemini seçin.</p>
+                    </div>
+                    
+                    <div class="payment-options-grid">
+                        <div class="payment-option-card" data-payment-type="cash">
+                            <i class="fas fa-wallet icon"></i>
+                            <label for="payment-cash">Peşin Ödeme</label>
+                            <input type="radio" id="payment-cash" name="paymentType" value="cash">
+                        </div>
+                        <div class="payment-option-card" data-payment-type="installment">
+                            <i class="fas fa-calendar-alt icon"></i>
+                            <label for="payment-installment">Taksitli Ödeme</label>
+                            <input type="radio" id="payment-installment" name="paymentType" value="installment">
+                        </div>
+                    </div>
+
+                    <div id="installment-details" class="hidden">
+                        <div class="form-group">
+                            <label for="installmentCount" class="form-label">Taksit Sayısı</label>
+                            <select id="installmentCount" class="form-control"></select>
+                        </div>
+                        <div id="installment-dates-container"></div>
+                        <button type="button" id="generate-dates-btn" class="btn btn-secondary hidden" style="width:100%; justify-content:center; margin-top:1rem;">
+                            <i class="fas fa-magic"></i> Otomatik Tarihleri Ata
+                        </button>
+                    </div>
+                </div>
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" id="btn-prev-step2">
+                        <i class="fas fa-arrow-left"></i> Geri
+                    </button>
+                    <button class="btn btn-primary" id="btn-submit-final" disabled>
+                        Başvuruyu Tamamla <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCoFKoItrd3B9e3n_gycx3YsILeguNCUlY",
+      authDomain: "dilkocum-6a4e0.firebaseapp.com",
+      projectId: "dilkocum-6a4e0",
+      storageBucket: "dilkocum-6a4e0.appspot.com",
+      messagingSenderId: "329707977894",
+      appId: "1:329707977894:web:40226f42583dc70b08c867"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    
+    let currentStep = 1;
+    let currentPurchaseDetails = null;
+    let currentUser = null;
+    let selectedPaymentType = '';
+    let selectedInstallmentCount = 0;
+    let installmentDates = [];
+    let installmentAmounts = [];
+    let finalCalculatedPrice = 0;
+    
+    const PRICE_THRESHOLD = 10000;
+    const PEŞİN_İNDİRİM_ORANI = 0.10;
+    const MAX_TAKSIT_ALTI_THRESHOLD = 2;
+    const MAX_TAKSIT_ÜSTÜ_THRESHOLD = 6;
+
+    const wizardContainer = document.getElementById('wizard-container');
+    const formSteps = document.querySelectorAll('.form-step');
+    const btnNextStep1 = document.getElementById('btn-next-step1');
+    const btnPrevStep2 = document.getElementById('btn-prev-step2');
+    const btnSubmitFinal = document.getElementById('btn-submit-final');
+    const fullNameInput = document.getElementById('fullName');
+    const phoneInput = document.getElementById('phone');
+    const paymentOptionCards = document.querySelectorAll('.payment-option-card');
+    const installmentDetailsDiv = document.getElementById('installment-details');
+    const installmentCountSelect = document.getElementById('installmentCount');
+    const installmentDatesContainer = document.getElementById('installment-dates-container');
+    const generateDatesBtn = document.getElementById('generate-dates-btn');
+    const summaryPackageName = document.getElementById('summary-package-name');
+    const summaryOriginalPrice = document.getElementById('summary-original-price');
+    const summaryDiscountItem = document.getElementById('summary-discount-item');
+    const summaryDiscountAmount = document.getElementById('summary-discount-amount');
+    const summaryInstallmentsItem = document.getElementById('summary-installments-item');
+    const summaryInstallmentsInfo = document.getElementById('summary-installments-info');
+    const summaryFinalPrice = document.getElementById('summary-final-price');
+
+    const goToStep = (step) => {
+        currentStep = step;
+        formSteps.forEach(s => {
+            s.classList.toggle('active', parseInt(s.dataset.step) === step);
+        });
+        // Mobil için scroll'u başa al
+        if (window.innerWidth <= 992) {
+            wizardContainer.scrollTo(0, 0);
+        }
+    };
+
+    const validateStep1 = () => {
+        const isFullNameValid = fullNameInput.value.trim().length > 2;
+        const isPhoneValid = phoneInput.value.trim().length > 9;
+        btnNextStep1.disabled = !(isFullNameValid && isPhoneValid);
+    };
+
+    const validateStep2 = () => {
+        if (!selectedPaymentType) {
+            btnSubmitFinal.disabled = true;
+            return;
+        }
+        if (selectedPaymentType === 'installment') {
+            const isInstallmentCountSelected = selectedInstallmentCount > 0;
+            // Tüm tarih inputlarının dolu olup olmadığını kontrol et
+            const allDatesFilled = Array.from(document.querySelectorAll('.installment-date-input'))
+                                        .every(input => input.value !== '');
+            btnSubmitFinal.disabled = !(isInstallmentCountSelected && allDatesFilled);
+        } else {
+            btnSubmitFinal.disabled = false;
+        }
+    };
+
+    const renderError = (message) => {
+        wizardContainer.innerHTML = `
+            <div class="success-view" style="width:100%;">
+                <div class="icon" style="color: #ef4444;"><i class="fas fa-exclamation-circle"></i></div>
+                <h2>Bir Hata Oluştu</h2>
+                <p>${message}</p>
+                <a href="Paketlerimiz.html" class="btn btn-primary">Paketlere Geri Dön</a>
+            </div>`;
+        wizardContainer.style.justifyContent = 'center';
+    };
+
+    const updatePaymentSummary = () => {
+        const originalPrice = parseFloat(currentPurchaseDetails.price.replace(/\./g, '').replace(',', '.'));
+        finalCalculatedPrice = originalPrice;
+        
+        summaryDiscountItem.classList.add('hidden');
+        summaryInstallmentsItem.classList.add('hidden');
+
+        if (selectedPaymentType === 'cash') {
+            const discount = originalPrice * PEŞİN_İNDİRİM_ORANI;
+            finalCalculatedPrice = originalPrice - discount;
+            summaryDiscountAmount.textContent = `- ${discount.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}`;
+            summaryDiscountItem.classList.remove('hidden');
+        } else if (selectedPaymentType === 'installment') {
+            if (selectedInstallmentCount > 0) {
+                const perInstallment = (originalPrice / selectedInstallmentCount);
+                summaryInstallmentsInfo.textContent = `${selectedInstallmentCount} x ${perInstallment.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}`;
+                summaryInstallmentsItem.classList.remove('hidden');
+            }
+        }
+        
+        summaryFinalPrice.textContent = `${finalCalculatedPrice.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}`;
+        validateStep2();
+    };
+    
+    const generateAutomaticInstallmentDates = () => {
+        if (selectedInstallmentCount === 0) return;
+        const dateInputs = document.querySelectorAll('.installment-date-input');
+        
+        let year, month, day;
+
+        if (dateInputs[0] && dateInputs[0].value) {
+            const parts = dateInputs[0].value.split('-');
+            year = parseInt(parts[0], 10);
+            month = parseInt(parts[1], 10) - 1; 
+            day = parseInt(parts[2], 10);
+        } else {
+            const today = new Date();
+            year = today.getFullYear();
+            month = today.getMonth();
+            day = today.getDate();
+        }
+
+        const initialDay = day;
+
+        for (let i = 0; i < selectedInstallmentCount; i++) {
+            let targetMonth = month + i;
+            let targetYear = year + Math.floor(targetMonth / 12);
+            targetMonth %= 12;
+
+            const lastDayOfMonth = new Date(targetYear, targetMonth + 1, 0).getDate();
+            const adjustedDay = Math.min(initialDay, lastDayOfMonth);
+            
+            const targetDate = new Date(targetYear, targetMonth, adjustedDay);
+
+            const yyyy = targetDate.getFullYear();
+            const mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(targetDate.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+            
+            if (dateInputs[i]) {
+                dateInputs[i].value = formattedDate;
+            }
+        }
+        updateInstallmentDatesArray();
+    };
+
+    const updateInstallmentDatesArray = () => {
+        installmentDates = Array.from(document.querySelectorAll('.installment-date-input'))
+                                .map(input => input.value)
+                                .filter(Boolean); // Sadece dolu olanları al
+        updatePaymentSummary(); // Bu fonksiyon zaten validateStep2'yi çağırıyor
+    };
+    
+    const generateInstallmentDateInputs = () => {
+        installmentDatesContainer.innerHTML = '';
+        installmentAmounts = [];
+        if (selectedInstallmentCount > 0) {
+            const originalPrice = parseFloat(currentPurchaseDetails.price.replace(/\./g, '').replace(',', '.'));
+            const perInstallmentAmount = (originalPrice / selectedInstallmentCount);
+            for (let i = 0; i < selectedInstallmentCount; i++) {
+                installmentDatesContainer.innerHTML += `
+                    <div class="form-group" style="display:flex; align-items:center; gap:1rem;">
+                        <label for="installmentDate${i}" class="form-label" style="margin:0; flex-shrink:0;">${i + 1}. Taksit:</label>
+                        <input type="date" id="installmentDate${i}" class="form-control installment-date-input" required>
+                    </div>`;
+                installmentAmounts.push(parseFloat(perInstallmentAmount));
+            }
+            document.querySelectorAll('.installment-date-input').forEach(input => {
+                input.addEventListener('change', updateInstallmentDatesArray);
+            });
+        }
+    };
+
+    const handleFormSubmit = async () => {
+        btnSubmitFinal.disabled = true;
+        btnSubmitFinal.innerHTML = `Gönderiliyor... <i class="fas fa-spinner fa-spin"></i>`;
+        
+        try {
+            const dataToSave = {
+                userId: currentUser.uid,
+                customerName: fullNameInput.value.trim(),
+                customerEmail: currentUser.email,
+                customerPhone: phoneInput.value.trim(),
+                packageName: currentPurchaseDetails.name,
+                packageDetails: currentPurchaseDetails.details,
+                originalPackagePrice: currentPurchaseDetails.price,
+                selectedPaymentType: selectedPaymentType,
+                finalPaymentAmount: finalCalculatedPrice,
+                createdAt: serverTimestamp(),
+                isHandled: false
+            };
+            if (selectedPaymentType === 'cash') {
+                dataToSave.paymentPlan = {
+                    type: 'Peşin',
+                    discountApplied: `${PEŞİN_İNDİRİM_ORANI * 100}%`,
+                    finalAmount: finalCalculatedPrice
+                };
+            } else if (selectedPaymentType === 'installment') {
+                dataToSave.paymentPlan = {
+                    type: 'Taksitli',
+                    installmentCount: selectedInstallmentCount,
+                    totalAmount: finalCalculatedPrice,
+                    installments: installmentDates.map((date, index) => ({
+                      date: date,
+                      amount: parseFloat(installmentAmounts[index]),
+                      status: 'unpaid'
+                    }))
+                };
+            }
+            
+            await addDoc(collection(db, "package_requests"), dataToSave);
+            
+            wizardContainer.innerHTML = `
+            <div class="success-view">
+                <div class="icon"><i class="fas fa-check-circle"></i></div>
+                <h2>Başvurunuz Başarıyla Alındı!</h2>
+                <p>Paket seçiminiz tamamlanmıştır. Ekibimiz en kısa sürede sizlerle iletişime geçecektir.</p>
+                <a href="Paketlerimiz.html" class="btn btn-primary">Yeni Paket Seç</a>
+            </div>`;
+            wizardContainer.style.justifyContent = 'center';
+            localStorage.removeItem('purchaseDetails');
+        } catch (error) {
+            console.error("Hata:", error);
+            renderError('Başvurunuz gönderilirken beklenmedik bir hata oluştu.');
+        }
+    };
+    
+    // --- EVENT LISTENERS ---
+    btnNextStep1.addEventListener('click', () => goToStep(2));
+    btnPrevStep2.addEventListener('click', () => goToStep(1));
+    btnSubmitFinal.addEventListener('click', handleFormSubmit);
+
+    fullNameInput.addEventListener('input', validateStep1);
+    phoneInput.addEventListener('input', validateStep1);
+
+    paymentOptionCards.forEach(card => {
+        card.addEventListener('click', () => {
+            paymentOptionCards.forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+            const radio = card.querySelector('input');
+            radio.checked = true;
+            selectedPaymentType = radio.value;
+            
+            installmentDetailsDiv.classList.toggle('hidden', selectedPaymentType !== 'installment');
+            if (selectedPaymentType !== 'installment') {
+                selectedInstallmentCount = 0;
+                installmentDates = [];
+                installmentCountSelect.value = '';
+                installmentDatesContainer.innerHTML = ''; // Taksit inputlarını temizle
+                generateDatesBtn.classList.add('hidden');
+            }
+            updatePaymentSummary();
+        });
+    });
+
+    installmentCountSelect.addEventListener('change', () => {
+        selectedInstallmentCount = parseInt(installmentCountSelect.value) || 0;
+        generateDatesBtn.classList.toggle('hidden', !selectedInstallmentCount);
+        generateInstallmentDateInputs();
+        updatePaymentSummary();
+    });
+
+    generateDatesBtn.addEventListener('click', generateAutomaticInstallmentDates);
+
+    // --- INITIALIZATION ---
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            currentUser = user;
+            document.getElementById('user-email-info').textContent = user.email;
+            const purchaseDetailsString = localStorage.getItem('purchaseDetails');
+            if (!purchaseDetailsString) {
+                renderError("Paket bilgisi bulunamadı. Lütfen paket seçimi sayfasına geri dönün.");
+                return;
+            }
+            currentPurchaseDetails = JSON.parse(purchaseDetailsString);
+            
+            const originalPrice = parseFloat(currentPurchaseDetails.price.replace(/\./g, '').replace(',', '.'));
+            summaryPackageName.textContent = currentPurchaseDetails.name;
+            summaryOriginalPrice.textContent = `${originalPrice.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}`;
+            summaryFinalPrice.textContent = `${originalPrice.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}`;
+            
+            installmentCountSelect.innerHTML = '<option value="">Taksit sayısı seçin...</option>';
+            const maxInstallments = originalPrice <= PRICE_THRESHOLD ? MAX_TAKSIT_ALTI_THRESHOLD : MAX_TAKSIT_ÜSTÜ_THRESHOLD;
+            for (let i = 2; i <= maxInstallments; i++) {
+                installmentCountSelect.innerHTML += `<option value="${i}">${i} Ay Taksit</option>`;
+            }
+        } else {
+             renderError("Bu sayfayı görüntülemek için giriş yapmanız gerekmektedir. Lütfen giriş yapıp tekrar deneyin.");
+        }
+    });
+
+</script>
+
+</body>
+</html>
